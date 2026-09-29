@@ -1,0 +1,65 @@
+---
+import Icon from './Icon.astro';
+import SlotImage from './SlotImage.astro';
+import { site } from '../content/site';
+import { config } from '../config';
+import { rich } from '../lib/rich';
+import { slot } from '../lib/slots';
+
+const d = site.demo;
+const img = { flyer: slot('demo-flyer'), slide: slot('demo-slide'), image: slot('demo-image') };
+const isFile = config.demoUrl !== '#';
+---
+<section class="section" id="demo" aria-labelledby="demo-title">
+  <div class="wrap">
+    <div class="demo reveal">
+      <div>
+        <p class="eyebrow">{d.eyebrow}</p>
+        <h2 class="h2" id="demo-title" set:html={rich(d.title)} />
+        <p class="sub">{d.sub}</p>
+        <ul class="checklist">
+          {d.checklist.map((item) => <li><Icon name="check" />{item}</li>)}
+        </ul>
+        <div class="demo__row">
+          <a href={config.demoUrl} class="btn btn--gold" data-track="demo_download" download={isFile ? '' : undefined}>
+            <Icon name="download" />
+            {d.cta}
+          </a>
+          <span class="demo__meta">{d.meta}</span>
+        </div>
+      </div>
+      <div class="fan" aria-hidden="true">
+        <div class="fan__card fc-flyer">{img.flyer && <SlotImage src={img.flyer} alt="" sizes="180px" widths={[180, 360]} />}</div>
+        <div class="fan__card fc-slide">{img.slide ? <SlotImage src={img.slide} alt="" sizes="340px" widths={[340, 680]} /> : <span>{d.slideTitle}</span>}</div>
+        <div class="fan__card fc-img">{img.image && <SlotImage src={img.image} alt="" sizes="170px" widths={[170, 340]} />}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .demo { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; padding: clamp(32px, 5vw, 72px); border-radius: 22px; overflow: hidden;
+    background: radial-gradient(60% 90% at 82% 50%, rgba(201, 119, 46, .3), transparent 70%), linear-gradient(180deg, #16110C, #0E0B08); box-shadow: 0 0 0 1px var(--line) inset, 0 0 160px -60px rgba(227, 178, 94, .35) }
+  .checklist { list-style: none; display: grid; gap: 14px; margin: 28px 0 36px }
+  .checklist li { display: flex; gap: 14px; align-items: center; color: var(--ink-2) }
+  .checklist :global(svg) { flex: none; width: 22px; height: 22px; color: var(--gold) }
+  .demo__row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px }
+  .demo__meta { font-size: 13px; letter-spacing: .06em; color: var(--muted-solid) }
+  .fan { position: relative; height: 380px }
+  .fan__card { position: absolute; left: 50%; top: 50%; border-radius: 8px; overflow: hidden; box-shadow: 0 30px 60px -18px rgba(0, 0, 0, .85), 0 0 0 1px rgba(243, 235, 221, .12) }
+  .fc-flyer { width: 180px; aspect-ratio: 8.5/11; transform: translate(-50%, -50%) translate(-150px, 20px) rotate(-10deg);
+    background: radial-gradient(90% 45% at 50% 32%, rgba(255, 228, 170, .9), rgba(232, 160, 80, .5) 30%, transparent 75%), #120C08 }
+  .fc-slide { width: 340px; aspect-ratio: 16/9; z-index: 2; transform: translate(-50%, -50%) translate(10px, -40px);
+    background: radial-gradient(50% 80% at 76% 72%, rgba(255, 214, 145, .9), rgba(224, 150, 70, .4) 25%, transparent 62%), linear-gradient(180deg, #09070A, #1C1109) }
+  .fc-slide span { position: absolute; left: 8%; top: 34%; font-family: var(--display); font-weight: 600; font-size: 26px; line-height: 1; max-width: 55% }
+  .fc-img { width: 170px; aspect-ratio: 1; z-index: 3; transform: translate(-50%, -50%) translate(140px, 90px) rotate(8deg);
+    background: radial-gradient(40% 55% at 35% 40%, rgba(255, 232, 185, .9), rgba(214, 128, 52, .4) 35%, transparent 70%), linear-gradient(160deg, #2A160A, #0B0807 70%) }
+
+  @media (max-width: 1020px) {
+    .demo { grid-template-columns: 1fr }
+  }
+  @media (max-width: 760px) {
+    .fan { height: 300px; transform: scale(.78) }
+    .demo__row .btn { width: 100% }
+  }
+</style>

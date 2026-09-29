@@ -1,0 +1,89 @@
+---
+import Icon from './Icon.astro';
+import SlotImage from './SlotImage.astro';
+import { site } from '../content/site';
+import { config } from '../config';
+import { rich } from '../lib/rich';
+import { slot } from '../lib/slots';
+
+const t = site.trailer;
+const image = slot('trailer');
+---
+<section class="trailer" id="trailer" aria-labelledby="trailer-title">
+  <div class="section-head">
+    <p class="eyebrow">{t.eyebrow}</p>
+    <h2 class="h2" id="trailer-title" set:html={rich(t.title)} />
+    <p class="sub">{t.sub}</p>
+  </div>
+
+  <button class="video" id="openVideo" type="button" aria-label={t.playLabel} aria-haspopup="dialog" aria-controls="videoModal">
+    <div class="video__scene" aria-hidden="true">
+      {image ? (
+        <SlotImage src={image} alt="" sizes="(max-width: 1240px) calc(100vw - 2 * clamp(20px, 5vw, 72px)), 1160px" widths={[480, 800, 1160, 1600, 2320]} />
+      ) : (
+        <Fragment>
+          <div class="v-wall"></div>
+          <div class="v-floor"></div>
+          <div class="v-beam"></div>
+          <div class="v-arch"></div>
+          <div class="v-steps"></div>
+          <div class="v-dust"></div>
+        </Fragment>
+      )}
+    </div>
+    {!image && <div class="v-bars" aria-hidden="true"></div>}
+    <span class="video__play"><Icon name="play" /></span>
+    <span class:list={['video__meta', { 'video__meta--image': image }]}><b>{t.metaLabel}</b><span>{t.duration}</span></span>
+    {config.showPlaceholderTags && !image && <span class="ph-tag">{site.placeholderTags.trailer}</span>}
+  </button>
+</section>
+
+<style>
+  .trailer { position: relative; overflow: hidden; padding: clamp(56px, 6vw, 90px) var(--gutter) clamp(90px, 10vw, 140px) }
+  .trailer::before { content: ""; position: absolute; left: 50%; top: 38%; width: 1100px; height: 700px; transform: translate(-50%, -50%); background: radial-gradient(closest-side, rgba(201, 119, 46, .16), transparent); pointer-events: none }
+
+  .video { position: relative; display: block; width: 100%; max-width: 1160px; margin: 0 auto; aspect-ratio: 16/9; border-radius: 10px; overflow: hidden; background: #0C0907;
+    box-shadow: 0 0 0 1px var(--line), 0 40px 120px -30px rgba(0, 0, 0, .9), 0 0 140px -40px rgba(227, 178, 94, .35); cursor: pointer; isolation: isolate }
+  .video:focus-visible { outline-offset: 6px }
+  .video__scene { position: absolute; inset: 0; z-index: -1; transition: transform 1.2s var(--ease) }
+  .video:hover .video__scene { transform: scale(1.03) }
+  .v-wall { position: absolute; inset: 0; background: radial-gradient(70% 90% at 50% 62%, #2A1A0D 0%, #140D08 45%, #090706 80%) }
+  .v-beam { position: absolute; left: 50%; bottom: 0; width: 70%; height: 40%; transform: translateX(-50%); background: linear-gradient(180deg, rgba(255, 210, 140, .28), rgba(255, 190, 110, .04) 80%, transparent); clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%); filter: blur(6px) }
+  .v-arch { position: absolute; left: 50%; bottom: 40%; width: 17%; height: 46%; transform: translateX(-50%); border-radius: 999px 999px 0 0;
+    background: linear-gradient(180deg, #FFF0CC 0%, #F6CC82 35%, #E09A48 75%, #B8661F 100%);
+    box-shadow: 0 0 60px 10px rgba(246, 204, 130, .45), 0 0 180px 60px rgba(224, 154, 72, .28) }
+  .v-floor { position: absolute; left: 0; right: 0; bottom: 0; height: 40%; background: linear-gradient(180deg, #1A110A, #070504) }
+  .v-steps { position: absolute; left: 50%; bottom: 40%; width: 30%; height: 4%; transform: translate(-50%, 100%); background: linear-gradient(180deg, rgba(255, 215, 150, .35), rgba(255, 215, 150, 0)); border-radius: 2px; filter: blur(1px) }
+  .v-dust { position: absolute; inset: 0; opacity: .7; background-image:
+    radial-gradient(1.5px 1.5px at 46% 40%, #ffe7b8 50%, transparent 51%),
+    radial-gradient(1px 1px at 53% 33%, #ffe7b8 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 49% 52%, #ffe7b8aa 50%, transparent 51%),
+    radial-gradient(1px 1px at 56% 47%, #ffe7b8aa 50%, transparent 51%),
+    radial-gradient(1.4px 1.4px at 43% 58%, #ffe7b880 50%, transparent 51%),
+    radial-gradient(1px 1px at 58% 60%, #ffe7b880 50%, transparent 51%) }
+  .v-bars::before, .v-bars::after { content: ""; position: absolute; left: 0; right: 0; height: 8%; background: #000; z-index: 1 }
+  .v-bars::before { top: 0 }
+  .v-bars::after { bottom: 0 }
+  .video__play { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; z-index: 2;
+    background: linear-gradient(180deg, var(--gold-hi), var(--gold)); color: #1E1408; box-shadow: 0 10px 50px -6px rgba(227, 178, 94, .7); transition: transform .3s var(--ease) }
+  .video__play::before { content: ""; position: absolute; inset: -12px; border-radius: 50%; border: 1px solid rgba(244, 212, 142, .5); animation: pulse 2.6s var(--ease) infinite }
+  .video__play :global(svg) { width: 28px; height: 28px; margin-left: 4px }
+  .video:hover .video__play { transform: translate(-50%, -50%) scale(1.07) }
+  .video__meta { position: absolute; left: 28px; bottom: calc(8% + 20px); z-index: 2; display: flex; align-items: center; gap: 14px; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-2) }
+  .video__meta--image { bottom: 24px; text-shadow: 0 1px 12px rgba(0, 0, 0, .8) }
+  .video__meta b { font-weight: 600; color: var(--ink) }
+  .video__meta span { padding: 4px 9px; border: 1px solid rgba(243, 235, 221, .25); border-radius: 4px; letter-spacing: .08em }
+  .video .ph-tag { top: calc(8% + 18px); bottom: auto; right: 24px; z-index: 2 }
+
+  @keyframes pulse { 0% { transform: scale(.9); opacity: 1 } 100% { transform: scale(1.35); opacity: 0 } }
+
+  @media (max-width: 760px) {
+    .trailer { padding-top: 64px }
+    .video { aspect-ratio: 4/5; border-radius: 8px }
+    .v-arch { width: 36%; height: 44% }
+    .v-beam { width: 120% }
+    .video__play { width: 76px; height: 76px }
+    .video__meta { left: 18px; font-size: 11px }
+    .video .ph-tag { top: calc(8% + 12px); right: 14px }
+  }
+</style>

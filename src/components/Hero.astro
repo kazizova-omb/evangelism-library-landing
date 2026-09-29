@@ -1,0 +1,120 @@
+---
+import Icon from './Icon.astro';
+import SlotImage from './SlotImage.astro';
+import { site } from '../content/site';
+import { config } from '../config';
+import { rich } from '../lib/rich';
+import { slot } from '../lib/slots';
+
+const h = site.hero;
+const image = slot('hero');
+---
+<section class="hero" aria-labelledby="hero-title">
+  <div class:list={['scene', { 'scene--image': image }]} aria-hidden="true">
+    {image ? (
+      <SlotImage src={image} alt="" sizes="100vw" widths={[640, 960, 1280, 1920, 2560]} priority />
+    ) : (
+      <Fragment>
+        <div class="scene__sky"></div>
+        <div class="scene__stars"></div>
+        <div class="scene__rays"></div>
+        <div class="scene__sun"></div>
+        <svg class="scene__hills" viewBox="0 0 1440 400" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5A361A"/><stop offset=".55" stop-color="#23160C"/></linearGradient>
+            <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B1B0E"/><stop offset=".6" stop-color="#120C07"/></linearGradient>
+          </defs>
+          <path fill="url(#g1)" opacity=".92" d="M0 190 C90 170 150 150 230 162 C320 176 370 120 470 128 C560 136 610 172 700 160 C790 148 850 96 960 108 C1060 118 1110 150 1200 138 C1290 126 1360 118 1440 130 V400 H0Z"/>
+          <path fill="url(#g2)" d="M0 262 C120 232 210 214 320 236 C430 258 520 206 640 214 C760 222 830 262 950 250 C1070 238 1150 204 1270 218 C1350 228 1400 240 1440 236 V400 H0Z"/>
+          <path fill="#0A0806" d="M0 330 C180 300 360 342 560 318 C760 294 920 340 1120 320 C1260 306 1370 322 1440 316 V400 H0Z"/>
+        </svg>
+      </Fragment>
+    )}
+    <div class="scene__fade"></div>
+  </div>
+  {config.showPlaceholderTags && !image && <span class="ph-tag">{site.placeholderTags.hero}</span>}
+
+  <div class="hero__in">
+    <div class="hero__copy">
+      <p class="eyebrow rise">{h.eyebrow}</p>
+      <h1 class="h1 rise d1" id="hero-title" set:html={rich(h.title)} />
+      <p class="lead rise d2" set:html={rich(h.lead)} />
+      <div class="ctas rise d3">
+        <a href="#get" class="btn btn--gold" data-track="cta_click" data-track-location="hero">{h.primaryCta}</a>
+        <a href="#demo" class="btn btn--ghost" data-track="cta_click" data-track-location="hero_demo">
+          <Icon name="download" />
+          {h.secondaryCta}
+        </a>
+      </div>
+      <p class="trust rise d4">
+        {h.trust.map((t, i) => <Fragment>{i > 0 && <i aria-hidden="true"></i>} {t} </Fragment>)}
+      </p>
+    </div>
+  </div>
+  <a href="#trailer" class="cue"><span>{h.cue}</span><span class="cue__line" aria-hidden="true"></span></a>
+</section>
+
+<style>
+  .hero { position: relative; min-height: 100vh; min-height: 100svh; max-height: 1000px; display: flex; align-items: center; overflow: hidden; isolation: isolate }
+  .scene { position: absolute; inset: 0; z-index: -1; --sx: 70%; --sy: 74% }
+  .scene__sky { position: absolute; inset: 0; background:
+    radial-gradient(120% 70% at var(--sx) var(--sy), rgba(120, 62, 20, .55) 0%, rgba(60, 30, 12, .35) 30%, transparent 60%),
+    linear-gradient(180deg, #060508 0%, #0B0808 40%, #1C1108 70%, #0A0806 100%) }
+  .scene__stars { position: absolute; inset: 0 0 45% 0; opacity: .55;
+    background-image:
+      radial-gradient(1px 1px at 12% 18%, #fff8 50%, transparent 51%),
+      radial-gradient(1px 1px at 28% 8%, #fff6 50%, transparent 51%),
+      radial-gradient(1.2px 1.2px at 44% 22%, #fff7 50%, transparent 51%),
+      radial-gradient(1px 1px at 58% 12%, #fff5 50%, transparent 51%),
+      radial-gradient(1px 1px at 76% 6%, #fff6 50%, transparent 51%),
+      radial-gradient(1.3px 1.3px at 88% 20%, #fff7 50%, transparent 51%),
+      radial-gradient(1px 1px at 94% 34%, #fff4 50%, transparent 51%),
+      radial-gradient(1px 1px at 36% 36%, #fff4 50%, transparent 51%),
+      radial-gradient(1px 1px at 66% 30%, #fff3 50%, transparent 51%),
+      radial-gradient(1px 1px at 6% 40%, #fff4 50%, transparent 51%);
+    -webkit-mask-image: linear-gradient(180deg, #000, transparent); mask-image: linear-gradient(180deg, #000, transparent) }
+  .scene__rays { position: absolute; inset: 0; opacity: .9;
+    background: repeating-conic-gradient(from 180deg at var(--sx) var(--sy), rgba(255, 214, 150, .07) 0deg 1.6deg, transparent 1.6deg 7deg);
+    -webkit-mask-image: radial-gradient(60% 75% at var(--sx) var(--sy), #000 0%, rgba(0, 0, 0, .4) 40%, transparent 75%);
+            mask-image: radial-gradient(60% 75% at var(--sx) var(--sy), #000 0%, rgba(0, 0, 0, .4) 40%, transparent 75%) }
+  .scene__sun { position: absolute; left: var(--sx); top: var(--sy); width: 1400px; height: 1400px; transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(255, 236, 190, 1) 0%, rgba(255, 206, 130, .9) 3.5%, rgba(240, 168, 82, .55) 9%, rgba(201, 119, 46, .28) 20%, rgba(120, 60, 20, .1) 36%, transparent 55%);
+    animation: breathe 9s ease-in-out infinite }
+  .scene__hills { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 46% }
+  .scene__fade { position: absolute; inset: 0; background:
+    linear-gradient(90deg, rgba(10, 8, 6, .92) 0%, rgba(10, 8, 6, .7) 30%, rgba(10, 8, 6, 0) 62%),
+    linear-gradient(180deg, rgba(10, 8, 6, .5) 0%, transparent 18%, transparent 80%, var(--bg) 100%) }
+
+  .hero__in { width: 100%; max-width: 1440px; margin: 0 auto; padding: 120px var(--gutter) 110px }
+  .hero__copy { max-width: 660px }
+  .h1 { font-family: var(--display); font-weight: 600; font-size: clamp(46px, 6.4vw, 96px); line-height: .98; letter-spacing: -.012em; margin: 26px 0 28px; text-wrap: balance }
+  .h1 :global(em) { font-style: italic; font-weight: 500; background: linear-gradient(100deg, var(--gold-hi) 10%, var(--gold) 55%, var(--amber) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: .06em }
+  .lead { font-size: clamp(17px, 1.35vw, 19.5px); line-height: 1.6; color: var(--ink-2); max-width: 540px }
+  .lead :global(strong) { color: var(--ink); font-weight: 500 }
+  .ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 40px }
+  .trust { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 34px; font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-solid) }
+  .trust i { width: 3px; height: 3px; border-radius: 50%; background: var(--gold); opacity: .7 }
+
+  .cue { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted-solid); opacity: 0; animation: fadein 1s .9s var(--ease) forwards }
+  .cue__line { width: 1px; height: 38px; background: linear-gradient(var(--gold), transparent); transform-origin: top; animation: cue 2.4s var(--ease) infinite }
+
+  @keyframes breathe { 0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1) } 50% { opacity: .88; transform: translate(-50%, -50%) scale(1.04) } }
+  @keyframes cue { 0% { transform: scaleY(0); opacity: 1 } 60% { transform: scaleY(1); opacity: 1 } 100% { transform: scaleY(1); opacity: 0 } }
+
+  @media (max-width: 760px) {
+    .hero { align-items: flex-end; max-height: none }
+    .scene { --sx: 64%; --sy: 25% }
+    .scene__sun { width: 900px; height: 900px }
+    .scene__hills { height: 24%; bottom: 56% }
+    .scene__fade { background: linear-gradient(180deg, rgba(10, 8, 6, .55) 0%, transparent 14%, transparent 30%, rgba(10, 8, 6, .9) 46%, var(--bg) 56%) }
+    .scene:not(.scene--image)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 44%; background: var(--bg) }
+    .scene--image :global(.slot-img) { bottom: 44% }
+    .hero__in { padding: 0 var(--gutter) 48px }
+    .h1 { font-size: clamp(44px, 12.4vw, 58px); margin: 18px 0 20px }
+    .lead { font-size: 16.5px }
+    .ctas { flex-direction: column; margin-top: 30px }
+    .ctas .btn { width: 100% }
+    .trust { font-size: 11px; letter-spacing: .12em; margin-top: 26px }
+    .cue { display: none }
+  }
+</style>

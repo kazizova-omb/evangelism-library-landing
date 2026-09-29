@@ -1,0 +1,45 @@
+---
+import { site } from '../content/site';
+import { rich } from '../lib/rich';
+
+const j = site.journey;
+---
+<section class="section glow-l" id="journey" aria-labelledby="journey-title">
+  <div class="wrap">
+    <div class="head-left reveal">
+      <p class="eyebrow">{j.eyebrow}</p>
+      <h2 class="h2" id="journey-title" set:html={rich(j.title)} />
+      <p class="sub">{j.sub}</p>
+    </div>
+    <ol class="journey">
+      {j.steps.map((s, i) => (
+        <li class="step reveal">
+          <span class="step__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <div>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+            <ul class="chips" role="list">{s.chips.map((c) => <li class="chip">{c}</li>)}</ul>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .journey { list-style: none; display: grid; grid-template-columns: repeat(5, 1fr); gap: 28px; position: relative }
+  .journey::before { content: ""; position: absolute; left: 28px; right: 28px; top: 28px; height: 1px; background: linear-gradient(90deg, var(--gold), rgba(227, 178, 94, .12)) }
+  .step { position: relative }
+  .step__num { position: relative; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--bg); box-shadow: 0 0 0 1px rgba(227, 178, 94, .5) inset, 0 0 34px -6px rgba(227, 178, 94, .55); color: var(--gold-hi); font-family: var(--display); font-size: 22px; font-weight: 600 }
+  .step h3 { font-family: var(--display); font-size: 28px; font-weight: 600; line-height: 1.08; margin: 28px 0 10px }
+  .step p { font-size: 15.5px; color: var(--ink-2); line-height: 1.55 }
+  .chips { list-style: none }
+
+  @media (max-width: 1020px) {
+    .journey { grid-template-columns: 1fr; gap: 0 }
+    .journey::before { left: 28px; right: auto; top: 28px; bottom: 60px; width: 1px; height: auto; background: linear-gradient(180deg, var(--gold), rgba(227, 178, 94, .12)) }
+    .step { display: flex; gap: 24px; padding-bottom: 34px }
+    .step__num { flex: none }
+    .step h3 { margin-top: 12px }
+  }
+</style>

@@ -1,0 +1,49 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../content/site';
+import { rich } from '../lib/rich';
+
+const q = site.quality;
+---
+<section class="section" id="why" aria-labelledby="why-title">
+  <div class="wrap why">
+    <div class="why__head reveal">
+      <p class="eyebrow">{q.eyebrow}</p>
+      <h2 class="h2" id="why-title" set:html={rich(q.title)} />
+      <p class="sub">{q.sub}</p>
+      <a href="#get" class="btn btn--gold" data-track="cta_click" data-track-location="quality">{q.cta}</a>
+    </div>
+    <div class="features">
+      {q.features.map((f) => (
+        <div class="feature reveal">
+          <span class="icon-badge"><Icon name={f.icon} /></span>
+          <h3>{f.title}</h3>
+          <p>{f.text}</p>
+          {'chips' in f && <ul class="chips" role="list">{f.chips.map((c) => <li class="chip">{c}</li>)}</ul>}
+          {'link' in f && <div class="chips"><a href={f.link.href} class="chip">{f.link.label}</a></div>}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .why { display: grid; grid-template-columns: 5fr 7fr; gap: 72px; align-items: start }
+  .why__head { position: sticky; top: 120px }
+  .why__head .sub { margin-bottom: 32px }
+  .features { display: grid; grid-template-columns: 1fr 1fr; gap: 16px }
+  .feature { padding: 30px; border-radius: 14px; background: linear-gradient(180deg, rgba(243, 235, 221, .04), rgba(243, 235, 221, .012)); box-shadow: 0 0 0 1px var(--line) inset; transition: box-shadow .3s, transform .3s var(--ease) }
+  .feature:hover { box-shadow: 0 0 0 1px rgba(227, 178, 94, .4) inset; transform: translateY(-3px) }
+  .feature h3 { font-family: var(--display); font-weight: 600; font-size: 26px; line-height: 1.1; margin: 22px 0 8px }
+  .feature p { font-size: 15.5px; color: var(--muted-solid); line-height: 1.55 }
+  .feature .chips { margin-top: 14px; list-style: none }
+
+  @media (max-width: 1020px) {
+    .why { grid-template-columns: 1fr; gap: 48px }
+    .why__head { position: static }
+  }
+  @media (max-width: 760px) {
+    .features { grid-template-columns: 1fr }
+    .feature { padding: 24px }
+  }
+</style>

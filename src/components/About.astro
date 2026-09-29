@@ -1,0 +1,49 @@
+---
+import SlotImage from './SlotImage.astro';
+import { site } from '../content/site';
+import { config } from '../config';
+import { rich } from '../lib/rich';
+import { slot } from '../lib/slots';
+
+const a = site.about;
+const image = slot('team');
+---
+<section class="section glow-l" id="about" aria-labelledby="about-title">
+  <div class="wrap about">
+    <div class:list={['portrait reveal', { 'portrait--image': image }]}>
+      {image && <SlotImage src={image} alt={a.imageAlt} sizes="(max-width: 1020px) min(420px, calc(100vw - 40px)), 440px" widths={[420, 640, 880]} />}
+      {config.showPlaceholderTags && !image && <span class="ph-tag">{site.placeholderTags.portrait}</span>}
+    </div>
+    <div class="about__copy reveal">
+      <p class="eyebrow">{a.eyebrow}</p>
+      <h2 class="h2" id="about-title" set:html={rich(a.title)} />
+      {a.paragraphs.map((p) => <p>{p}</p>)}
+      <figure class="quote">
+        <blockquote><p>“{a.quote}”</p></blockquote>
+        <figcaption><b>{a.author}</b>{a.role}</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about { display: grid; grid-template-columns: 5fr 7fr; gap: 80px; align-items: center }
+  .portrait { position: relative; aspect-ratio: 4/5; border-radius: 999px 999px 16px 16px; overflow: hidden;
+    background: radial-gradient(80% 55% at 50% 28%, rgba(246, 204, 130, .6), rgba(201, 119, 46, .22) 42%, transparent 75%), linear-gradient(180deg, #22160C, #0D0A07); box-shadow: 0 0 0 1px var(--line), 0 0 140px -30px rgba(227, 178, 94, .45) }
+  .portrait:not(.portrait--image)::before { content: ""; position: absolute; left: 50%; top: 30%; width: 30%; aspect-ratio: 1; border-radius: 50%; transform: translateX(-50%); background: #0F0A07 }
+  .portrait:not(.portrait--image)::after { content: ""; position: absolute; left: 50%; bottom: -8%; width: 74%; height: 42%; border-radius: 50% 50% 0 0; transform: translateX(-50%); background: #0F0A07 }
+  .portrait .ph-tag { top: auto; bottom: 20px; right: 50%; transform: translateX(50%); z-index: 2 }
+  .about__copy > p:not(.eyebrow) { color: var(--ink-2); margin-bottom: 16px; max-width: 620px }
+  .quote { margin: 36px 0 0; padding-top: 32px; border-top: 1px solid var(--line) }
+  .quote blockquote { font-family: var(--display); font-style: italic; font-weight: 500; font-size: clamp(24px, 2.3vw, 33px); line-height: 1.28 }
+  .quote figcaption { display: block; margin-top: 18px; font-size: 14px; color: var(--muted-solid) }
+  .quote figcaption b { color: var(--ink); font-weight: 600; margin-right: 8px }
+
+  @media (max-width: 1020px) {
+    .about { grid-template-columns: 1fr; gap: 48px }
+    .portrait { max-width: 420px }
+  }
+  @media (max-width: 760px) {
+    .about { gap: 36px }
+  }
+</style>

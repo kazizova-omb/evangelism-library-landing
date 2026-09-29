@@ -1,0 +1,54 @@
+---
+import { site } from '../content/site';
+import { rich } from '../lib/rich';
+
+const f = site.faq;
+---
+<section class="section" id="faq" aria-labelledby="faq-title">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">{f.eyebrow}</p>
+      <h2 class="h2" id="faq-title" set:html={rich(f.title)} />
+    </div>
+    <div class="faq reveal">
+      {f.items.map((item) => (
+        <details open={'open' in item && item.open}>
+          <summary><span>{item.q}</span><i aria-hidden="true"></i></summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq { max-width: 880px; margin: 0 auto }
+  .faq details { border-bottom: 1px solid var(--line) }
+  .faq details:first-of-type { border-top: 1px solid var(--line) }
+  .faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 26px 0; font-family: var(--display); font-weight: 600; font-size: clamp(22px, 2.1vw, 29px); line-height: 1.2; transition: color .2s }
+  .faq summary::-webkit-details-marker { display: none }
+  .faq summary:hover { color: var(--gold-hi) }
+  .faq summary i { flex: none; position: relative; width: 34px; height: 34px; border-radius: 50%; box-shadow: 0 0 0 1px var(--line) inset; transition: transform .3s var(--ease), box-shadow .3s }
+  .faq summary i::before, .faq summary i::after { content: ""; position: absolute; left: 50%; top: 50%; width: 12px; height: 1.5px; background: var(--gold); transform: translate(-50%, -50%) }
+  .faq summary i::after { transform: translate(-50%, -50%) rotate(90deg); transition: transform .3s var(--ease) }
+  .faq details[open] summary i { box-shadow: 0 0 0 1px rgba(227, 178, 94, .5) inset }
+  .faq details[open] summary i::after { transform: translate(-50%, -50%) rotate(0) }
+  .faq details p { padding: 0 60px 28px 0; color: var(--ink-2); max-width: 760px }
+
+  @media (max-width: 760px) {
+    .faq details p { padding-right: 0 }
+  }
+</style>
+
+<script>
+  import { track } from '../scripts/analytics';
+
+  // Track on the summary click (mouse, Enter or Space) that is about to open an item.
+  // The "toggle" event would also fire for the item that starts open.
+  document.querySelectorAll<HTMLDetailsElement>('#faq details').forEach((d) => {
+    const summary = d.querySelector('summary')!;
+    summary.addEventListener('click', () => {
+      if (!d.open) track('faq_open', { question: summary.textContent?.trim() ?? '' });
+    });
+  });
+</script>
