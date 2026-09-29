@@ -1,0 +1,27 @@
+# Cloudflare Pages project (static site in dist/ + Pages Functions in functions/).
+# Bindings and non-secret settings live here; secrets are set with
+#   npx wrangler pages secret put RESEND_API_KEY --project-name revelation-media-resources
+# (also TURNSTILE_SECRET, ADMIN_TOKEN). See README "Email and downloads".
+name = "revelation-media-resources"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-09-01"
+
+[vars]
+# "test": emails are stored and viewable from the success screen, nothing is sent.
+# "live": emails go out through Resend (needs RESEND_API_KEY and a verified domain).
+EMAIL_MODE = "test"
+EMAIL_FROM = "Revelation Media Resources <noreply@revelationresource.org>"
+SUPPORT_EMAIL = "support@revelationresource.org"
+# days a download link stays valid; "0" = never expires
+LINK_TTL_DAYS = "0"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "revelation-leads"
+database_id = "ae2c1590-1ce3-408b-b5c8-b3abaf3853c8"
+migrations_dir = "migrations"
+
+# Kit files in R2 (uncomment once the bucket exists and the files are uploaded):
+# [[r2_buckets]]
+# binding = "KIT"
+# bucket_name = "revelation-kit"

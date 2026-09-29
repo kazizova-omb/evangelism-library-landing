@@ -9,7 +9,9 @@
     "preview": "astro preview",
     "check": "astro check",
     "stub": "node scripts/stub-server.mjs",
-    "deploy:preview": "PUBLIC_PREVIEW=true PUBLIC_SHOW_PLACEHOLDER_TAGS=false PUBLIC_SITE_URL=https://revelation-media-resources.pages.dev astro build && npx wrangler pages deploy dist --project-name revelation-media-resources --branch main"
+    "deploy:preview": "PUBLIC_PREVIEW=true PUBLIC_SHOW_PLACEHOLDER_TAGS=false PUBLIC_API_URL=/api/lead PUBLIC_SITE_URL=https://revelation-media-resources.pages.dev astro build && wrangler pages deploy dist --project-name revelation-media-resources --branch main",
+    "dev:full": "PUBLIC_API_URL=/api/lead astro build && wrangler pages dev dist",
+    "db:migrate": "wrangler d1 migrations apply revelation-leads --remote"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -22,7 +24,9 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "typescript": "^6.0.3"
+    "@cloudflare/workers-types": "^5.20260929.1",
+    "typescript": "^6.0.3",
+    "wrangler": "^4.143.0"
   },
   "engines": {
     "node": ">=22.12.0"
