@@ -1,0 +1,192 @@
+---
+// Design option 3: "poster editorial". Sits on top of V2Theme (same page loads both).
+// Heavy condensed display type (Anton) in capitals for headlines, a serif lead-in
+// above them instead of small tracked labels, warm paper background with grain,
+// full-bleed indigo blocks, black-and-white imagery and thin gradient rules.
+// Selectors use :root.v3:not(#v1):not(#v2) to outrank the v2 layer (one ID) and
+// the components' scoped styles.
+import '@fontsource/anton/400.css';
+---
+<style is:global>
+  :root.v3:not(#v1):not(#v2) {
+    --paper: #F5F3EE;
+    --paper-2: #ECE9E1;
+    --indigo: #2A2C7C;        /* block background */
+    --navy: #1F2160;          /* text on paper */
+    --teal: #0E8FA2;          /* accent on paper, 24px+ (3.4:1) */
+    --teal-text: #0A7383;     /* small links on paper (5:1) */
+    --cyan-light: #7FE0EC;    /* accent on indigo (7.9:1) */
+    --pink: #D98BB8;
+    --rule: linear-gradient(90deg, var(--pink), var(--indigo) 50%, #3CC0CF);
+    --ink: var(--navy);
+    --ink-2: #3F4170;
+    --muted-solid: #5E607F;
+    --line: rgba(31, 33, 96, .14);
+    --gold: var(--teal);
+    --gold-hi: var(--teal-text);
+    --cyan: #3CC0CF;
+    --cyan-lg: var(--teal);
+    --cyan-text: var(--teal-text);
+    --lavender: #E4E3F1;
+    --poster: "Anton", "Oswald", Impact, sans-serif;
+    --bg: var(--paper);
+    --bg-2: var(--paper-2);
+  }
+  :root.v3:not(#v1):not(#v2) body { background: var(--paper) }
+  /* paper grain */
+  :root.v3:not(#v1):not(#v2) body::after { display: block; opacity: .16; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") }
+
+  /* ---------- type: poster headlines + serif lead-in ---------- */
+  :root.v3:not(#v1):not(#v2) :is(.h1, .h2) { font-family: var(--poster); font-weight: 400; text-transform: uppercase; letter-spacing: .004em; line-height: .96; color: var(--navy) }
+  :root.v3:not(#v1):not(#v2) .h2 { font-size: clamp(44px, 5.2vw, 78px) }
+  :root.v3:not(#v1):not(#v2) :is(.h1, .h2) em { color: var(--teal) }
+  :root.v3:not(#v1):not(#v2) .eyebrow { font-family: var(--display); font-weight: 400; font-size: clamp(19px, 1.6vw, 23px); letter-spacing: 0; text-transform: none; color: var(--ink-2) }
+  :root.v3:not(#v1):not(#v2) .h2 { margin-top: 10px }
+  :root.v3:not(#v1):not(#v2) .sub { color: var(--ink-2) }
+
+  /* gradient rule used as a separator (never beside a label) */
+  :root.v3:not(#v1):not(#v2) .stats { border-top: 0; position: relative }
+  :root.v3:not(#v1):not(#v2) .stats::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--rule) }
+
+  /* ---------- buttons: squarer, poster-like ---------- */
+  :root.v3:not(#v1):not(#v2) .btn { border-radius: 6px; text-transform: uppercase; letter-spacing: .08em; font-size: 13.5px; font-weight: 700 }
+  :root.v3:not(#v1):not(#v2) .btn--gold { background: var(--indigo); color: #fff; box-shadow: 0 12px 26px -14px rgba(42, 44, 124, .7) }
+  :root.v3:not(#v1):not(#v2) .btn--gold:hover { background: #34369A }
+  :root.v3:not(#v1):not(#v2) .btn--ghost { background: transparent; border: 2px solid var(--navy); color: var(--navy) }
+  :root.v3:not(#v1):not(#v2) .btn--ghost:hover { background: var(--navy); color: #fff }
+
+  /* ---------- header ---------- */
+  :root.v3:not(#v1):not(#v2) .header.is-scrolled { background: rgba(245, 243, 238, .92) }
+  :root.v3:not(#v1):not(#v2) .brand { font-family: var(--poster); text-transform: uppercase; letter-spacing: .02em; font-size: 20px }
+  :root.v3:not(#v1):not(#v2) .menu { background: rgba(245, 243, 238, .98) }
+  :root.v3:not(#v1):not(#v2) .menu a:not(.btn) { font-family: var(--poster); text-transform: uppercase; font-size: 40px }
+
+  /* ---------- black-and-white imagery ---------- */
+  :root.v3:not(#v1):not(#v2) .slot-img img { filter: grayscale(1) contrast(1.08) brightness(1.02) }
+
+  /* ---------- hero: poster type on paper, B/W figure bleeding off the right ---------- */
+  :root.v3:not(#v1):not(#v2) .hero { background: var(--paper); padding: 120px 0 72px }
+  :root.v3:not(#v1):not(#v2) .hero .scene { inset: 0 0 0 auto; width: 52%; border-radius: 0; box-shadow: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 28%); mask-image: linear-gradient(90deg, transparent 0, #000 28%) }
+  :root.v3:not(#v1):not(#v2) .hero .slot-img img { object-position: 40% 20% }
+  :root.v3:not(#v1):not(#v2) .h1 { font-size: clamp(64px, 8.6vw, 136px); line-height: .9; margin: 16px 0 26px }
+  :root.v3:not(#v1):not(#v2) .hero__copy { max-width: min(640px, 52%) }
+  :root.v3:not(#v1):not(#v2) .hero__copy::after { content: ""; display: block; height: 2px; margin-top: 36px; max-width: 420px; background: var(--rule) }
+  :root.v3:not(#v1):not(#v2) .trust { color: var(--muted-solid) }
+  :root.v3:not(#v1):not(#v2) .trust i { background: var(--teal) }
+
+  /* ---------- indigo blocks: trailer, about, request form ---------- */
+  :root.v3:not(#v1):not(#v2) :is(#trailer, #about, #get) {
+    --ink: #FFFFFF; --ink-2: rgba(255, 255, 255, .84); --muted-solid: rgba(255, 255, 255, .66); --line: rgba(255, 255, 255, .18);
+    --teal: var(--cyan-light); --gold: var(--cyan-light); --gold-hi: var(--cyan-light); --cyan: var(--cyan-light);
+    background: var(--indigo); color: #fff }
+  :root.v3:not(#v1):not(#v2) :is(#trailer, #about, #get) :is(.h2, .eyebrow) { color: #fff }
+  :root.v3:not(#v1):not(#v2) :is(#trailer, #about, #get) .eyebrow { color: rgba(255, 255, 255, .8) }
+  :root.v3:not(#v1):not(#v2) :is(#trailer, #about, #get) .h2 em { color: var(--cyan-light) }
+  :root.v3:not(#v1):not(#v2) :is(#trailer, #about, #get) .sub { color: rgba(255, 255, 255, .84) }
+
+  /* trailer: poster-style head, right-aligned like the reference */
+  :root.v3:not(#v1):not(#v2) .trailer .section-head { max-width: 1040px; text-align: left; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); column-gap: 48px; align-items: end }
+  :root.v3:not(#v1):not(#v2) .trailer .section-head .eyebrow { grid-column: 1 / -1 }
+  :root.v3:not(#v1):not(#v2) .trailer .section-head .h2 { margin-bottom: 0 }
+  :root.v3:not(#v1):not(#v2) .trailer .section-head .sub { text-align: right; padding-bottom: 8px }
+  :root.v3:not(#v1):not(#v2) .video { border-radius: 8px; box-shadow: 0 40px 80px -40px rgba(0, 0, 0, .7) }
+  :root.v3:not(#v1):not(#v2) .video .video__scene::after { background: linear-gradient(180deg, rgba(42, 44, 124, .1), rgba(42, 44, 124, .6)) }
+  :root.v3:not(#v1):not(#v2) .video__play { background: var(--cyan-light); color: var(--indigo) }
+  :root.v3:not(#v1):not(#v2) .video__play::before { border-color: rgba(127, 224, 236, .8) }
+
+  /* ---------- what's inside ---------- */
+  :root.v3:not(#v1):not(#v2) .stat dd { font-family: var(--poster); font-size: clamp(52px, 5.4vw, 84px); line-height: .95; color: var(--indigo) }
+  :root.v3:not(#v1):not(#v2) .stat__suffix { font-family: var(--poster); font-size: .62em; vertical-align: .5em; color: var(--teal) }
+  :root.v3:not(#v1):not(#v2) .stat dt { color: var(--ink-2); font-weight: 600 }
+  :root.v3:not(#v1):not(#v2) .tile { border-radius: 6px; box-shadow: none; background: var(--paper-2) }
+  :root.v3:not(#v1):not(#v2) .tile figcaption { border-radius: 4px; background: var(--indigo); color: #fff }
+
+  /* two-column headings: poster type is wide in capitals, so one step smaller */
+  :root.v3:not(#v1):not(#v2) .about__copy .h2 { font-size: clamp(40px, 4.2vw, 62px) }
+  :root.v3:not(#v1):not(#v2) .get__head .h2 { font-size: clamp(38px, 3.6vw, 52px) } /* "to the complete library" on one line */
+  /* accent phrases never split, at any width (sizes below keep them inside the column) */
+  :root.v3:not(#v1):not(#v2) :is(.h1, .h2) em { white-space: nowrap }
+
+  /* ---------- journey ---------- */
+  :root.v3:not(#v1):not(#v2) #journey { background: var(--paper-2) }
+  /* long headline: full width so it sets in two lines, intro underneath */
+  :root.v3:not(#v1):not(#v2) #journey .head-left { grid-template-columns: 1fr }
+  :root.v3:not(#v1):not(#v2) #journey .head-left .sub { max-width: 620px; margin-top: 18px; padding-bottom: 0 }
+  :root.v3:not(#v1):not(#v2) .phase { font-family: var(--display); font-size: 17px; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--navy) }
+  :root.v3:not(#v1):not(#v2) .phase::after, :root.v3:not(#v1):not(#v2) .phase:first-child::after, :root.v3:not(#v1):not(#v2) .phase:last-child::after { height: 2px; background: var(--rule) }
+  :root.v3:not(#v1):not(#v2) .step { border-radius: 6px; background: var(--paper) }
+  :root.v3:not(#v1):not(#v2) .step__num { border-radius: 4px; background: var(--indigo); color: #fff; font-family: var(--poster); font-weight: 400; font-size: 16px }
+  :root.v3:not(#v1):not(#v2) .step h3 { font-family: var(--poster); font-weight: 400; text-transform: uppercase; font-size: 22px; letter-spacing: .01em; line-height: 1.05 }
+
+  /* ---------- quality ---------- */
+  :root.v3:not(#v1):not(#v2) .feature { border-radius: 6px; background: #FBFAF7 }
+  :root.v3:not(#v1):not(#v2) .feature h3 { font-family: var(--poster); text-transform: uppercase; font-size: 24px; letter-spacing: .01em; line-height: 1.05 }
+  :root.v3:not(#v1):not(#v2) .icon-badge { border-radius: 6px; background: var(--indigo); color: #fff }
+
+  /* ---------- demo ---------- */
+  :root.v3:not(#v1):not(#v2) .demo { border-radius: 8px; background: #E3F4F6; box-shadow: none }
+  :root.v3:not(#v1):not(#v2) .demo::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--rule) }
+  :root.v3:not(#v1):not(#v2) .fan__card { border-radius: 6px; box-shadow: 0 30px 50px -24px rgba(31, 33, 96, .6), 0 0 0 4px #fff }
+
+  /* ---------- about (indigo): figure placeholder in tone ---------- */
+  :root.v3:not(#v1):not(#v2) .portrait { border-radius: 8px; background: linear-gradient(180deg, #34378F, #23256B); box-shadow: none }
+  :root.v3:not(#v1):not(#v2) .portrait:not(.portrait--image)::before, :root.v3:not(#v1):not(#v2) .portrait:not(.portrait--image)::after { background: rgba(127, 224, 236, .22) }
+  :root.v3:not(#v1):not(#v2) .quote blockquote { font-family: var(--display); color: #fff; font-size: clamp(24px, 2.2vw, 32px) }
+  :root.v3:not(#v1):not(#v2) .quote figcaption b { color: #fff }
+
+  /* ---------- faq ---------- */
+  :root.v3:not(#v1):not(#v2) .faq summary { font-family: var(--body); font-weight: 600; font-size: clamp(18px, 1.5vw, 21px); color: var(--navy) }
+  :root.v3:not(#v1):not(#v2) .faq details:first-of-type { border-top: 2px solid transparent; border-image: var(--rule) 1 }
+  :root.v3:not(#v1):not(#v2) .faq summary i { border-radius: 4px; background: var(--indigo) }
+  :root.v3:not(#v1):not(#v2) .faq summary i::before, :root.v3:not(#v1):not(#v2) .faq summary i::after { background: #fff }
+  :root.v3:not(#v1):not(#v2) .faq details[open] summary i { background: var(--teal) }
+
+  /* ---------- request form (indigo block, white card) ---------- */
+  :root.v3:not(#v1):not(#v2) #get .next li, :root.v3:not(#v1):not(#v2) #get .next { border-color: rgba(255, 255, 255, .2) }
+  :root.v3:not(#v1):not(#v2) #get .next b { color: #fff }
+  :root.v3:not(#v1):not(#v2) #get .next__num { color: var(--cyan-light) }
+  :root.v3:not(#v1):not(#v2) #get .returning h3 { color: #fff }
+  :root.v3:not(#v1):not(#v2) #get .returning__help a { color: var(--cyan-light) }
+  :root.v3:not(#v1):not(#v2) .formcard {
+    --ink: var(--navy); --ink-2: #3F4170; --muted-solid: #5E607F; --line: rgba(31, 33, 96, .14);
+    --teal: #0E8FA2; --gold: #0E8FA2; --gold-hi: #0A7383; --cyan: #3CC0CF;
+    border-radius: 8px; background: #FBFAF7; color: var(--navy); box-shadow: 0 40px 80px -40px rgba(0, 0, 0, .55) }
+  :root.v3:not(#v1):not(#v2) .formcard .btn--gold { background: var(--indigo) }
+  :root.v3:not(#v1):not(#v2) .field :is(input:not([type="checkbox"]), select, textarea) { border-radius: 6px; background: #fff }
+  :root.v3:not(#v1):not(#v2) .consent a { color: var(--teal-text) }
+  :root.v3:not(#v1):not(#v2) .success__ic { border-radius: 8px; background: var(--indigo); box-shadow: none }
+  :root.v3:not(#v1):not(#v2) .success h3 { font-family: var(--poster); text-transform: uppercase; font-weight: 400; color: var(--navy) }
+
+  /* ---------- translate ---------- */
+  :root.v3:not(#v1):not(#v2) .translate { max-width: 1040px }
+  :root.v3:not(#v1):not(#v2) .langs .lang { padding: 9px 16px; border-radius: 4px; border-width: 1.5px; border-color: var(--navy); background: transparent; font-weight: 500 }
+  :root.v3:not(#v1):not(#v2) .langs .lang--soon { border-color: rgba(31, 33, 96, .3) }
+
+  /* ---------- footer ---------- */
+  :root.v3:not(#v1):not(#v2) .footer { background: #16174A; position: relative }
+  :root.v3:not(#v1):not(#v2) .footer::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--rule) }
+  :root.v3:not(#v1):not(#v2) .footer .brand { font-size: 22px }
+
+  /* ---------- floating UI ---------- */
+  :root.v3:not(#v1):not(#v2) .to-top { border-radius: 8px; background: var(--indigo); color: #fff; box-shadow: 0 14px 30px -14px rgba(31, 33, 96, .6) }
+  :root.v3:not(#v1):not(#v2) .lang__list, :root.v3:not(#v1):not(#v2) .consent-banner { border-radius: 8px; background: #FBFAF7 }
+
+  /* ---------- tablet / phone ---------- */
+  @media (max-width: 1020px) {
+    :root.v3:not(#v1):not(#v2) .hero__copy { max-width: 58% }
+  }
+  @media (max-width: 760px) {
+    :root.v3:not(#v1):not(#v2) .hero { padding: 76px 0 48px }
+    :root.v3:not(#v1):not(#v2) .hero .scene { position: relative; inset: auto; width: auto; height: 76vw; margin: 0 0 4px;
+      -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent); mask-image: linear-gradient(180deg, #000 70%, transparent) }
+    :root.v3:not(#v1):not(#v2) .hero__copy { max-width: none }
+    :root.v3:not(#v1):not(#v2) .h1 { font-size: clamp(56px, 17vw, 76px) }
+    :root.v3:not(#v1):not(#v2) .h2 { font-size: clamp(34px, 9.6vw, 46px) }
+    :root.v3:not(#v1):not(#v2) :is(.get__head, .about__copy) .h2 { font-size: clamp(30px, 8.6vw, 38px) }
+    :root.v3:not(#v1):not(#v2) .trailer .section-head { grid-template-columns: 1fr }
+    :root.v3:not(#v1):not(#v2) .trailer .section-head .sub { text-align: left; margin-top: 14px }
+    :root.v3:not(#v1):not(#v2) .menu a:not(.btn) { font-size: 34px }
+  }
+</style>

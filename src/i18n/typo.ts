@@ -36,6 +36,14 @@ export function typo(text: string, lang: string): string {
   if (re) out = out.replace(re, `$1$2${NBSP}`).replace(re, `$1$2${NBSP}`);
   // number + unit: "120 MB"
   out = out.replace(/(\d) (?=(?:MB|GB|KB|%)\b)/g, `$1${NBSP}`);
+  // no widow: the last two words stay together when both are short ("you need."),
+  // so a heading never ends on a lone short word. The limit stays low: a longer
+  // unbreakable pair would not fit big display type on a phone.
+  out = out.replace(/ (\S+ ?)$/u, (m, tail: string) => {
+    const before = out.slice(0, out.length - m.length);
+    const prev = before.slice(before.lastIndexOf(' ') + 1).replace(/[*]/g, '');
+    return prev.length + tail.replace(/[*.,!?]/g, '').length <= 11 ? `${NBSP}${tail}` : m;
+  });
   return out;
 }
 

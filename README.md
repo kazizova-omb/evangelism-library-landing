@@ -46,12 +46,14 @@ Two designs share one codebase, content and behaviour, so the client compares on
 | --- | --- | --- |
 | v1 | `/`, `/es` | Dark cinematic: gold on black, Cormorant Garamond + Hanken Grotesk |
 | v2 | `/v2`, `/es/v2` | Light editorial ("Imagery Guidelines"): navy + cyan, DM Serif Display + Inter, photo cards |
+| v3 | `/v3`, `/es/v3` | Poster editorial: v2 plus Anton capitals for headlines, serif lead-ins, indigo blocks (trailer, about, form), paper texture, black-and-white photos |
 
 - v2 is `src/pages/[...lang]/v2.astro` plus one stylesheet, `src/components/V2Theme.astro`
   (every rule is prefixed `:root.v2:not(#v1)` so it overrides the components' scoped styles).
+- v3 (`v3.astro`) loads V2Theme and `V3Theme.astro` on top (`:root.v3:not(#v1):not(#v2)`). Photos: `slots/v3/`, then `slots/v2/`.
 - v2 photos live in `src/assets/slots/v2/` and override the regular slots on v2 pages only.
   They are cut from the guidelines board and upscaled: replace them with the original high-resolution files.
-- `/v2` is `noindex`. When the client picks one: if v2 wins, move `<V2Theme />` and `noindex`-free
+- `/v2` and `/v3` are `noindex`. When the client picks one: if v2 wins, move `<V2Theme />` and `noindex`-free
   Base into `index.astro` (or make v2 the default) and delete the other option.
 
 ## Languages

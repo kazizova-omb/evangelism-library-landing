@@ -13,6 +13,7 @@ import displayItalicFont from '@fontsource/cormorant-garamond/files/cormorant-ga
 import bodyFont from '@fontsource/hanken-grotesk/files/hanken-grotesk-latin-400-normal.woff2?url';
 import v2DisplayFont from '@fontsource/dm-serif-display/files/dm-serif-display-latin-400-normal.woff2?url';
 import v2BodyFont from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
+import v3DisplayFont from '@fontsource/anton/files/anton-latin-400-normal.woff2?url';
 
 import { getImage } from 'astro:assets';
 import Header from '../components/Header.astro';
@@ -24,7 +25,7 @@ import { useT, getLang, locales, localeCodes, switchPath, defaultLocale, localeP
 import { baseGraph, homeGraph } from '../lib/schema';
 import { config } from '../config';
 import { slot, logo } from '../lib/slots';
-import { getTheme } from '../lib/theme';
+import { getTheme, themeClass } from '../lib/theme';
 
 const site = useT(Astro);
 const lang = getLang(Astro);
@@ -40,7 +41,7 @@ interface Props {
 }
 
 const theme = getTheme(Astro);
-const preloads = theme === 'v2' ? [v2DisplayFont, v2BodyFont] : [displayFont, displayItalicFont, bodyFont];
+const preloads = theme === 'v3' ? [v3DisplayFont, v2BodyFont, v2DisplayFont] : theme === 'v2' ? [v2DisplayFont, v2BodyFont] : [displayFont, displayItalicFont, bodyFont];
 
 const { title, description = site.meta.description, home = false, noindex = false, breadcrumb } = Astro.props;
 const pageTitle = title ? `${title} | ${site.meta.title}` : home ? site.meta.homeTitle : site.meta.title;
@@ -75,7 +76,7 @@ const jsonLd = noindex && !breadcrumb ? null : {
 };
 ---
 <!doctype html>
-<html lang={site.locale.htmlLang} class={theme === 'v2' ? 'v2' : undefined}>
+<html lang={site.locale.htmlLang} class={themeClass(theme)}>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -85,8 +86,8 @@ const jsonLd = noindex && !breadcrumb ? null : {
   <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
   {!noindex && alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
   {!noindex && <link rel="alternate" hreflang="x-default" href={xDefault} />}
-  <meta name="theme-color" content={theme === 'v2' ? '#FFFFFF' : '#0A0806'} />
-  <meta name="color-scheme" content={theme === 'v2' ? 'light' : 'dark'} />
+  <meta name="theme-color" content={theme === 'v1' ? '#0A0806' : theme === 'v3' ? '#F5F3EE' : '#FFFFFF'} />
+  <meta name="color-scheme" content={theme === 'v1' ? 'dark' : 'light'} />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="sitemap" href="/sitemap-index.xml" />

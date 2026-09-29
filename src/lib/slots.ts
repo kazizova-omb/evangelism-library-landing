@@ -19,7 +19,7 @@ export type SlotName =
 // plus 'logo' (svg allowed), see logoUrl below
 
 const files = import.meta.glob<{ default: ImageMetadata }>(
-  ['/src/assets/slots/*.{jpg,jpeg,png,webp,avif}', '/src/assets/slots/v2/*.{jpg,jpeg,png,webp,avif}'],
+  ['/src/assets/slots/*.{jpg,jpeg,png,webp,avif}', '/src/assets/slots/v2/*.{jpg,jpeg,png,webp,avif}', '/src/assets/slots/v3/*.{jpg,jpeg,png,webp,avif}'],
   { eager: true },
 );
 
@@ -32,9 +32,14 @@ function find(dir: string, name: string) {
   return undefined;
 }
 
-/** Image for a slot. Design option v2 looks in src/assets/slots/v2/ first. */
-export function slot(name: SlotName, theme: 'v1' | 'v2' = 'v1'): ImageMetadata | undefined {
-  return (theme === 'v2' ? find('/src/assets/slots/v2', name) : undefined) ?? find('/src/assets/slots', name);
+/** Image for a slot. v3 looks in slots/v3, then slots/v2; v2 in slots/v2; then the shared folder. */
+export function slot(name: SlotName, theme: 'v1' | 'v2' | 'v3' = 'v1'): ImageMetadata | undefined {
+  const dirs = theme === 'v3' ? ['v3', 'v2'] : theme === 'v2' ? ['v2'] : [];
+  for (const d of dirs) {
+    const hit = find(`/src/assets/slots/${d}`, name);
+    if (hit) return hit;
+  }
+  return find('/src/assets/slots', name);
 }
 
 // Logo: src/assets/slots/logo.svg (or .png/.webp). Replaces the star mark
