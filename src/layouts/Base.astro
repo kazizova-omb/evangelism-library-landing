@@ -88,7 +88,9 @@ const jsonLd = noindex && !breadcrumb ? null : {
   {!noindex && <link rel="alternate" hreflang="x-default" href={xDefault} />}
   <meta name="theme-color" content={theme === 'v1' ? '#0A0806' : theme === 'v3' ? '#F5F3EE' : '#FFFFFF'} />
   <meta name="color-scheme" content={theme === 'v1' ? 'dark' : 'light'} />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <!-- tab icon: church symbol on a tile in each design option's colours; ICO/PNG for older browsers -->
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="icon" href={theme === 'v3' ? '/favicon-v3.svg' : theme === 'v2' ? '/favicon-v2.svg' : '/favicon.svg'} type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="sitemap" href="/sitemap-index.xml" />
 
