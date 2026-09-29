@@ -1,0 +1,53 @@
+---
+import { langPaths, useT, getLang, localePath } from '../../i18n';
+import Base from '../../layouts/Base.astro';
+import { rich } from '../../lib/rich';
+
+// Built as /404.html and /es/404.html; Cloudflare Pages serves the closest one.
+export const getStaticPaths = langPaths;
+
+const site = useT(Astro);
+const lang = getLang(Astro);
+const n = site.notFound;
+const home = localePath(lang, '/');
+const links = [
+  { href: `${home}#inside`, label: site.footer.links.inside },
+  { href: `${home}#demo`, label: site.footer.links.demo },
+  { href: `${home}#faq`, label: site.footer.links.faq },
+];
+---
+<Base title={n.title} noindex>
+  <section class="notfound">
+    <div class="notfound__glow" aria-hidden="true"></div>
+    <div class="notfound__in">
+      <p class="notfound__code" aria-hidden="true">404</p>
+      <h1 class="h2" set:html={rich(n.heading)} />
+      <p class="sub">{n.text}</p>
+      <div class="notfound__ctas">
+        <a href={home} class="btn btn--gold">{n.cta}</a>
+        <a href={`${home}#get`} class="btn btn--ghost">{n.secondaryCta}</a>
+      </div>
+      <nav class="notfound__links" aria-label={n.title}>
+        {links.map((l) => <a href={l.href}>{l.label}</a>)}
+      </nav>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .notfound { position: relative; overflow: hidden; min-height: 100vh; min-height: 100svh; display: grid; place-items: center; padding: 120px var(--gutter) 80px; text-align: center }
+  .notfound__glow { position: absolute; left: 50%; top: 42%; width: 900px; height: 900px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(closest-side, rgba(201, 119, 46, .18), transparent); pointer-events: none }
+  .notfound__in { position: relative; max-width: 620px }
+  .notfound__code { font-family: var(--display); font-weight: 600; font-size: clamp(110px, 17vw, 200px); line-height: .85; letter-spacing: -.02em;
+    font-variant-numeric: lining-nums; font-feature-settings: "lnum" 1;
+    background: linear-gradient(180deg, var(--gold-hi), var(--gold) 55%, rgba(201, 119, 46, .35)); -webkit-background-clip: text; background-clip: text; color: transparent }
+  .notfound .h2 { margin: 18px 0 14px }
+  .notfound .sub { max-width: 460px; margin: 0 auto }
+  .notfound__ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 34px }
+  .notfound__links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 28px; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 14px }
+  .notfound__links a { color: var(--muted-solid); transition: color .2s }
+  .notfound__links a:hover { color: var(--gold-hi) }
+  @media (max-width: 760px) {
+    .notfound__ctas .btn { width: 100% }
+  }
+</style>
