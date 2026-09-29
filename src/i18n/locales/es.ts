@@ -14,8 +14,12 @@ const es: Site = {
 
   meta: {
     title: 'Revelation Media Resources',
+    homeTitle: 'Kit gratuito para series de profecía | Revelation Media Resources',
     description:
-      'Presentaciones, imágenes, videos y materiales promocionales para dirigir una serie sobre profecía. Listos para usar, totalmente editables y gratuitos para pastores y líderes de ministerio.',
+      'Kit gratuito para pastores: presentaciones para seminarios de profecía, imágenes, videos y materiales promocionales, editables en PowerPoint, Keynote y Google Slides.',
+    kitName: 'Kit de series evangelísticas de Revelation Media Resources',
+    audience: 'Pastores, líderes de iglesia y organizaciones ministeriales',
+    howToName: 'Cómo obtener el kit de Revelation Media Resources',
     ogImageAlt: 'Revelation Media Resources: todo lo que necesita para dirigir una serie sobre profecía',
   },
 
@@ -151,7 +155,9 @@ const es: Site = {
     eyebrow: 'Preguntas',
     title: 'Antes de que *pregunte*',
     items: [
-      { q: '¿Es realmente gratuito?', a: 'Sí. El kit completo es gratuito para pastores, iglesias y organizaciones ministeriales. Solo complete el breve formulario para obtener acceso.', open: true },
+      { q: '¿Qué es Revelation Media Resources?', a: 'Revelation Media Resources es una biblioteca gratuita de materiales listos para dirigir una serie evangelística sobre profecía: presentaciones, diapositivas, imágenes, videos y materiales promocionales para pastores, iglesias y organizaciones ministeriales.', open: true },
+      { q: '¿Es realmente gratuito?', a: 'Sí. El kit completo es gratuito para pastores, iglesias y organizaciones ministeriales. Solo complete el breve formulario para obtener acceso.' },
+      { q: '¿Quién puede usar estos materiales?', a: 'Pastores, líderes de iglesia y organizaciones ministeriales que quieran dirigir una serie evangelística. No necesita saber de diseño: los archivos están listos para presentar y son fáciles de adaptar a su iglesia.' },
       { q: '¿Qué formatos incluye?', a: 'Las presentaciones vienen en PowerPoint, Keynote y Google Slides. Las imágenes y los videos se entregan en formatos estándar que funcionan en cualquier dispositivo.' },
       { q: '¿Puedo editar los materiales?', a: 'Sí. Puede cambiar textos, reordenar diapositivas y agregar los datos de su iglesia para adaptarlos a su programa.' },
       { q: '¿Qué idiomas están disponibles?', a: 'El kit está disponible en varios idiomas, que se indican en la sección de traducción más abajo. ¿No ve el suyo? Puede ayudarnos a traducirlo.' },

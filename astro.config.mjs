@@ -2,7 +2,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { loadEnv } from 'vite';
-import { locales, defaultLocale } from './src/i18n/config.mjs';
+import { locales, defaultLocale, legalPagesReady } from './src/i18n/config.mjs';
 
 const env = loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), '');
 
@@ -18,7 +18,8 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/404'),
+      filter: (page) => !page.includes('/404') && (legalPagesReady || !/\/(terms|privacy)$/.test(page)),
+      serialize: (item) => ({ ...item, lastmod: new Date().toISOString() }),
       i18n: { defaultLocale, locales: Object.fromEntries(locales.map((l) => [l, l])) },
     }),
   ],

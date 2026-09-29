@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { useT, getLang, localePath } from '../i18n';
+import { legalPagesReady } from '../i18n/config.mjs';
 import { config } from '../config';
 import { fill } from '../lib/rich';
 
@@ -11,7 +12,7 @@ interface Props { page: 'terms' | 'privacy' }
 const doc = site.legal[Astro.props.page];
 const email = `<a href="mailto:${config.contactEmail}">${config.contactEmail}</a>`;
 ---
-<Base title={doc.title} description={doc.description}>
+<Base title={doc.title} description={doc.description} noindex={!legalPagesReady} breadcrumb={doc.title}>
   <article class="section legal glow-r">
     <div class="wrap legal__in">
       <p class="eyebrow">{site.meta.title}</p>

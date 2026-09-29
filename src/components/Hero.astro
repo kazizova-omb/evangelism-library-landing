@@ -38,8 +38,11 @@ const image = slot('hero');
 
   <div class="hero__in">
     <div class="hero__copy">
-      <p class="eyebrow rise">{h.eyebrow}</p>
-      <h1 class="h1 rise d1" id="hero-title" set:html={rich(h.title)} />
+      <!-- The eyebrow is part of the H1 so the heading carries the category, not only the brand -->
+      <h1 class="hero__title" id="hero-title">
+        <span class="hero__kicker rise"><span class="eyebrow">{h.eyebrow}</span></span>
+        <span class="h1 rise d1" set:html={rich(h.title)} />
+      </h1>
       <p class="lead rise d2" set:html={rich(h.lead)} />
       <div class="ctas rise d3">
         <a href="#get" class="btn btn--gold" data-track="cta_click" data-track-location="hero">{h.primaryCta}</a>
@@ -89,7 +92,10 @@ const image = slot('hero');
 
   .hero__in { width: 100%; max-width: 1440px; margin: 0 auto; padding: 120px var(--gutter) 110px }
   .hero__copy { max-width: 660px }
-  .h1 { font-family: var(--display); font-weight: 600; font-size: clamp(46px, 6.4vw, 96px); line-height: .98; letter-spacing: -.012em; margin: 26px 0 28px; text-wrap: balance }
+  /* h1 wrapper renders exactly like the prototype's separate eyebrow <p> + title */
+  .hero__title { font: inherit }
+  .hero__kicker { display: block }
+  .h1 { display: block; font-family: var(--display); font-weight: 600; font-size: clamp(46px, 6.4vw, 96px); line-height: .98; letter-spacing: -.012em; margin: 26px 0 28px; text-wrap: balance }
   .h1 :global(em) { font-style: italic; font-weight: 500; background: linear-gradient(100deg, var(--gold-hi) 10%, var(--gold) 55%, var(--amber) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: .06em }
   .lead { font-size: clamp(17px, 1.35vw, 19.5px); line-height: 1.6; color: var(--ink-2); max-width: 540px }
   .lead :global(strong) { color: var(--ink); font-weight: 500 }

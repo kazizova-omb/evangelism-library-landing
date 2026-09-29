@@ -19,9 +19,16 @@ const en = {
   },
 
   meta: {
+    // Brand, used as the suffix of every page title
     title: 'Revelation Media Resources',
+    // Home page <title>: lead with what people search for (keep under ~65 characters)
+    homeTitle: 'Free Prophecy Series Kit for Pastors | Revelation Media Resources',
     description:
-      'Presentations, images, videos, and promotional materials for leading a prophecy series. Ready to use, fully editable, and free for pastors and ministry leaders.',
+      'Free evangelistic series kit for pastors: prophecy seminar presentations, images, videos and promo materials, editable in PowerPoint, Keynote and Google Slides.',
+    // Structured data (search engines and AI answers)
+    kitName: 'Revelation Media Resources evangelistic series kit',
+    audience: 'Pastors, church leaders and ministry organizations',
+    howToName: 'How to get the Revelation Media Resources kit',
     ogImageAlt: 'Revelation Media Resources: everything you need to lead a prophecy series',
   },
 
@@ -158,8 +165,11 @@ const en = {
   faq: {
     eyebrow: 'Questions',
     title: 'Before you *ask*',
+    // Also published as FAQPage structured data. Start answers with the direct answer.
     items: [
-      { q: 'Is it really free?', a: 'Yes. The full kit is free for pastors, churches, and ministry organizations. Just fill out the short form to get access.', open: true },
+      { q: 'What is Revelation Media Resources?', a: 'Revelation Media Resources is a free library of ready-made materials for running an evangelistic prophecy series: presentations, slides, images, videos, and promotional materials for pastors, churches, and ministry organizations.', open: true },
+      { q: 'Is it really free?', a: 'Yes. The full kit is free for pastors, churches, and ministry organizations. Just fill out the short form to get access.' },
+      { q: 'Who can use these materials?', a: 'Pastors, church leaders, and ministry organizations who want to run an evangelistic series. No design skills are needed: the files are ready to present and easy to adapt to your church.' },
       { q: 'What formats are included?', a: 'Presentations come in PowerPoint, Keynote, and Google Slides. Images and videos are provided in standard formats that work on any device.' },
       { q: 'Can I edit the materials?', a: "Yes. You can change text, reorder slides, and add your church's details to fit your program." },
       { q: 'Which languages are available?', a: "The kit is available in several languages, listed in the translation section below. Don't see yours? You can help us translate it." },

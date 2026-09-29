@@ -128,6 +128,25 @@ STUB_DELAY=3000 npm run stub         # slow response to see the loading state
 PUBLIC_API_URL=http://localhost:8787/lead npm run dev
 ```
 
+## SEO and answer engines
+
+- **Titles and descriptions:** the home page uses `meta.homeTitle` / `meta.description` from the locale
+  files (search phrase first, brand last). Other pages use "Page | Brand".
+- **H1** contains the category ("Evangelistic Series Library") and the brand.
+- **Structured data** (`src/lib/schema.ts`), one linked JSON-LD graph per page: Organization, WebSite,
+  WebPage (with `speakable`), the kit as a free CreativeWork with an Offer, HowTo (the 3 steps),
+  FAQPage (all FAQ items), BreadcrumbList on legal pages. It is generated from the same copy as the page.
+- **FAQ** opens with a one-sentence definition ("Revelation Media Resources is...") that AI answers can quote.
+  Keep answers direct: answer first, detail after.
+- **/llms.txt**: plain-text summary for AI assistants, generated from the English copy.
+- `hreflang` + `x-default`, canonical, sitemap with `lastmod`, `max-image-preview:large`,
+  per-language Open Graph images (`public/og-default.jpg`, `og-default-es.jpg`).
+- **Legal pages** are `noindex` and out of the sitemap while `legalPagesReady` is `false` in
+  `src/i18n/config.mjs`. Flip it when the client's texts are in.
+
+After launch: verify the domain in Google Search Console and Bing Webmaster Tools, submit
+`/sitemap-index.xml`, and check the page in Google's Rich Results Test.
+
 ## Analytics and consent
 
 With `PUBLIC_GA4_ID` set, a cookie banner (Accept / Decline) appears on the first visit and the choice
