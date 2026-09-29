@@ -1,56 +1,89 @@
 ---
 import BrandMark from './BrandMark.astro';
+import LangSwitch from './LangSwitch.astro';
 import { useT, getLang, localePath } from '../i18n';
 import { config } from '../config';
 import { anchor } from '../lib/links';
 
-const site = useT(Astro);
-const lang = getLang(Astro);
-
 interface Props { home: boolean }
 const { home } = Astro.props;
+const site = useT(Astro);
+const lang = getLang(Astro);
 const l = site.footer.links;
+const c = site.footer.columns;
+const a = (href: string) => anchor(href, home, lang);
 ---
 <footer class="footer">
-  <div class="footer__in">
-    <div>
+  <div class="footer__top">
+    <div class="footer__brand">
       <a href={home ? '#top' : localePath(lang, '/')} class="brand">
         <BrandMark />
         <span>{site.brand}</span>
       </a>
       <p>{site.footer.tagline}</p>
     </div>
-    <nav aria-label="Footer">
-      <a href={anchor('#inside', home, lang)}>{l.inside}</a>
-      <a href={`mailto:${config.supportEmail}`}>{l.support}</a>
-      <a href={anchor('#demo', home, lang)}>{l.demo}</a>
-      <a href={`mailto:${config.contactEmail}`}>{l.contact}</a>
-      <a href={anchor('#about', home, lang)}>{l.about}</a>
-      <a href={localePath(lang, '/terms')}>{l.terms}</a>
-      <a href={anchor('#translate', home, lang)}>{l.translate}</a>
-      <a href={localePath(lang, '/privacy')}>{l.privacy}</a>
+
+    <nav class="footer__cols" aria-label="Footer">
+      <div>
+        <p class="footer__h" id="fc-explore">{c.explore}</p>
+        <ul aria-labelledby="fc-explore">
+          <li><a href={a('#inside')}>{l.inside}</a></li>
+          <li><a href={a('#demo')}>{l.demo}</a></li>
+          <li><a href={a('#about')}>{l.about}</a></li>
+          <li><a href={a('#translate')}>{l.translate}</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer__h" id="fc-help">{c.help}</p>
+        <ul aria-labelledby="fc-help">
+          <li><a href={a('#faq')}>{l.faq}</a></li>
+          <li><a href={`mailto:${config.supportEmail}`}>{l.support}</a></li>
+          <li><a href={`mailto:${config.contactEmail}`}>{l.contact}</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer__h" id="fc-legal">{c.legal}</p>
+        <ul aria-labelledby="fc-legal">
+          <li><a href={localePath(lang, '/terms')}>{l.terms}</a></li>
+          <li><a href={localePath(lang, '/privacy')}>{l.privacy}</a></li>
+          {config.ga4Id && <li><button type="button" data-cookie-settings>{site.footer.cookieSettings}</button></li>}
+        </ul>
+      </div>
     </nav>
   </div>
+
   <div class="footer__bottom">
     <span>{site.footer.copyright}</span>
-    {config.ga4Id && <button type="button" class="cookie-link" data-cookie-settings>{site.footer.cookieSettings}</button>}
-    <span>{site.footer.questions} <a href={`mailto:${config.contactEmail}`}>{config.contactEmail}</a></span>
+    <LangSwitch variant="inline" />
   </div>
 </footer>
 
 <style>
-  .footer { border-top: 1px solid var(--line); padding: 56px var(--gutter) 36px }
-  .footer__in { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap }
-  .brand { display: flex; align-items: center; gap: 12px; font-family: var(--display); font-weight: 600; font-size: 22px; letter-spacing: .02em; white-space: nowrap }
+  .footer { border-top: 1px solid var(--line); padding: 64px var(--gutter) 32px }
+  .footer__top { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 48px 64px }
+  .brand { display: inline-flex; align-items: center; gap: 12px; font-family: var(--display); font-weight: 600; font-size: 22px; letter-spacing: .02em; white-space: nowrap }
   .brand :global(.brand__mark) { width: 26px; height: 26px; color: var(--gold) }
-  .footer p { max-width: 360px; margin-top: 14px; font-size: 14px; color: var(--muted-solid) }
-  .footer nav { display: grid; grid-template-columns: repeat(2, auto); gap: 12px 48px; font-size: 14px; color: var(--ink-2) }
-  .footer nav a:hover, .footer__bottom a:hover, .cookie-link:hover { color: var(--gold-hi) }
-  .footer__bottom { max-width: 1200px; margin: 48px auto 0; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted-solid) }
-  .cookie-link { font-size: 13px; color: var(--muted-solid); text-decoration: underline; text-underline-offset: 3px }
+  .footer__brand p { max-width: 340px; margin-top: 16px; font-size: 14px; line-height: 1.6; color: var(--muted-solid) }
 
+  .footer__cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px }
+  .footer__h { margin-bottom: 16px; font-size: 12px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--gold) }
+  .footer__cols ul { list-style: none; display: grid; gap: 12px }
+  .footer__cols a, .footer__cols button { font: inherit; font-size: 14.5px; color: var(--ink-2); text-align: left; transition: color .2s }
+  .footer__cols a:hover, .footer__cols button:hover { color: var(--gold-hi) }
+
+  .footer__bottom { max-width: 1200px; margin: 56px auto 0; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted-solid) }
+
+  /* keep the language links clear of the floating back-to-top button */
+  @media (max-width: 1360px) and (min-width: 761px) {
+    .footer__bottom { padding-right: 64px }
+  }
+  @media (max-width: 1020px) {
+    .footer__top { grid-template-columns: 1fr }
+  }
   @media (max-width: 760px) {
+    .footer { padding-top: 48px }
     .brand { font-size: 19px }
-    .footer nav { grid-template-columns: 1fr 1fr; gap: 12px 32px }
+    .footer__cols { grid-template-columns: 1fr 1fr; gap: 32px 24px }
+    .footer__bottom { margin-top: 40px; flex-direction: column-reverse; align-items: flex-start }
   }
 </style>
