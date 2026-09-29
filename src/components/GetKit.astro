@@ -31,15 +31,12 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
       <h2 class="h2" id="get-title" set:html={rich(g.title)} />
       <p class="sub">{g.sub}</p>
       <ol class="next">
-        {g.steps.map((s) => <li><div><b>{s.title}</b><span>{s.text}</span></div></li>)}
+        {g.steps.map((s, i) => <li><span class="next__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span><div><b>{s.title}</b><span>{s.text}</span></div></li>)}
       </ol>
       <aside class="returning" aria-labelledby="returning-title">
-        <span class="icon-badge"><Icon name="mail" /></span>
-        <div>
-          <h3 id="returning-title">{g.returning.title}</h3>
-          <p>{g.returning.text}</p>
-          <p class="returning__help" set:html={returningHelp} />
-        </div>
+        <h3 id="returning-title">{g.returning.title}</h3>
+        <p>{g.returning.text}</p>
+        <p class="returning__help" set:html={returningHelp} />
       </aside>
     </div>
 
@@ -116,49 +113,55 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
 </section>
 
 <style>
-  .get { display: grid; grid-template-columns: 5fr 7fr; gap: 72px; align-items: start }
+  .get { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 80px; align-items: start }
   .get__head { position: sticky; top: 120px }
-  .next { list-style: none; counter-reset: s; display: grid; gap: 22px; margin-top: 36px }
-  .next li { display: flex; gap: 16px; align-items: flex-start }
-  .next li::before { counter-increment: s; content: counter(s); flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-family: var(--display); font-weight: 600; font-size: 19px; color: var(--gold-hi); box-shadow: 0 0 0 1px rgba(227, 178, 94, .45) inset }
-  .next b { display: block; font-weight: 600; color: var(--ink) }
-  .next span { font-size: 15px; color: var(--muted-solid) }
+  .get__head .h2 { font-size: clamp(40px, 3.9vw, 56px); text-wrap: balance }
+  .get__head .h2 :global(em) { white-space: nowrap } /* keep the accent phrase on one line */
+  /* steps: numbered rows with hairlines, no badges */
+  .next { list-style: none; margin-top: 36px; border-bottom: 1px solid var(--line) }
+  .next li { display: grid; grid-template-columns: 40px 1fr; gap: 12px; padding: 16px 0; border-top: 1px solid var(--line) }
+  .next__num { padding-top: 3px; font-size: 12.5px; font-weight: 600; letter-spacing: .04em; color: var(--gold); font-variant-numeric: tabular-nums lining-nums }
+  .next b { display: block; font-weight: 500; font-size: 16px; color: var(--ink) }
+  .next div span { display: block; margin-top: 2px; font-size: 14.5px; color: var(--muted-solid) }
 
-  .returning { display: flex; gap: 16px; align-items: flex-start; margin-top: 40px; padding: 22px 24px; border-radius: 14px; background: linear-gradient(180deg, rgba(243, 235, 221, .04), rgba(243, 235, 221, .012)); box-shadow: 0 0 0 1px var(--line) inset }
-  .returning h3 { font-family: var(--display); font-weight: 600; font-size: 24px; line-height: 1.15; margin: 2px 0 6px }
-  .returning p { font-size: 15px; color: var(--ink-2); line-height: 1.55 }
-  .returning__help { margin-top: 10px; font-size: 13px !important; color: var(--muted-solid) !important }
+  /* returning users: a quiet note, not a second card */
+  .returning { margin-top: 36px; padding-left: 16px; border-left: 2px solid rgba(227, 178, 94, .5) }
+  .returning h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 4px }
+  .returning p { font-size: 14.5px; color: var(--muted-solid); line-height: 1.55; max-width: 440px }
+  .returning__help { margin-top: 8px; font-size: 13px !important }
   .returning__help :global(a), .success__help :global(a) { color: var(--gold-hi); text-decoration: underline; text-underline-offset: 3px; white-space: nowrap }
 
-  .formcard { position: relative; padding: clamp(26px, 3.6vw, 48px); border-radius: 20px; background: linear-gradient(180deg, #17120D, #0F0C09); box-shadow: 0 0 0 1px var(--line) inset, 0 40px 100px -40px rgba(0, 0, 0, .9), 0 0 140px -50px rgba(227, 178, 94, .4) }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px }
-  .field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px }
-  .field label { font-size: 14px; font-weight: 500; color: var(--ink-2) }
+  .formcard { position: relative; padding: clamp(24px, 3vw, 40px); border-radius: 18px; background: linear-gradient(180deg, #14100C, #0F0C09); box-shadow: 0 0 0 1px var(--line) inset, 0 30px 80px -40px rgba(0, 0, 0, .8) }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px }
+  .field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px }
+  .field label { font-size: 13.5px; font-weight: 500; color: var(--ink-2) }
   .field label em { font-style: normal; font-weight: 400; font-size: 13px; color: var(--muted-solid) }
-  .field input, .field select, .field textarea { width: 100%; font: inherit; font-size: 16px; color: var(--ink); background: rgba(243, 235, 221, .04); border: 1px solid rgba(243, 235, 221, .15); border-radius: 10px; height: 52px; padding: 0 16px; outline: none; transition: border-color .2s, box-shadow .2s, background .2s }
-  .field textarea { height: auto; min-height: 104px; padding: 14px 16px; resize: vertical; line-height: 1.5 }
+  .field input:not([type="checkbox"]), .field select, .field textarea { width: 100%; font: inherit; font-size: 16px; color: var(--ink); background: rgba(243, 235, 221, .025); border: 1px solid rgba(243, 235, 221, .12); border-radius: 10px; height: 48px; padding: 0 14px; outline: none; transition: border-color .2s, box-shadow .2s, background .2s }
+  .field input:not([type="checkbox"]):hover, .field select:hover, .field textarea:hover { border-color: rgba(243, 235, 221, .22) }
+  .field textarea { height: auto; min-height: 96px; padding: 12px 14px; resize: vertical; line-height: 1.5 }
   .field select { appearance: none; -webkit-appearance: none; padding-right: 44px; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23E3B25E' stroke-width='1.6'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 18px center }
   .field select option { background: #17120D; color: var(--ink) }
-  .field ::placeholder { color: rgba(163, 150, 130, .7) }
-  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); background: rgba(243, 235, 221, .06); box-shadow: 0 0 0 4px rgba(227, 178, 94, .14) }
+  .field ::placeholder { color: rgba(163, 150, 130, .6) }
+  .field input:not([type="checkbox"]):focus, .field select:focus, .field textarea:focus { border-color: rgba(227, 178, 94, .8); background: rgba(243, 235, 221, .04); box-shadow: 0 0 0 3px rgba(227, 178, 94, .12) }
   .err { display: none; font-size: 13px; color: var(--error) }
   .is-invalid input, .is-invalid select { border-color: var(--error-line) }
   .is-invalid .err { display: block }
 
-  .consent { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--ink-2); margin: 4px 0 6px; cursor: pointer }
-  .consent input { flex: none; appearance: none; -webkit-appearance: none; width: 20px; height: 20px; margin-top: 2px; border-radius: 5px; border: 1px solid rgba(243, 235, 221, .3); background: rgba(243, 235, 221, .04); cursor: pointer; display: grid; place-items: center; transition: background .2s, border-color .2s }
+  .consent { display: flex; gap: 12px; align-items: flex-start; font-size: 13.5px; line-height: 1.55; color: var(--muted-solid); margin: 6px 0 4px; cursor: pointer }
+  .consent input { flex: none; appearance: none; -webkit-appearance: none; width: 18px; height: 18px; padding: 0; margin-top: 2px; border-radius: 5px; border: 1px solid rgba(243, 235, 221, .3); background: rgba(243, 235, 221, .04); cursor: pointer; display: grid; place-items: center; transition: background .2s, border-color .2s }
   .consent input:checked { background: var(--gold); border-color: var(--gold) }
-  .consent input:checked::after { content: ""; width: 10px; height: 6px; border-left: 2px solid #1E1408; border-bottom: 2px solid #1E1408; transform: translateY(-1px) rotate(-45deg) }
+  .consent input:checked::after { content: ""; width: 9px; height: 5px; border-left: 2px solid #1E1408; border-bottom: 2px solid #1E1408; transform: translateY(-1px) rotate(-45deg) }
   .consent input:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; box-shadow: 0 0 0 4px rgba(227, 178, 94, .2) }
   .is-invalid .consent input { border-color: var(--error-line) }
-  .consent :global(a) { color: var(--gold-hi); text-decoration: underline; text-underline-offset: 3px }
-  .consent-wrap { margin-bottom: 22px }
+  .consent :global(a) { color: var(--ink-2); text-decoration: underline; text-decoration-color: rgba(227, 178, 94, .6); text-underline-offset: 3px }
+  .consent :global(a:hover) { color: var(--gold-hi) }
+  .consent-wrap { margin: 4px 0 20px }
 
   /* Cloudflare Turnstile: space is reserved so the widget does not shift the layout */
-  .turnstile-wrap { margin-bottom: 24px; gap: 6px }
+  .turnstile-wrap { margin-bottom: 20px; gap: 6px }
   .turnstile { width: 100%; max-width: 300px; min-height: 65px }
-  /* under ~392px the card is narrower than the 300px widget: the script switches to "compact" (150x140) */
-  @media (max-width: 391px) { .turnstile { min-height: 148px } }
+  /* under ~388px the card is narrower than the 300px widget: the script switches to "compact" (150x140) */
+  @media (max-width: 387px) { .turnstile { min-height: 148px } }
 
   .btn.is-loading { pointer-events: none; opacity: .85 }
   .btn.is-loading::after { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(30, 20, 8, .3); border-top-color: #1E1408; animation: spin .8s linear infinite }
