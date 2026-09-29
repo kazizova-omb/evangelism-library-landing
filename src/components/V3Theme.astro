@@ -93,15 +93,12 @@ import '@fontsource/anton/400.css';
   :root.v3:not(#v1):not(#v2) .video__play::before { border-color: rgba(127, 224, 236, .8) }
 
   /* ---------- what's inside ---------- */
-  /* numbers carry the brand gradient (a deeper cut of the rule colours so they stay
-     readable on paper: pink 4.4:1, indigo, teal 3.4:1). Each number is sized to its
-     own text, so every figure shows the full sweep. */
+  /* numbers in the headline accent teal (same as "RESOURCE"); "+" in navy */
   :root.v3:not(#v1):not(#v2) .stat { padding-left: 20px; padding-right: 20px }
   :root.v3:not(#v1):not(#v2) .stat:first-child { padding-left: 0 }
   :root.v3:not(#v1):not(#v2) .stat dd { align-self: flex-start; font-family: var(--poster); font-size: clamp(60px, 6.2vw, 92px); line-height: .95;
-    background: linear-gradient(90deg, #B0508A 0%, #2A2C7C 55%, #0E8FA2 100%); -webkit-background-clip: text; background-clip: text;
-    color: transparent; -webkit-text-fill-color: transparent; padding-right: .02em }
-  :root.v3:not(#v1):not(#v2) .stat__suffix { font-family: var(--poster); font-size: .55em; vertical-align: .6em; color: var(--teal); -webkit-text-fill-color: var(--teal) }
+    background: none; color: var(--teal); -webkit-text-fill-color: currentColor }
+  :root.v3:not(#v1):not(#v2) .stat__suffix { font-family: var(--poster); font-size: .55em; vertical-align: .6em; color: var(--navy); -webkit-text-fill-color: currentColor }
   :root.v3:not(#v1):not(#v2) .stat dt { color: var(--ink-2); font-weight: 600 }
   :root.v3:not(#v1):not(#v2) .tile { border-radius: 6px; box-shadow: none; background: var(--paper-2) }
   :root.v3:not(#v1):not(#v2) .tile figcaption { border-radius: 4px; background: var(--indigo); color: #fff }
