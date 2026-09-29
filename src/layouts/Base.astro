@@ -17,6 +17,7 @@ import Header from '../components/Header.astro';
 import MobileMenu from '../components/MobileMenu.astro';
 import Footer from '../components/Footer.astro';
 import ConsentBanner from '../components/ConsentBanner.astro';
+import BackToTop from '../components/BackToTop.astro';
 import { useT, getLang, locales, localeCodes, switchPath, defaultLocale } from '../i18n';
 import { config } from '../config';
 import { slot } from '../lib/slots';
@@ -114,6 +115,7 @@ const jsonLd = {
     <slot />
   </main>
   <Footer home={home} />
+  <BackToTop />
   {config.ga4Id && <ConsentBanner />}
 
   <script>
