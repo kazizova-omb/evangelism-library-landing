@@ -179,6 +179,17 @@ Events: `cta_click` (`location`), `demo_download`, `trailer_play`, `login_click`
 `faq_open` (`question`), `translate_click`, `form_submit` (after a successful response only).
 Add `data-track="event_name"` (and optionally `data-track-location`) to any link or button to track it.
 
+## Client preview
+
+Live preview for the client (all three design options, switcher bottom left, not indexed):
+**https://revelation-media-resources.pages.dev** (`/v2`, `/v3`, Spanish under `/es`).
+
+Update it after changes (needs `npx wrangler login` once on this machine):
+
+```sh
+npm run deploy:preview
+```
+
 ## Deploying to Cloudflare Pages
 
 1. Push this repository to GitHub or GitLab.
