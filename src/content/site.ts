@@ -10,18 +10,18 @@
 
 export const site = {
   meta: {
-    title: 'Evangelistic Series Library',
+    title: 'Revelation Media Resources',
     description:
       'Presentations, images, videos, and promotional materials for leading a prophecy series. Ready to use, fully editable, and free for pastors and ministry leaders.',
-    ogImageAlt: 'Evangelistic Series Library: everything you need to lead a prophecy series',
+    ogImageAlt: 'Revelation Media Resources: everything you need to lead a prophecy series',
   },
 
   organization: {
-    name: '[Organization Name]',
+    name: 'Lorem Ipsum Ministries',
     logo: '/favicon.svg',
   },
 
-  brand: 'Project Name',
+  brand: 'Revelation Media Resources',
   skipLink: 'Skip to content',
 
   nav: [
@@ -49,8 +49,8 @@ export const site = {
 
   hero: {
     eyebrow: 'Evangelistic Series Library',
-    title: 'Everything you need to lead a *prophecy series*',
-    lead: 'Presentations, images, videos, and promotional materials. Ready to use, fully editable, and **free for pastors and ministry leaders.**',
+    title: 'Revelation Media *Resources*',
+    lead: 'Everything you need to lead a prophecy series: presentations, images, videos, and promotional materials. Ready to use, fully editable, and **free for pastors and ministry leaders.**',
     primaryCta: 'Get the materials',
     secondaryCta: 'Download demo',
     trust: ['PowerPoint', 'Keynote', 'Google Slides', 'Multiple languages'],
@@ -68,7 +68,7 @@ export const site = {
     modalLabel: 'Trailer',
     closeLabel: 'Close',
     placeholder: 'The trailer will play here (YouTube embed, loaded on click).',
-    videoTitle: 'Evangelistic Series Library trailer',
+    videoTitle: 'Revelation Media Resources trailer',
   },
 
   inside: {
@@ -128,21 +128,21 @@ export const site = {
     sub: 'Download a short sample before you request the full kit.',
     checklist: ['One complete presentation', 'A selection of images', 'Examples of promotional materials'],
     cta: 'Download demo',
-    meta: 'ZIP · size TBD',
+    meta: 'ZIP · 120 MB',
     slideTitle: 'The prophecy unfolds',
   },
 
   about: {
     eyebrow: 'About the team',
-    title: 'Created by *[Department Name]*',
+    title: 'Created by *Lorem Ipsum Ministries*',
     paragraphs: [
-      '[Short introduction of the department: who they are, what they do, and why they created this library.]',
-      '[Mission statement: one or two sentences about equipping pastors and churches to share the message of Bible prophecy.]',
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.',
     ],
-    quote: '[A short personal word from the project lead about why this project matters and who it is for.]',
-    author: 'Justin [Surname]',
-    role: 'Project Lead, [Department Name]',
-    imageAlt: 'Justin [Surname], Project Lead',
+    quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus, ut fermentum massa justo sit amet risus.',
+    author: 'Justin Lorem',
+    role: 'Project Lead, Lorem Ipsum Ministries',
+    imageAlt: 'Justin Lorem, Project Lead',
   },
 
   faq: {
@@ -172,7 +172,7 @@ export const site = {
       country: { label: 'Country', placeholder: 'Start typing...', error: 'Please enter your country.' },
       organization: { label: 'Church or organization', placeholder: 'Name of your church', error: 'Please enter your church or organization.' },
       division: { label: 'Division', placeholder: 'Select a division' },
-      conference: { label: 'Conference or mission', placeholder: 'e.g. Northern California Conference' },
+      conference: { label: 'Conference or mission', placeholder: 'e.g. Texas Conference' },
       comment: { label: 'Comment', placeholder: "Anything you'd like us to know" },
     },
     optional: '(optional)',
@@ -268,7 +268,7 @@ export const site = {
       translate: 'Translate',
       privacy: 'Privacy Policy',
     },
-    copyright: '© 2026 [Organization Name]',
+    copyright: '© 2026 Lorem Ipsum Ministries',
     questions: 'Questions?',
     cookieSettings: 'Cookie settings',
   },
@@ -284,30 +284,30 @@ export const site = {
 
   legal: {
     backHome: 'Back to home',
-    updated: 'Last updated: [date]',
+    updated: 'Last updated: September 29, 2026',
     terms: {
       title: 'Terms of Use',
-      description: 'Terms of Use for the Evangelistic Series Library.',
-      intro: '[Placeholder. Replace with the final Terms of Use before launch.]',
+      description: 'Terms of Use for Revelation Media Resources.',
+      intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. These terms explain how you may use the library and its materials.',
       sections: [
-        { heading: 'Who we are', text: '[Organization Name] provides the Evangelistic Series Library free of charge to pastors, churches, and ministry organizations.' },
-        { heading: 'Using the materials', text: '[Describe what users may do with the materials: present, edit, print, share within their church.]' },
-        { heading: 'What is not allowed', text: '[Describe restrictions, for example reselling the materials or removing attribution.]' },
-        { heading: 'Accounts and access', text: '[Describe how access to the library works and when it may be withdrawn.]' },
-        { heading: 'Changes to these terms', text: '[Describe how users will be told about changes.]' },
+        { heading: 'Who we are', text: 'Lorem Ipsum Ministries provides Revelation Media Resources free of charge to pastors, churches, and ministry organizations.' },
+        { heading: 'Using the materials', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam.' },
+        { heading: 'What is not allowed', text: 'Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.' },
+        { heading: 'Accounts and access', text: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
+        { heading: 'Changes to these terms', text: 'Curabitur blandit tempus porttitor. Maecenas faucibus mollis interdum, nullam quis risus eget urna mollis ornare vel eu leo.' },
         { heading: 'Contact', text: 'Questions about these terms? Write to us at {email}.' },
       ],
     },
     privacy: {
       title: 'Privacy Policy',
-      description: 'How the Evangelistic Series Library collects and uses personal data.',
-      intro: '[Placeholder. Replace with the final Privacy Policy before launch.]',
+      description: 'How Revelation Media Resources collects and uses personal data.',
+      intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. This policy explains what we collect, why, and the choices you have.',
       sections: [
         { heading: 'What we collect', text: 'When you request the kit we collect your name, email, country, church or organization, and any optional details you choose to share.' },
         { heading: 'Why we collect it', text: 'We use your details to give you access to the library and to send updates about the kit.' },
         { heading: 'Cookies and analytics', text: 'With your consent we use Google Analytics to understand how the site is used. You can change your choice at any time using "Cookie settings" in the footer.' },
         { heading: 'Spam protection', text: 'The form is protected by Cloudflare Turnstile, which processes technical data to tell people from bots.' },
-        { heading: 'Your rights', text: '[Describe access, correction and deletion rights and how to use them.]' },
+        { heading: 'Your rights', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id ligula porta felis euismod semper, cras mattis consectetur purus sit amet fermentum.' },
         { heading: 'Contact', text: 'Questions about your data? Write to us at {email}.' },
       ],
     },

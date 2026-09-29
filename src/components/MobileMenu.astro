@@ -1,12 +1,14 @@
 ---
 import { site } from '../content/site';
 import { anchor } from '../lib/links';
+import { config } from '../config';
 
 interface Props { home: boolean }
 const { home } = Astro.props;
 ---
 <nav class="menu" id="menu" aria-label="Mobile">
   {site.nav.map((l) => <a href={anchor(l.href, home)}>{l.label}</a>)}
+  <a href={config.libraryUrl} class="menu__login" data-track="login_click" data-track-location="mobile_menu">{site.header.login}</a>
   <a href={anchor('#get', home)} class="btn btn--gold" data-track="cta_click" data-track-location="mobile_menu">{site.header.mobileCta}</a>
 </nav>
 
@@ -14,6 +16,7 @@ const { home } = Astro.props;
   .menu { position: fixed; inset: 0; z-index: 60; background: rgba(10, 8, 6, .97); display: flex; flex-direction: column; padding: 96px var(--gutter) 40px; gap: 8px; overflow-y: auto; opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s }
   .menu.is-open { opacity: 1; visibility: visible; transition: opacity .3s } /* visible at once, so focus can move in */
   .menu a { font-family: var(--display); font-size: 36px; font-weight: 600; padding: 8px 0; border-bottom: 1px solid var(--line) }
+  .menu .menu__login { font-family: var(--body); font-size: 17px; font-weight: 500; color: var(--ink-2); border-bottom: 0; padding-top: 20px }
   .menu .btn { margin-top: 28px; font-family: var(--body); font-size: 16px; border: 0 }
 </style>
 

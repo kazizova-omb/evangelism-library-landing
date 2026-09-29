@@ -59,7 +59,13 @@ const isFile = config.demoUrl !== '#';
     .demo { grid-template-columns: 1fr }
   }
   @media (max-width: 760px) {
-    .fan { height: 300px; transform: scale(.78) }
+    /* smaller fan that stays inside the card (the scaled desktop fan was clipped on the left) */
+    .demo { gap: 24px }
+    .fan { height: 250px }
+    .fc-flyer { width: 118px; transform: translate(-50%, -50%) translate(-88px, 18px) rotate(-10deg) }
+    .fc-slide { width: 230px; transform: translate(-50%, -50%) translate(4px, -34px) }
+    .fc-slide span { font-size: 19px }
+    .fc-img { width: 112px; transform: translate(-50%, -50%) translate(84px, 62px) rotate(8deg) }
     .demo__row .btn { width: 100% }
   }
 </style>

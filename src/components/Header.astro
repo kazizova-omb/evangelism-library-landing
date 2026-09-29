@@ -57,7 +57,7 @@ const { home } = Astro.props;
   @media (max-width: 760px) {
     .header__in { height: 64px; gap: 16px }
     .brand { font-size: 19px }
-    .header__actions .btn { display: none }
+    .header__actions .btn, .login { display: none } /* both live in the mobile menu */
     .burger { display: inline-flex }
   }
 </style>
