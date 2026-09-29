@@ -1,4 +1,5 @@
-// All copy, numbers, captions, lists and links for the site live here.
+// English copy. Every language has its own file in this folder with the same shape
+// (TypeScript checks that nothing is missing). See README "Languages".
 // Edit this file to replace placeholder content; the markup does not need to change.
 //
 // Inline formatting in text fields:
@@ -8,7 +9,15 @@
 //
 // Emails and external URLs (library, demo, trailer) come from env vars, see src/config.ts.
 
-export const site = {
+const en = {
+  locale: {
+    code: 'en',
+    name: 'English',
+    short: 'EN',
+    htmlLang: 'en',
+    ogLocale: 'en_US',
+  },
+
   meta: {
     title: 'Revelation Media Resources',
     description:
@@ -32,7 +41,7 @@ export const site = {
   ],
 
   header: {
-    login: 'Log in',
+    languageLabel: 'Language',
     cta: 'Get materials',
     mobileCta: 'Get the materials',
     openMenu: 'Open menu',
@@ -181,6 +190,13 @@ export const site = {
       text: 'I agree to the {terms} and the processing of my data under the {privacy}.',
       error: 'Please accept the terms to continue.',
     },
+    // Shown under the steps for people who signed up before
+    returning: {
+      title: 'Already registered?',
+      text: 'Your access is waiting in your inbox. Look for the email from Revelation Media Resources and follow the sign-in link.',
+      // {support} is replaced with the support email link
+      help: "Didn't get the email? Write to {support}.",
+    },
     turnstileError: 'Please complete the spam check.',
     submit: 'Get free access',
     sending: 'Sending',
@@ -190,47 +206,36 @@ export const site = {
       title: 'Access granted',
       // {email} is replaced with the submitted address
       text: "We've sent an email to {email} with sign-in instructions. Can't find it? Check your spam folder.",
+      // {support} is replaced with the support email link
+      help: 'Still nothing? Write to {support}.',
       cta: 'Go to the library',
       change: 'Wrong email? Change it',
     },
-    divisions: [
-      'East-Central Africa Division',
-      'Euro-Asia Division',
-      'Inter-American Division',
-      'Inter-European Division',
-      'North American Division',
-      'Northern Asia-Pacific Division',
-      'South American Division',
-      'South Pacific Division',
-      'Southern Africa-Indian Ocean Division',
-      'Southern Asia Division',
-      'Southern Asia-Pacific Division',
-      'Trans-European Division',
-      'West-Central Africa Division',
-      'Other / not applicable',
-    ],
-    countries: [
-      'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia', 'Austria',
-      'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bhutan',
-      'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi', 'Cabo Verde', 'Cambodia',
-      'Cameroon', 'Canada', 'Central African Republic', 'Chad', 'Chile', 'China', 'Colombia', 'Comoros', 'Congo', 'Costa Rica',
-      "Côte d'Ivoire", 'Croatia', 'Cuba', 'Cyprus', 'Czechia', 'Democratic Republic of the Congo', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic',
-      'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Eswatini', 'Ethiopia', 'Fiji', 'Finland',
-      'France', 'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Greece', 'Grenada', 'Guatemala', 'Guinea',
-      'Guinea-Bissau', 'Guyana', 'Haiti', 'Honduras', 'Hong Kong', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran',
-      'Iraq', 'Ireland', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati',
-      'Kosovo', 'Kuwait', 'Kyrgyzstan', 'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein',
-      'Lithuania', 'Luxembourg', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Mauritania',
-      'Mauritius', 'Mexico', 'Micronesia', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Morocco', 'Mozambique', 'Myanmar',
-      'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'North Korea', 'North Macedonia',
-      'Norway', 'Oman', 'Pakistan', 'Palau', 'Palestine', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines',
-      'Poland', 'Portugal', 'Puerto Rico', 'Qatar', 'Romania', 'Russia', 'Rwanda', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent and the Grenadines',
-      'Samoa', 'San Marino', 'São Tomé and Príncipe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovakia',
-      'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'South Korea', 'South Sudan', 'Spain', 'Sri Lanka', 'Sudan', 'Suriname',
-      'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'Timor-Leste', 'Togo', 'Tonga',
-      'Trinidad and Tobago', 'Tunisia', 'Türkiye', 'Turkmenistan', 'Tuvalu', 'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States',
-      'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City', 'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe',
-    ],
+    // Keys are fixed codes; the English name is what the form sends.
+    divisions: {
+      ECD: 'East-Central Africa Division',
+      ESD: 'Euro-Asia Division',
+      IAD: 'Inter-American Division',
+      EUD: 'Inter-European Division',
+      NAD: 'North American Division',
+      NSD: 'Northern Asia-Pacific Division',
+      SAD: 'South American Division',
+      SPD: 'South Pacific Division',
+      SID: 'Southern Africa-Indian Ocean Division',
+      SUD: 'Southern Asia Division',
+      SSD: 'Southern Asia-Pacific Division',
+      TED: 'Trans-European Division',
+      WAD: 'West-Central Africa Division',
+      OTHER: 'Other / not applicable',
+    } as Record<string, string>,
+    // Country names come from the browser's built-in list (Intl.DisplayNames) for each
+    // language. Override the ones that read badly, by ISO code.
+    countryNames: {
+      AG: 'Antigua and Barbuda', BA: 'Bosnia and Herzegovina', CD: 'Democratic Republic of the Congo',
+      CG: 'Congo', HK: 'Hong Kong', KN: 'Saint Kitts and Nevis', LC: 'Saint Lucia', MM: 'Myanmar',
+      ST: 'São Tomé and Príncipe', TT: 'Trinidad and Tobago', VC: 'Saint Vincent and the Grenadines',
+      PS: 'Palestine', CI: "Côte d'Ivoire",
+    } as Record<string, string>,
   },
 
   translate: {
@@ -253,6 +258,8 @@ export const site = {
     legendInProgress: 'In progress',
     sub: 'Fluent in another language? Join our volunteer translators and help pastors around the world share this message.',
     cta: 'Volunteer as a translator',
+    // {email} is replaced with the translation email link
+    orWrite: 'Or write to {email}',
     mailSubject: 'Volunteer translator',
   },
 
@@ -260,7 +267,7 @@ export const site = {
     tagline: 'A modern visual library of materials for evangelistic series. Free for pastors and ministry leaders.',
     links: {
       inside: "What's inside",
-      login: 'Log in',
+      support: 'Support',
       demo: 'Demo',
       contact: 'Contact us',
       about: 'About',
@@ -322,4 +329,4 @@ export const site = {
   },
 } as const;
 
-export type Site = typeof site;
+export default en;

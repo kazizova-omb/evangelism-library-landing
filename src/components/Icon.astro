@@ -1,7 +1,9 @@
 ---
 // Inline SVG icons from the prototype. Decorative: always aria-hidden.
+export type IconName = 'mark' | 'play' | 'download' | 'check' | 'close' | 'success' | 'mail' | 'image' | 'book' | 'screen' | 'pen' | 'doc' | 'globe';
+
 interface Props {
-  name: 'mark' | 'play' | 'download' | 'check' | 'close' | 'success' | 'image' | 'book' | 'screen' | 'pen' | 'doc' | 'globe';
+  name: IconName;
   class?: string;
 }
 const { name, class: cls } = Astro.props;
@@ -24,6 +26,9 @@ const line = { fill: 'none', stroke: 'currentColor', 'stroke-linecap': 'round', 
 )}
 {name === 'success' && (
   <svg class={cls} viewBox="0 0 24 24" {...line} stroke-width="2.2" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+)}
+{name === 'mail' && (
+  <svg class={cls} viewBox="0 0 24 24" {...line} stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/></svg>
 )}
 {name === 'image' && (
   <svg class={cls} viewBox="0 0 24 24" {...line} stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 15l5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1.5"/></svg>

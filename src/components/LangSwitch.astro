@@ -1,0 +1,35 @@
+---
+import { locales, localeCodes, getLang, switchPath, useT } from '../i18n';
+
+// Links to the same page in every language. "compact" = EN / ES (header),
+// otherwise full names (mobile menu).
+interface Props { compact?: boolean; class?: string }
+const { compact = false, class: cls } = Astro.props;
+const lang = getLang(Astro);
+const site = useT(Astro);
+---
+{localeCodes.length > 1 && (
+  <nav class:list={['lang-switch', cls, { 'lang-switch--full': !compact }]} aria-label={site.header.languageLabel}>
+    {localeCodes.map((code) => {
+      const l = locales[code].locale;
+      return (
+        <a
+          href={switchPath(Astro.url.pathname, lang, code)}
+          hreflang={l.htmlLang}
+          lang={l.htmlLang}
+          aria-current={code === lang ? 'true' : undefined}
+          aria-label={compact ? l.name : undefined}
+        >{compact ? l.short : l.name}</a>
+      );
+    })}
+  </nav>
+)}
+
+<style>
+  .lang-switch { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; letter-spacing: .08em }
+  .lang-switch a { display: grid; place-items: center; min-width: 32px; height: 32px; padding: 0 6px; border-radius: 999px; color: var(--ink-2); opacity: .75; transition: opacity .2s, color .2s, background .2s }
+  .lang-switch a:hover { opacity: 1; color: var(--gold-hi) }
+  .lang-switch a[aria-current] { opacity: 1; color: var(--gold); box-shadow: 0 0 0 1px rgba(227, 178, 94, .4) inset }
+  .lang-switch--full { gap: 10px; font-size: 15px; font-weight: 500; letter-spacing: .02em }
+  .lang-switch--full a { height: 40px; padding: 0 16px }
+</style>

@@ -1,9 +1,11 @@
 ---
 import SlotImage from './SlotImage.astro';
-import { site } from '../content/site';
+import { useT } from '../i18n';
 import { config } from '../config';
 import { rich } from '../lib/rich';
 import { slot } from '../lib/slots';
+
+const site = useT(Astro);
 
 const a = site.about;
 const image = slot('team');

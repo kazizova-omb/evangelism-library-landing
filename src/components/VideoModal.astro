@@ -1,7 +1,9 @@
 ---
 import Icon from './Icon.astro';
-import { site } from '../content/site';
+import { useT } from '../i18n';
 import { config } from '../config';
+
+const site = useT(Astro);
 
 const t = site.trailer;
 ---

@@ -1,8 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site } from '../content/site';
+import { useT, getLang, localePath } from '../i18n';
 import { config } from '../config';
 import { fill } from '../lib/rich';
+
+const site = useT(Astro);
+const lang = getLang(Astro);
 
 interface Props { page: 'terms' | 'privacy' }
 const doc = site.legal[Astro.props.page];
@@ -21,7 +24,7 @@ const email = `<a href="mailto:${config.contactEmail}">${config.contactEmail}</a
           <p set:html={fill(s.text, { email })} />
         </section>
       ))}
-      <a href="/" class="btn btn--ghost legal__back">{site.legal.backHome}</a>
+      <a href={localePath(lang, '/')} class="btn btn--ghost legal__back">{site.legal.backHome}</a>
     </div>
   </article>
 </Base>

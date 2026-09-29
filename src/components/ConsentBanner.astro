@@ -1,9 +1,12 @@
 ---
-import { site } from '../content/site';
+import { useT, getLang, localePath } from '../i18n';
 import { fill } from '../lib/rich';
 
+const site = useT(Astro);
+const lang = getLang(Astro);
+
 const c = site.consent;
-const text = fill(c.text, { privacy: `<a href="/privacy">${c.privacyLink}</a>` });
+const text = fill(c.text, { privacy: `<a href="${localePath(lang, '/privacy')}">${c.privacyLink}</a>` });
 ---
 <!-- Rendered only when PUBLIC_GA4_ID is set. Fixed position, so showing it causes no layout shift. -->
 <section class="consent-banner" id="consentBanner" aria-label={c.label} hidden>

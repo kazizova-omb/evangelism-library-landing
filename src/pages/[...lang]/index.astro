@@ -1,0 +1,30 @@
+---
+import { langPaths } from '../../i18n';
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import Trailer from '../../components/Trailer.astro';
+import VideoModal from '../../components/VideoModal.astro';
+import Inside from '../../components/Inside.astro';
+import Journey from '../../components/Journey.astro';
+import Quality from '../../components/Quality.astro';
+import Demo from '../../components/Demo.astro';
+import About from '../../components/About.astro';
+import Faq from '../../components/Faq.astro';
+import GetKit from '../../components/GetKit.astro';
+import Translate from '../../components/Translate.astro';
+
+export const getStaticPaths = langPaths;
+---
+<Base home>
+  <Hero />
+  <Trailer />
+  <Inside />
+  <Journey />
+  <Quality />
+  <Demo />
+  <About />
+  <Faq />
+  <GetKit />
+  <Translate />
+  <VideoModal />
+</Base>

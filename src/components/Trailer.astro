@@ -1,10 +1,12 @@
 ---
 import Icon from './Icon.astro';
 import SlotImage from './SlotImage.astro';
-import { site } from '../content/site';
+import { useT } from '../i18n';
 import { config } from '../config';
 import { rich } from '../lib/rich';
 import { slot } from '../lib/slots';
+
+const site = useT(Astro);
 
 const t = site.trailer;
 const image = slot('trailer');

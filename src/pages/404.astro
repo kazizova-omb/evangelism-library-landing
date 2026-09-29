@@ -1,7 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site } from '../content/site';
+import { useT } from '../i18n';
 import { rich } from '../lib/rich';
+
+const site = useT(Astro);
 
 const n = site.notFound;
 ---

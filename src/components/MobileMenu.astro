@@ -1,22 +1,26 @@
 ---
-import { site } from '../content/site';
+import { useT, getLang } from '../i18n';
 import { anchor } from '../lib/links';
-import { config } from '../config';
+import LangSwitch from './LangSwitch.astro';
+
+const site = useT(Astro);
+const lang = getLang(Astro);
 
 interface Props { home: boolean }
 const { home } = Astro.props;
 ---
 <nav class="menu" id="menu" aria-label="Mobile">
-  {site.nav.map((l) => <a href={anchor(l.href, home)}>{l.label}</a>)}
-  <a href={config.libraryUrl} class="menu__login" data-track="login_click" data-track-location="mobile_menu">{site.header.login}</a>
-  <a href={anchor('#get', home)} class="btn btn--gold" data-track="cta_click" data-track-location="mobile_menu">{site.header.mobileCta}</a>
+  {site.nav.map((l) => <a href={anchor(l.href, home, lang)}>{l.label}</a>)}
+  <LangSwitch class="menu__lang" />
+  <a href={anchor('#get', home, lang)} class="btn btn--gold" data-track="cta_click" data-track-location="mobile_menu">{site.header.mobileCta}</a>
 </nav>
 
 <style>
   .menu { position: fixed; inset: 0; z-index: 60; background: rgba(10, 8, 6, .97); display: flex; flex-direction: column; padding: 96px var(--gutter) 40px; gap: 8px; overflow-y: auto; opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s }
   .menu.is-open { opacity: 1; visibility: visible; transition: opacity .3s } /* visible at once, so focus can move in */
   .menu a { font-family: var(--display); font-size: 36px; font-weight: 600; padding: 8px 0; border-bottom: 1px solid var(--line) }
-  .menu .menu__login { font-family: var(--body); font-size: 17px; font-weight: 500; color: var(--ink-2); border-bottom: 0; padding-top: 20px }
+  .menu :global(.menu__lang) { margin: 24px 0 0 -16px } /* first label lines up with the links above */
+  .menu :global(.menu__lang a) { font-family: var(--body); font-size: 15px; font-weight: 500; padding: 0 16px; border-bottom: 0 }
   .menu .btn { margin-top: 28px; font-family: var(--body); font-size: 16px; border: 0 }
 </style>
 

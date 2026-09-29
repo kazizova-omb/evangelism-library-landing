@@ -1,7 +1,9 @@
 ---
-import Icon from './Icon.astro';
-import { site } from '../content/site';
+import Icon, { type IconName } from './Icon.astro';
+import { useT } from '../i18n';
 import { rich } from '../lib/rich';
+
+const site = useT(Astro);
 
 const q = site.quality;
 ---
@@ -16,7 +18,7 @@ const q = site.quality;
     <div class="features">
       {q.features.map((f) => (
         <div class="feature reveal">
-          <span class="icon-badge"><Icon name={f.icon} /></span>
+          <span class="icon-badge"><Icon name={f.icon as IconName} /></span>
           <h3>{f.title}</h3>
           <p>{f.text}</p>
           {'chips' in f && <ul class="chips" role="list">{f.chips.map((c) => <li class="chip">{c}</li>)}</ul>}
