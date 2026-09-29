@@ -24,24 +24,41 @@ so redeploy after changing one.
 
 | Variable | Purpose | When empty |
 | --- | --- | --- |
-| `PUBLIC_SITE_URL` | Canonical URL, Open Graph URLs, sitemap, robots.txt | `https://example.org` |
+| `PUBLIC_SITE_URL` | Canonical URL, Open Graph URLs, sitemap, robots.txt | `https://revelationresource.org` |
 | `PUBLIC_API_URL` | Form endpoint (POST JSON) | Form mocks success after 900 ms |
-| `PUBLIC_LIBRARY_URL` | "Log in" and "Go to the library" links | `#` |
+| `PUBLIC_LIBRARY_URL` | "Go to the library" button after signing up | Button hidden |
 | `PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key | Cloudflare test key (always passes) |
 | `PUBLIC_GA4_ID` | Google Analytics 4 measurement ID | No GA, no cookie banner |
 | `PUBLIC_DEMO_URL` | Direct link to the demo ZIP | `#` |
 | `PUBLIC_TRAILER_YOUTUBE_ID` | YouTube ID of the trailer | Modal shows placeholder text |
-| `PUBLIC_CONTACT_EMAIL` | Contact links, legal pages, JSON-LD | `hello@example.org` |
-| `PUBLIC_TRANSLATE_EMAIL` | "Volunteer as a translator" mailto | `translate@example.org` |
+| `PUBLIC_CONTACT_EMAIL` | Contact links, legal pages, JSON-LD | `hello@revelationresource.org` |
+| `PUBLIC_TRANSLATE_EMAIL` | "Volunteer as a translator" button and the address shown under it | `translate@revelationresource.org` |
+| `PUBLIC_SUPPORT_EMAIL` | "Didn't get the email?" help in the form section, success screen, footer | `support@revelationresource.org` |
 | `PUBLIC_SHOW_PLACEHOLDER_TAGS` | Show the dashed "placeholder" tags (`true` / `false`) | Hidden |
 
 Set `PUBLIC_SHOW_PLACEHOLDER_TAGS=false` for production.
 
+## Languages
+
+The site ships in English (`/`) and Spanish (`/es`). Each language is one file in
+**`src/i18n/locales/`** (`en.ts`, `es.ts`) holding every piece of copy: headlines, stats, gallery captions,
+journey steps, features, FAQ, form labels and errors, divisions, footer, legal text.
+
+To add a language (example: Portuguese):
+
+1. Copy `src/i18n/locales/es.ts` to `pt.ts`, change the `locale` block (`code: 'pt'`, `name: 'Português'`,
+   `short: 'PT'`, `htmlLang: 'pt'`, `ogLocale: 'pt_BR'`), rename the constant and translate the strings.
+   It is typed as `Site`, so `npm run check` reports any missing key.
+2. Add `'pt'` to the list in `src/i18n/config.mjs`.
+3. Rebuild. The pages appear under `/pt`; the language switcher, `hreflang` tags and sitemap pick it up.
+
+Country names are generated per language from the built-in list (`Intl.DisplayNames`);
+a locale can override single names in `getKit.countryNames`. The form always sends the English division
+name, whatever the page language.
+
 ## Replacing content
 
-Every piece of copy lives in **`src/content/site.ts`**: headlines, stats, gallery captions, journey steps,
-features, FAQ, form labels and errors, divisions, countries, languages, footer, legal page text.
-Edit the file and rebuild; no markup changes are needed.
+Edit the locale files and rebuild; no markup changes are needed.
 
 - `*word*` renders the gold italic accent in headlines, `**words**` renders bold (hero lead).
 - `{terms}`, `{privacy}`, `{email}` in some strings are replaced with links or values; keep them.
@@ -58,9 +75,12 @@ slot into **`src/assets/slots/`** (`.jpg`, `.png`, `.webp` or `.avif`) and rebui
 `hero`, `trailer`, `gallery-slide`, `gallery-flyer`, `gallery-art`, `gallery-video`, `gallery-social`,
 `demo-flyer`, `demo-slide`, `demo-image`, `team`, `og`.
 
+**Logo:** `src/assets/slots/logo.svg` (or `.png` / `.webp`) replaces the star mark next to the name in the
+header and footer, shown 32px high (28px on phones).
+
 The build generates AVIF and WebP in several widths, sets `width`/`height`, lazy-loads everything
 below the fold and loads the hero with high priority. The matching placeholder tag disappears.
-Recommended sizes are in [`src/assets/slots/README.md`](src/assets/slots/README.md); alt texts are in `site.ts`.
+Recommended sizes are in [`src/assets/slots/README.md`](src/assets/slots/README.md); alt texts are in the locale files.
 Without an `og` image, `public/og-default.jpg` (rendered from the hero) is used for link previews.
 
 ## Form
@@ -125,11 +145,13 @@ screenshots/          screenshots of the approved state
 public/               favicon, default OG image, Cloudflare _headers
 scripts/stub-server.mjs  local form endpoint for testing
 src/config.ts         env vars
-src/content/site.ts   all copy and lists
+src/i18n/locales/     copy per language (en.ts, es.ts)
+src/i18n/config.mjs   list of languages
 src/styles/global.css design tokens and shared styles
 src/layouts/Base.astro  <head>, SEO, fonts, consent defaults, header/footer
 src/components/       one component per section, plus Icon and SlotImage
-src/pages/            index, terms, privacy, 404, robots.txt
+src/pages/[...lang]/  index, terms, privacy for every language
+src/pages/            404, robots.txt
 src/assets/slots/     drop real images here
 ```
 

@@ -17,6 +17,7 @@ replaced by an optimized `<picture>` (AVIF + WebP + JPEG fallback).
 | `demo-image` | Demo fan, right card (1:1) | 340 x 340 |
 | `team` | About, team portrait (4:5, arched top) | 880 x 1100 |
 | `og` | Social share image (cropped to 1200 x 630) | 1200 x 630 |
+| `logo` (.svg, .png, .webp) | Symbol next to the brand name, header and footer | SVG, or PNG 128px high |
 
 Images are cropped with `object-fit: cover`, so keep the subject near the center.
-Alt text for each slot lives in `src/content/site.ts`.
+Alt text for each slot lives in `src/i18n/locales/*.ts`.

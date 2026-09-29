@@ -16,6 +16,7 @@ export type SlotName =
   | 'demo-image'
   | 'team'
   | 'og';
+// plus 'logo' (svg allowed), see logoUrl below
 
 const files = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/slots/*.{jpg,jpeg,png,webp,avif}',
@@ -29,3 +30,12 @@ export function slot(name: SlotName): ImageMetadata | undefined {
   }
   return undefined;
 }
+
+// Logo: src/assets/slots/logo.svg (or .png/.webp). Replaces the star mark
+// next to the brand name in the header and footer.
+const logoFiles = import.meta.glob<string>('/src/assets/slots/logo.{svg,png,webp}', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
+export const logoUrl: string | undefined = Object.values(logoFiles)[0];
