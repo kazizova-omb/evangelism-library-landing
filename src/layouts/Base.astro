@@ -1,0 +1,139 @@
+---
+import '@fontsource/cormorant-garamond/500.css';
+import '@fontsource/cormorant-garamond/500-italic.css';
+import '@fontsource/cormorant-garamond/600.css';
+import '@fontsource/cormorant-garamond/600-italic.css';
+import '@fontsource/hanken-grotesk/400.css';
+import '@fontsource/hanken-grotesk/500.css';
+import '@fontsource/hanken-grotesk/600.css';
+import '../styles/global.css';
+
+import displayFont from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-600-normal.woff2?url';
+import displayItalicFont from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-500-italic.woff2?url';
+import bodyFont from '@fontsource/hanken-grotesk/files/hanken-grotesk-latin-400-normal.woff2?url';
+
+import { getImage } from 'astro:assets';
+import Header from '../components/Header.astro';
+import MobileMenu from '../components/MobileMenu.astro';
+import Footer from '../components/Footer.astro';
+import ConsentBanner from '../components/ConsentBanner.astro';
+import { site } from '../content/site';
+import { config } from '../config';
+import { slot } from '../lib/slots';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** true on the landing page: header links are in-page anchors */
+  home?: boolean;
+  noindex?: boolean;
+}
+
+const { title, description = site.meta.description, home = false, noindex = false } = Astro.props;
+const pageTitle = title ? `${title} | ${site.meta.title}` : site.meta.title;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const ogSrc = slot('og');
+const ogImage = ogSrc
+  ? new URL((await getImage({ src: ogSrc, width: 1200, height: 630, fit: 'cover', format: 'jpg' })).src, Astro.site).href
+  : new URL('/og-default.jpg', Astro.site).href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.organization.name,
+  url: Astro.site?.href,
+  logo: new URL(site.organization.logo, Astro.site).href,
+  email: config.contactEmail,
+};
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  {noindex && <meta name="robots" content="noindex" />}
+  <meta name="theme-color" content="#0A0806" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={site.meta.title} />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={site.meta.ogImageAlt} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={pageTitle} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+
+  <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href={displayItalicFont} as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <!-- JS flag for reveal animations + Google Consent Mode v2 defaults (denied) -->
+  <script is:inline define:vars={{ gaId: config.ga4Id }}>
+    document.documentElement.classList.add('js');
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    if (gaId) {
+      gtag('consent', 'default', {
+        ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied',
+        analytics_storage: 'denied', wait_for_update: 500,
+      });
+    }
+  </script>
+</head>
+<body id="top">
+  <a class="skip" href="#main">{site.skipLink}</a>
+  <Header home={home} />
+  <MobileMenu home={home} />
+  <main id="main" tabindex="-1">
+    <slot />
+  </main>
+  <Footer home={home} />
+  {config.ga4Id && <ConsentBanner />}
+
+  <script>
+    import { track } from '../scripts/analytics';
+
+    // Declarative events: <a data-track="cta_click" data-track-location="hero">
+    document.addEventListener('click', (e) => {
+      const el = (e.target as Element).closest<HTMLElement>('[data-track]');
+      if (!el) return;
+      const params: Record<string, string> = {};
+      if (el.dataset.trackLocation) params.location = el.dataset.trackLocation;
+      track(el.dataset.track!, params);
+    });
+
+    // Scroll reveal
+    const els = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('in');
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+      );
+      els.forEach((el) => io.observe(el));
+    } else {
+      els.forEach((el) => el.classList.add('in'));
+    }
+  </script>
+</body>
+</html>

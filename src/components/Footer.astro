@@ -1,0 +1,53 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../content/site';
+import { config } from '../config';
+import { anchor } from '../lib/links';
+
+interface Props { home: boolean }
+const { home } = Astro.props;
+const l = site.footer.links;
+---
+<footer class="footer">
+  <div class="footer__in">
+    <div>
+      <a href={home ? '#top' : '/'} class="brand">
+        <Icon name="mark" class="brand__mark" />
+        <span>{site.brand}</span>
+      </a>
+      <p>{site.footer.tagline}</p>
+    </div>
+    <nav aria-label="Footer">
+      <a href={anchor('#inside', home)}>{l.inside}</a>
+      <a href={config.libraryUrl} data-track="login_click" data-track-location="footer">{l.login}</a>
+      <a href={anchor('#demo', home)}>{l.demo}</a>
+      <a href={`mailto:${config.contactEmail}`}>{l.contact}</a>
+      <a href={anchor('#about', home)}>{l.about}</a>
+      <a href="/terms">{l.terms}</a>
+      <a href={anchor('#translate', home)}>{l.translate}</a>
+      <a href="/privacy">{l.privacy}</a>
+    </nav>
+  </div>
+  <div class="footer__bottom">
+    <span>{site.footer.copyright}</span>
+    {config.ga4Id && <button type="button" class="cookie-link" data-cookie-settings>{site.footer.cookieSettings}</button>}
+    <span>{site.footer.questions} <a href={`mailto:${config.contactEmail}`}>{config.contactEmail}</a></span>
+  </div>
+</footer>
+
+<style>
+  .footer { border-top: 1px solid var(--line); padding: 56px var(--gutter) 36px }
+  .footer__in { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap }
+  .brand { display: flex; align-items: center; gap: 12px; font-family: var(--display); font-weight: 600; font-size: 22px; letter-spacing: .02em; white-space: nowrap }
+  .brand :global(.brand__mark) { width: 26px; height: 26px; color: var(--gold) }
+  .footer p { max-width: 360px; margin-top: 14px; font-size: 14px; color: var(--muted-solid) }
+  .footer nav { display: grid; grid-template-columns: repeat(2, auto); gap: 12px 48px; font-size: 14px; color: var(--ink-2) }
+  .footer nav a:hover, .footer__bottom a:hover, .cookie-link:hover { color: var(--gold-hi) }
+  .footer__bottom { max-width: 1200px; margin: 48px auto 0; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted-solid) }
+  .cookie-link { font-size: 13px; color: var(--muted-solid); text-decoration: underline; text-underline-offset: 3px }
+
+  @media (max-width: 760px) {
+    .brand { font-size: 19px }
+    .footer nav { grid-template-columns: 1fr 1fr; gap: 12px 32px }
+  }
+</style>

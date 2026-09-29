@@ -1,0 +1,45 @@
+---
+import { site } from '../content/site';
+import { anchor } from '../lib/links';
+
+interface Props { home: boolean }
+const { home } = Astro.props;
+---
+<nav class="menu" id="menu" aria-label="Mobile">
+  {site.nav.map((l) => <a href={anchor(l.href, home)}>{l.label}</a>)}
+  <a href={anchor('#get', home)} class="btn btn--gold" data-track="cta_click" data-track-location="mobile_menu">{site.header.mobileCta}</a>
+</nav>
+
+<style>
+  .menu { position: fixed; inset: 0; z-index: 60; background: rgba(10, 8, 6, .97); display: flex; flex-direction: column; padding: 96px var(--gutter) 40px; gap: 8px; overflow-y: auto; opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s }
+  .menu.is-open { opacity: 1; visibility: visible }
+  .menu a { font-family: var(--display); font-size: 36px; font-weight: 600; padding: 8px 0; border-bottom: 1px solid var(--line) }
+  .menu .btn { margin-top: 28px; font-family: var(--body); font-size: 16px; border: 0 }
+</style>
+
+<script>
+  const burger = document.getElementById('burger') as HTMLButtonElement;
+  const menu = document.getElementById('menu')!;
+  const outside = () => document.querySelectorAll<HTMLElement>('main, footer, .skip');
+  const mq = window.matchMedia('(max-width: 760px)');
+
+  function setMenu(open: boolean, restoreFocus = true) {
+    if (menu.classList.contains('is-open') === open) return;
+    menu.classList.toggle('is-open', open);
+    document.body.classList.toggle('menu-open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', (open ? burger.dataset.closeLabel : burger.dataset.openLabel) ?? '');
+    // Everything behind the menu is inert while it is open (focus stays in header + menu)
+    outside().forEach((el) => (el.inert = open));
+    if (open) menu.querySelector('a')?.focus();
+    else if (restoreFocus) burger.focus();
+  }
+
+  burger.addEventListener('click', () => setMenu(!menu.classList.contains('is-open')));
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false, false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu.classList.contains('is-open')) setMenu(false);
+  });
+  mq.addEventListener('change', (e) => { if (!e.matches) setMenu(false, false); });
+</script>
