@@ -5,11 +5,13 @@ import { useT } from '../i18n';
 import { config } from '../config';
 import { rich } from '../lib/rich';
 import { slot } from '../lib/slots';
+import { getTheme } from '../lib/theme';
 
 const site = useT(Astro);
+const theme = getTheme(Astro);
 
 const t = site.trailer;
-const image = slot('trailer');
+const image = slot('trailer', theme);
 ---
 <section class="trailer" id="trailer" aria-labelledby="trailer-title">
   <div class="section-head">

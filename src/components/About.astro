@@ -4,11 +4,13 @@ import { useT } from '../i18n';
 import { config } from '../config';
 import { rich } from '../lib/rich';
 import { slot } from '../lib/slots';
+import { getTheme } from '../lib/theme';
 
 const site = useT(Astro);
+const theme = getTheme(Astro);
 
 const a = site.about;
-const image = slot('team');
+const image = slot('team', theme);
 ---
 <section class="section glow-l" id="about" aria-labelledby="about-title">
   <div class="wrap about">

@@ -5,11 +5,13 @@ import { useT } from '../i18n';
 import { config } from '../config';
 import { rich } from '../lib/rich';
 import { slot } from '../lib/slots';
+import { getTheme } from '../lib/theme';
 
 const site = useT(Astro);
+const theme = getTheme(Astro);
 
 const d = site.demo;
-const img = { flyer: slot('demo-flyer'), slide: slot('demo-slide'), image: slot('demo-image') };
+const img = { flyer: slot('demo-flyer', theme), slide: slot('demo-slide', theme), image: slot('demo-image', theme) };
 const isFile = config.demoUrl !== '#';
 ---
 <section class="section" id="demo" aria-labelledby="demo-title">

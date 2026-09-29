@@ -38,6 +38,22 @@ so redeploy after changing one.
 
 Set `PUBLIC_SHOW_PLACEHOLDER_TAGS=false` for production.
 
+## Design options
+
+Two designs share one codebase, content and behaviour, so the client compares only the look:
+
+| Option | URL | Style |
+| --- | --- | --- |
+| v1 | `/`, `/es` | Dark cinematic: gold on black, Cormorant Garamond + Hanken Grotesk |
+| v2 | `/v2`, `/es/v2` | Light editorial ("Imagery Guidelines"): navy + cyan, DM Serif Display + Inter, photo cards |
+
+- v2 is `src/pages/[...lang]/v2.astro` plus one stylesheet, `src/components/V2Theme.astro`
+  (every rule is prefixed `:root.v2:not(#v1)` so it overrides the components' scoped styles).
+- v2 photos live in `src/assets/slots/v2/` and override the regular slots on v2 pages only.
+  They are cut from the guidelines board and upscaled: replace them with the original high-resolution files.
+- `/v2` is `noindex`. When the client picks one: if v2 wins, move `<V2Theme />` and `noindex`-free
+  Base into `index.astro` (or make v2 the default) and delete the other option.
+
 ## Languages
 
 The site ships in English (`/`) and Spanish (`/es`). Each language is one file in

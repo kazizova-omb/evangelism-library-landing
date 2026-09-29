@@ -5,17 +5,19 @@ import { useT } from '../i18n';
 import { config } from '../config';
 import { rich } from '../lib/rich';
 import { slot } from '../lib/slots';
+import { getTheme } from '../lib/theme';
 
 const site = useT(Astro);
+const theme = getTheme(Astro);
 
 const s = site.inside;
 const g = s.gallery;
 const img = {
-  slide: slot('gallery-slide'),
-  flyer: slot('gallery-flyer'),
-  art: slot('gallery-art'),
-  video: slot('gallery-video'),
-  social: slot('gallery-social'),
+  slide: slot('gallery-slide', theme),
+  flyer: slot('gallery-flyer', theme),
+  art: slot('gallery-art', theme),
+  video: slot('gallery-video', theme),
+  social: slot('gallery-social', theme),
 };
 const wide = { sizes: '(max-width: 760px) calc(100vw - 40px), (max-width: 1240px) 66vw, 800px', widths: [480, 800, 1200, 1600] };
 const narrow = { sizes: '(max-width: 760px) 50vw, (max-width: 1240px) 33vw, 400px', widths: [320, 480, 800] };

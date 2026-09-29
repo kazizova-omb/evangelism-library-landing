@@ -1,0 +1,214 @@
+---
+// Design option 2: light "modern gospel editorial" look (navy + cyan, bold serif).
+// Same markup and behaviour as v1; this file only restyles it. Rendered on /v2 pages,
+// so the CSS ships only there. Every rule starts with :root.v2:not(#v1): the :not(#id)
+// adds ID-level weight so these overrides beat the components' scoped selectors.
+import '@fontsource/dm-serif-display/400.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+---
+<style is:global>
+  :root.v2:not(#v1) {
+    --bg: #FFFFFF;
+    --bg-2: #F5F6FA;
+    --navy: #0B1446;
+    --indigo: #4F58B8;
+    --lavender: #EEF0FA;
+    --cyan: #16C3DE;           /* decorative only (fills, rings, icons) */
+    --cyan-lg: #0A9CB6;        /* text 24px+ (3:1 on white) */
+    --cyan-text: #077C91;      /* small text links (4.5:1 on white) */
+    --ink: var(--navy);
+    --ink-2: #3B4468;
+    --muted-solid: #5F6886;
+    --gold: var(--cyan-lg);
+    --gold-hi: var(--cyan-text);
+    --amber: var(--indigo);
+    --line: rgba(11, 20, 70, .1);
+    --logo-color: var(--navy);
+    --display: "DM Serif Display", Georgia, serif;
+    --body: "Inter", system-ui, sans-serif;
+    font-synthesis-weight: none; /* DM Serif has one weight: never fake bold */
+  }
+  :root.v2:not(#v1) body { background: var(--bg); font-size: 16.5px; line-height: 1.65 }
+  :root.v2:not(#v1) body::after { display: none } /* no film grain */
+  :root.v2:not(#v1) ::selection { background: rgba(22, 195, 222, .25) }
+
+  /* ---------- type ---------- */
+  :root.v2:not(#v1) :is(.h1, .h2, h3, .brand, .menu a, .stat dd, .faq summary, blockquote, .notfound__code, .slide-copy strong, .flyer strong, .social strong) { font-weight: 400 }
+  :root.v2:not(#v1) .h2 { font-size: clamp(34px, 3.9vw, 56px); line-height: 1.08; letter-spacing: -.012em }
+  :root.v2:not(#v1) .h2 em, :root.v2:not(#v1) .h1 em { font-style: normal; color: var(--cyan-lg); background: none; -webkit-text-fill-color: currentColor }
+  :root.v2:not(#v1) .eyebrow { color: var(--navy); font-size: 12px; letter-spacing: .3em }
+  :root.v2:not(#v1) .sub { color: var(--ink-2); font-size: 17.5px }
+  :root.v2:not(#v1) :focus-visible { outline-color: var(--cyan-lg) }
+
+  /* ---------- buttons ---------- */
+  :root.v2:not(#v1) .btn { border-radius: 12px; height: 50px; font-weight: 600; letter-spacing: .01em }
+  :root.v2:not(#v1) .btn--sm { height: 40px; border-radius: 10px }
+  :root.v2:not(#v1) .btn--gold { background: var(--navy); color: #fff; box-shadow: 0 10px 28px -14px rgba(11, 20, 70, .6) }
+  :root.v2:not(#v1) .btn--gold:hover { background: #18245F; box-shadow: 0 16px 34px -14px rgba(11, 20, 70, .7) }
+  :root.v2:not(#v1) .btn--ghost { border-color: rgba(11, 20, 70, .2); color: var(--navy); background: #fff }
+  :root.v2:not(#v1) .btn--ghost:hover { border-color: var(--navy); color: var(--navy) }
+  :root.v2:not(#v1) .btn.is-loading::after { border-color: rgba(255, 255, 255, .35); border-top-color: #fff }
+  :root.v2:not(#v1) .skip { background: var(--navy); color: #fff }
+
+  /* ---------- shared bits ---------- */
+  :root.v2:not(#v1) :is(.glow-l, .glow-r)::before, :root.v2:not(#v1) .trailer::before { display: none }
+  :root.v2:not(#v1) .icon-badge { width: 52px; height: 52px; color: var(--navy); background: var(--lavender); box-shadow: none }
+  :root.v2:not(#v1) .icon-badge svg { width: 22px; height: 22px }
+  :root.v2:not(#v1) .chip { border-color: rgba(11, 20, 70, .12); color: var(--ink-2); background: #fff }
+  :root.v2:not(#v1) a.chip:hover { border-color: var(--cyan-lg); color: var(--cyan-text) }
+  :root.v2:not(#v1) .tag, :root.v2:not(#v1) .ph-tag { color: var(--muted-solid); border-color: rgba(11, 20, 70, .25); background: rgba(255, 255, 255, .8) }
+
+  /* section rhythm: white and soft grey bands */
+  :root.v2:not(#v1) :is(#journey, #about, #get) { background: var(--bg-2) }
+
+  /* ---------- header, menu, language ---------- */
+  :root.v2:not(#v1) .header.is-scrolled { background: rgba(255, 255, 255, .9); border-color: var(--line) }
+  :root.v2:not(#v1) .nav a { color: var(--ink-2); opacity: 1 }
+  :root.v2:not(#v1) .nav a:hover { color: var(--cyan-text) }
+  :root.v2:not(#v1) .menu { background: rgba(255, 255, 255, .98) }
+  :root.v2:not(#v1) .lang__btn { color: var(--ink-2) }
+  :root.v2:not(#v1) :is(.lang__btn:hover, .lang__btn[aria-expanded="true"]) { color: var(--navy); background: var(--lavender) }
+  :root.v2:not(#v1) .lang__list { background: #fff; box-shadow: 0 0 0 1px var(--line) inset, 0 24px 50px -20px rgba(11, 20, 70, .35) }
+  :root.v2:not(#v1) :is(.lang__list a:hover, .lang__list a:focus-visible) { background: var(--bg-2); color: var(--navy) }
+  :root.v2:not(#v1) .lang__list a[aria-current] { color: var(--navy); font-weight: 600 }
+  :root.v2:not(#v1) .lang-row a { box-shadow: 0 0 0 1px rgba(11, 20, 70, .15) inset }
+  :root.v2:not(#v1) .lang-row a[aria-current] { background: var(--navy); color: #fff }
+
+  /* ---------- hero: copy left, photo card right ---------- */
+  :root.v2:not(#v1) .hero { min-height: 0; max-height: none; padding: 128px 0 88px; background: linear-gradient(180deg, #F3F5FB 0%, #FFFFFF 100%) }
+  :root.v2:not(#v1) .hero .scene { inset: 112px auto 72px auto; right: max(var(--gutter), calc((100vw - 1440px) / 2 + var(--gutter))); width: min(46%, 620px); z-index: 0;
+    border-radius: 28px; overflow: hidden; box-shadow: 0 40px 80px -40px rgba(11, 20, 70, .45) }
+  :root.v2:not(#v1) .hero .scene__fade { display: none }
+  :root.v2:not(#v1) .hero__in { position: relative; z-index: 1; padding-top: 24px; padding-bottom: 24px }
+  :root.v2:not(#v1) .hero__copy { max-width: min(560px, 48%) }
+  :root.v2:not(#v1) .h1 { font-size: clamp(46px, 5.6vw, 86px); line-height: 1; letter-spacing: -.015em; margin: 22px 0 24px }
+  :root.v2:not(#v1) .lead { color: var(--ink-2); font-size: clamp(16.5px, 1.3vw, 18.5px) }
+  :root.v2:not(#v1) .lead strong { color: var(--navy); font-weight: 600 }
+  :root.v2:not(#v1) .trust { color: var(--muted-solid); letter-spacing: .16em }
+  :root.v2:not(#v1) .trust i { background: var(--cyan); opacity: 1; width: 5px; height: 5px }
+  :root.v2:not(#v1) .cue { display: none }
+
+  /* ---------- trailer ---------- */
+  :root.v2:not(#v1) .trailer { background: #fff; padding-top: clamp(72px, 8vw, 112px) }
+  :root.v2:not(#v1) .video { max-width: 1040px; border-radius: 24px; background: var(--navy); box-shadow: 0 40px 90px -45px rgba(11, 20, 70, .6) }
+  :root.v2:not(#v1) .video .slot-img img { filter: blur(2.5px) saturate(1.1); transform: scale(1.06) } /* soft poster behind the play button */
+  :root.v2:not(#v1) .video .video__scene::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11, 20, 70, .15), rgba(11, 20, 70, .55)) }
+  :root.v2:not(#v1) .video__play { background: #fff; color: var(--navy); box-shadow: 0 16px 40px -12px rgba(11, 20, 70, .6) }
+  :root.v2:not(#v1) .video__play::before { border-color: rgba(22, 195, 222, .9) }
+  :root.v2:not(#v1) .video__meta { color: #fff }
+  :root.v2:not(#v1) .video__meta b { color: #fff }
+  :root.v2:not(#v1) .video__meta span { border-color: rgba(255, 255, 255, .5) }
+
+  /* ---------- what's inside ---------- */
+  :root.v2:not(#v1) .stats { border-color: var(--line) }
+  :root.v2:not(#v1) .stat { border-color: var(--line) }
+  :root.v2:not(#v1) .stat dd { background: none; color: var(--navy); -webkit-text-fill-color: currentColor; font-size: clamp(44px, 4.4vw, 62px) }
+  :root.v2:not(#v1) .stat dt { color: var(--muted-solid) }
+  :root.v2:not(#v1) .tile { border-radius: 18px; background: var(--bg-2); box-shadow: 0 0 0 1px var(--line) }
+  :root.v2:not(#v1) .tile::after { background: linear-gradient(180deg, transparent 55%, rgba(11, 20, 70, .55)) }
+  :root.v2:not(#v1) .tile figcaption { left: 16px; bottom: 14px; padding: 6px 12px; border-radius: 999px; background: rgba(255, 255, 255, .92); color: var(--navy); letter-spacing: .12em; font-size: 11px }
+  :root.v2:not(#v1) .mini-play { background: rgba(255, 255, 255, .9); box-shadow: none }
+  :root.v2:not(#v1) .mini-play svg { color: var(--navy) }
+
+  /* ---------- journey ---------- */
+  :root.v2:not(#v1) .journey::before { background: linear-gradient(90deg, var(--cyan), rgba(22, 195, 222, .15)) }
+  :root.v2:not(#v1) .step__num { background: #fff; color: var(--navy); font-family: var(--body); font-weight: 600; font-size: 16px; box-shadow: 0 0 0 2px var(--cyan) inset, 0 10px 24px -12px rgba(11, 20, 70, .35) }
+  :root.v2:not(#v1) .step h3 { font-size: 26px; color: var(--navy) }
+  :root.v2:not(#v1) .step p { color: var(--ink-2) }
+  @media (max-width: 1020px) {
+    :root.v2:not(#v1) .journey::before { background: linear-gradient(180deg, var(--cyan), rgba(22, 195, 222, .15)) }
+  }
+
+  /* ---------- quality ---------- */
+  :root.v2:not(#v1) .feature { background: #fff; border-radius: 18px; box-shadow: 0 0 0 1px var(--line) inset }
+  :root.v2:not(#v1) .feature:hover { box-shadow: 0 0 0 1px rgba(10, 156, 182, .5) inset, 0 20px 40px -26px rgba(11, 20, 70, .35) }
+  :root.v2:not(#v1) .feature h3 { font-size: 24px; color: var(--navy) }
+  :root.v2:not(#v1) .feature p { color: var(--muted-solid) }
+
+  /* ---------- demo ---------- */
+  :root.v2:not(#v1) .demo { background: linear-gradient(135deg, #EEF0FA 0%, #E5F7FB 100%); border-radius: 28px; box-shadow: none }
+  :root.v2:not(#v1) .checklist li { color: var(--ink-2) }
+  :root.v2:not(#v1) .checklist svg { color: var(--cyan-lg) }
+  :root.v2:not(#v1) .demo__meta { color: var(--muted-solid) }
+  :root.v2:not(#v1) .fan__card { border-radius: 14px; box-shadow: 0 30px 50px -22px rgba(11, 20, 70, .55), 0 0 0 4px #fff }
+
+  /* ---------- about: light placeholder until a real team photo exists ---------- */
+  :root.v2:not(#v1) .portrait { background: linear-gradient(180deg, #E6E9F6, #D6DBF0); box-shadow: 0 30px 70px -40px rgba(11, 20, 70, .45) }
+  :root.v2:not(#v1) .portrait:not(.portrait--image)::before, :root.v2:not(#v1) .portrait:not(.portrait--image)::after { background: #C3C9E6 }
+  :root.v2:not(#v1) .about__copy > p:not(.eyebrow) { color: var(--ink-2) }
+  :root.v2:not(#v1) .quote blockquote { font-style: normal; color: var(--navy) }
+  :root.v2:not(#v1) .quote figcaption { color: var(--muted-solid) }
+
+  /* ---------- faq ---------- */
+  :root.v2:not(#v1) .faq details { border-color: var(--line) }
+  :root.v2:not(#v1) .faq summary { font-size: clamp(20px, 1.9vw, 26px); color: var(--navy) }
+  :root.v2:not(#v1) .faq summary:hover { color: var(--cyan-lg) }
+  :root.v2:not(#v1) .faq summary i { background: var(--lavender); box-shadow: none }
+  :root.v2:not(#v1) .faq summary i::before, :root.v2:not(#v1) .faq summary i::after { background: var(--navy) }
+  :root.v2:not(#v1) .faq details[open] summary i { background: var(--cyan); box-shadow: none }
+  :root.v2:not(#v1) .faq details p { color: var(--ink-2) }
+
+  /* ---------- form ---------- */
+  :root.v2:not(#v1) .next li, :root.v2:not(#v1) .next { border-color: rgba(11, 20, 70, .12) }
+  :root.v2:not(#v1) .next__num { color: var(--indigo) }
+  :root.v2:not(#v1) .returning { border-left-color: var(--cyan) }
+  :root.v2:not(#v1) .returning__help a, :root.v2:not(#v1) .success__help a, :root.v2:not(#v1) .consent a { color: var(--cyan-text); text-decoration-color: currentColor }
+  :root.v2:not(#v1) .formcard { background: #fff; border-radius: 24px; box-shadow: 0 0 0 1px var(--line) inset, 0 40px 80px -48px rgba(11, 20, 70, .45) }
+  :root.v2:not(#v1) .field label { color: var(--navy) }
+  :root.v2:not(#v1) .field :is(input:not([type="checkbox"]), select, textarea) { background: #F7F8FC; border-color: rgba(11, 20, 70, .12); color: var(--navy) }
+  :root.v2:not(#v1) .field :is(input:not([type="checkbox"]), select, textarea):hover { border-color: rgba(11, 20, 70, .25) }
+  :root.v2:not(#v1) .field :is(input:not([type="checkbox"]), select, textarea):focus { background: #fff; border-color: var(--cyan-lg); box-shadow: 0 0 0 3px rgba(22, 195, 222, .2) }
+  :root.v2:not(#v1) .field ::placeholder { color: #8A91AB }
+  :root.v2:not(#v1) .field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%230B1446' stroke-width='1.6'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E") }
+  :root.v2:not(#v1) .field select option { background: #fff; color: var(--navy) }
+  :root.v2:not(#v1) .consent { color: var(--ink-2) }
+  :root.v2:not(#v1) .consent input { border-color: rgba(11, 20, 70, .3); background: #fff }
+  :root.v2:not(#v1) .consent input:checked { background: var(--navy); border-color: var(--navy) }
+  :root.v2:not(#v1) .consent input:checked::after { border-color: #fff }
+  :root.v2:not(#v1) .err { color: #C0392B }
+  :root.v2:not(#v1) .is-invalid :is(input, select) { border-color: #D65A4A !important }
+  :root.v2:not(#v1) .form-err { background: #FDEDEB; color: #A93226 }
+  :root.v2:not(#v1) .success__ic { background: var(--navy); color: #fff; box-shadow: 0 0 0 8px var(--lavender) }
+  :root.v2:not(#v1) .success h3 { color: var(--navy) }
+  :root.v2:not(#v1) .success p { color: var(--ink-2) }
+
+  /* ---------- translate ---------- */
+  :root.v2:not(#v1) .langs .lang { border-color: rgba(11, 20, 70, .22); color: var(--navy); background: #fff }
+  :root.v2:not(#v1) .langs .lang--soon { border-color: rgba(11, 20, 70, .18); color: var(--muted-solid); background: transparent }
+  :root.v2:not(#v1) .legend span::before { border-color: var(--navy) }
+  :root.v2:not(#v1) .legend span + span::before { border-color: rgba(11, 20, 70, .3) }
+  :root.v2:not(#v1) .or-write a { color: var(--cyan-text) }
+
+  /* ---------- footer: navy band to close the page ---------- */
+  :root.v2:not(#v1) .footer { --ink: #FFFFFF; --ink-2: rgba(255, 255, 255, .82); --muted-solid: rgba(255, 255, 255, .62); --line: rgba(255, 255, 255, .14);
+    --gold: #4FD6EC; --gold-hi: #7FE3F2; --logo-color: #FFFFFF; background: var(--navy); color: #fff; border-top: 0 }
+  :root.v2:not(#v1) .footer .lang-inline a[aria-current] { color: #fff }
+
+  /* ---------- floating UI ---------- */
+  :root.v2:not(#v1) .to-top { background: #fff; color: var(--navy); box-shadow: 0 0 0 1px var(--line) inset, 0 14px 30px -14px rgba(11, 20, 70, .45) }
+  :root.v2:not(#v1) .to-top:hover { box-shadow: 0 0 0 1px var(--cyan-lg) inset, 0 14px 30px -14px rgba(11, 20, 70, .45) }
+  :root.v2:not(#v1) .consent-banner { background: #fff; box-shadow: 0 0 0 1px var(--line) inset, 0 30px 60px -24px rgba(11, 20, 70, .45) }
+  :root.v2:not(#v1) .consent-banner p { color: var(--ink-2) }
+  :root.v2:not(#v1) .consent-banner p a { color: var(--cyan-text) }
+
+  /* ---------- phones and tablets ---------- */
+  @media (max-width: 1020px) {
+    :root.v2:not(#v1) .hero .scene { width: 42% }
+    :root.v2:not(#v1) .hero__copy { max-width: 54% }
+  }
+  @media (max-width: 760px) {
+    :root.v2:not(#v1) body { font-size: 16px }
+    :root.v2:not(#v1) .hero { flex-direction: column; align-items: stretch; padding: 84px 0 56px }
+    :root.v2:not(#v1) .hero .scene { position: relative; inset: auto; right: auto; width: auto; height: 68vw; margin: 0 var(--gutter) 8px; border-radius: 22px }
+    :root.v2:not(#v1) .hero .scene--image .slot-img { bottom: 0 }
+    :root.v2:not(#v1) .hero .slot-img img { object-position: 50% 22% }
+    :root.v2:not(#v1) .tile figcaption { letter-spacing: .06em; font-size: 10px; padding: 5px 10px; left: 10px; bottom: 10px }
+    :root.v2:not(#v1) .hero__copy { max-width: none }
+    :root.v2:not(#v1) .hero__in { padding: 20px var(--gutter) 0 }
+    :root.v2:not(#v1) .h1 { font-size: clamp(42px, 11.5vw, 54px) }
+    :root.v2:not(#v1) .video { border-radius: 18px }
+    :root.v2:not(#v1) .demo { border-radius: 22px }
+  }
+</style>

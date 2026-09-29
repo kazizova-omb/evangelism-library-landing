@@ -19,16 +19,22 @@ export type SlotName =
 // plus 'logo' (svg allowed), see logoUrl below
 
 const files = import.meta.glob<{ default: ImageMetadata }>(
-  '/src/assets/slots/*.{jpg,jpeg,png,webp,avif}',
+  ['/src/assets/slots/*.{jpg,jpeg,png,webp,avif}', '/src/assets/slots/v2/*.{jpg,jpeg,png,webp,avif}'],
   { eager: true },
 );
 
-export function slot(name: SlotName): ImageMetadata | undefined {
+function find(dir: string, name: string) {
   for (const [path, mod] of Object.entries(files)) {
-    const base = path.split('/').pop()!.replace(/\.[^.]+$/, '');
-    if (base === name) return mod.default;
+    const parts = path.split('/');
+    const base = parts.pop()!.replace(/\.[^.]+$/, '');
+    if (base === name && parts.join('/') === dir) return mod.default;
   }
   return undefined;
+}
+
+/** Image for a slot. Design option v2 looks in src/assets/slots/v2/ first. */
+export function slot(name: SlotName, theme: 'v1' | 'v2' = 'v1'): ImageMetadata | undefined {
+  return (theme === 'v2' ? find('/src/assets/slots/v2', name) : undefined) ?? find('/src/assets/slots', name);
 }
 
 // Logo: src/assets/slots/logo.svg (or .png/.webp). Replaces the star mark

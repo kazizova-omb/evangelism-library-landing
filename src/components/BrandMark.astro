@@ -2,13 +2,15 @@
 import Icon from './Icon.astro';
 import { logo } from '../lib/slots';
 
-const h = 32;
-
-// Brand symbol: the uploaded logo if there is one, otherwise the star mark.
+// Brand symbol: the uploaded logo (drawn as a mask, so it takes the text colour
+// of each design option), otherwise the star mark.
 ---
-{logo ? <img class="brand__logo" src={logo.url} alt="" width={Math.round(h * logo.ratio)} height={h} /> : <Icon name="mark" class="brand__mark" />}
+{logo
+  ? <span class="brand__logo" aria-hidden="true" style={`--logo:url("${logo.url}");aspect-ratio:${logo.ratio.toFixed(4)}`}></span>
+  : <Icon name="mark" class="brand__mark" />}
 
 <style>
-  .brand__logo { height: 32px; width: auto; max-width: 64px; object-fit: contain }
+  .brand__logo { display: block; flex: none; height: 32px; color: var(--logo-color, var(--gold)); background: currentColor;
+    -webkit-mask: var(--logo) center / contain no-repeat; mask: var(--logo) center / contain no-repeat }
   @media (max-width: 760px) { .brand__logo { height: 28px } }
 </style>
