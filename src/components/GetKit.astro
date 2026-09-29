@@ -55,6 +55,7 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
             <label for="f-email">{f.email.label}</label>
             <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder={f.email.placeholder} />
             <span class="err" id="f-email-err">{f.email.error}</span>
+            <p class="email-suggest" id="f-email-suggest" aria-live="polite" data-template={f.email.suggest} hidden></p>
           </div>
           <div class="field">
             <label for="f-country">{f.country.label}</label>
@@ -81,6 +82,11 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
         <div class="field">
           <label for="f-comment">{f.comment.label} <em>{g.optional}</em></label>
           <textarea id="f-comment" name="comment" placeholder={f.comment.placeholder}></textarea>
+        </div>
+        <!-- Honeypot: invisible to people, bots tend to fill it. Filled = silently dropped. -->
+        <div class="hp" aria-hidden="true">
+          <label for="f-website">Website</label>
+          <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off" />
         </div>
         <div class="field consent-wrap">
           <label class="consent">
@@ -143,6 +149,9 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
   .field select option { background: #17120D; color: var(--ink) }
   .field ::placeholder { color: rgba(163, 150, 130, .6) }
   .field input:not([type="checkbox"]):focus, .field select:focus, .field textarea:focus { border-color: rgba(227, 178, 94, .8); background: rgba(243, 235, 221, .04); box-shadow: 0 0 0 3px rgba(227, 178, 94, .12) }
+  .email-suggest { font-size: 13px; color: var(--muted-solid) }
+  .email-suggest :global(button) { font: inherit; color: var(--gold-hi); text-decoration: underline; text-underline-offset: 3px; cursor: pointer }
+  .hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden }
   .err { display: none; font-size: 13px; color: var(--error) }
   .is-invalid input, .is-invalid select { border-color: var(--error-line) }
   .is-invalid .err { display: block }
@@ -196,6 +205,7 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
 
 <script>
   import { track } from '../scripts/analytics';
+  import { isValidEmail, suggestEmail } from '../lib/email';
 
   const card = document.getElementById('formcard')!;
   const form = document.getElementById('kitForm') as HTMLFormElement;
@@ -205,7 +215,11 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
   const tsField = tsBox.closest<HTMLElement>('.field')!;
   const apiUrl = card.dataset.apiUrl ?? '';
   const sitekey = card.dataset.sitekey ?? '';
-  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailInput = document.getElementById('f-email') as HTMLInputElement;
+  const suggestBox = document.getElementById('f-email-suggest')!;
+  const honeypot = document.getElementById('f-website') as HTMLInputElement;
+  const loadedAt = performance.now();
+  const MIN_FILL_MS = 3000; // faster than any person can fill the form
 
   // UTM params, captured once on page load and kept in memory only
   const q = new URLSearchParams(location.search);
@@ -270,7 +284,7 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
     let firstBad: HTMLElement | null = null;
     form.querySelectorAll<HTMLInputElement>('[required]').forEach((inp) => {
       const v = inp.value.trim();
-      const ok = inp.type === 'checkbox' ? inp.checked : inp.type === 'email' ? EMAIL_RE.test(v) : v !== '';
+      const ok = inp.type === 'checkbox' ? inp.checked : inp.type === 'email' ? isValidEmail(v) : v !== '';
       setInvalid(inp.closest('.field')!, inp, !ok);
       if (!ok && !firstBad) firstBad = inp;
     });
@@ -286,6 +300,30 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
     inp.addEventListener('input', clear);
     inp.addEventListener('change', clear);
   });
+
+  /* ---------- Email: check on blur, offer a fix for common typos ---------- */
+  function showSuggestion() {
+    const fix = suggestEmail(emailInput.value);
+    if (!fix) { suggestBox.hidden = true; suggestBox.textContent = ''; return; }
+    const [before, after] = (suggestBox.dataset.template ?? '{email}').split('{email}');
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = fix;
+    b.addEventListener('click', () => {
+      emailInput.value = fix;
+      suggestBox.hidden = true;
+      setInvalid(emailInput.closest('.field')!, emailInput, false);
+      emailInput.focus();
+    });
+    suggestBox.replaceChildren(document.createTextNode(before ?? ''), b, document.createTextNode(after ?? ''));
+    suggestBox.hidden = false;
+  }
+  emailInput.addEventListener('blur', () => {
+    const v = emailInput.value.trim();
+    if (v && !isValidEmail(v)) setInvalid(emailInput.closest('.field')!, emailInput, true);
+    showSuggestion();
+  });
+  emailInput.addEventListener('input', () => { if (!suggestBox.hidden) suggestBox.hidden = true; });
 
   /* ---------- Submit ---------- */
   let busy = false;
@@ -330,11 +368,15 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
       return;
     }
 
+    // Bots: honeypot filled or submitted impossibly fast. Show the normal
+    // success screen so they learn nothing, but send nothing.
+    const isBot = honeypot.value.trim() !== '' || performance.now() - loadedAt < MIN_FILL_MS;
+
     const data = new FormData(form);
     const val = (k: string) => String(data.get(k) ?? '').trim();
     const payload = {
       name: val('name'),
-      email: val('email'),
+      email: val('email').replace(/@(.+)$/, (_, d: string) => '@' + d.toLowerCase()),
       country: val('country'),
       organization: val('organization'),
       division: val('division'),
@@ -348,11 +390,12 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
 
     setLoading(true);
     try {
-      await send(payload);
+      if (isBot) await new Promise((r) => setTimeout(r, 900));
+      else await send(payload);
       document.getElementById('sentTo')!.textContent = payload.email;
       card.classList.add('is-done');
       document.getElementById('successTitle')!.focus();
-      track('form_submit');
+      if (!isBot) track('form_submit');
     } catch {
       formErr.hidden = false;
       resetTurnstile(); // tokens are single use
