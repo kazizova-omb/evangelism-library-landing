@@ -18,4 +18,6 @@ export const config = {
   translateEmail: str(env.PUBLIC_TRANSLATE_EMAIL) || 'translate@revelationresource.org',
   supportEmail: str(env.PUBLIC_SUPPORT_EMAIL) || 'support@revelationresource.org',
   showPlaceholderTags: str(env.PUBLIC_SHOW_PLACEHOLDER_TAGS) === 'true',
+  /** client preview build: noindex everywhere + design option switcher */
+  preview: str(env.PUBLIC_PREVIEW) === 'true',
 };

@@ -1,0 +1,35 @@
+---
+// Client preview only (PUBLIC_PREVIEW=true): a small pill to flip between the
+// three design options on the same page language.
+import { getLang, localePath } from '../i18n';
+import { getTheme } from '../lib/theme';
+
+const lang = getLang(Astro);
+const theme = getTheme(Astro);
+const home = localePath(lang, '/');
+const join = (p: string) => (home === '/' ? `/${p}` : `${home}/${p}`);
+const options = [
+  { id: 'v1', label: '1', href: home, name: 'Dark cinematic' },
+  { id: 'v2', label: '2', href: join('v2'), name: 'Light editorial' },
+  { id: 'v3', label: '3', href: join('v3'), name: 'Poster editorial' },
+];
+---
+<nav class="preview-switch" aria-label="Design options">
+  <span>Design option</span>
+  {options.map((o) => (
+    <a href={o.href} title={o.name} aria-current={o.id === theme ? 'page' : undefined}>{o.label}</a>
+  ))}
+</nav>
+
+<style>
+  .preview-switch { position: fixed; left: max(16px, env(safe-area-inset-left)); bottom: max(16px, env(safe-area-inset-bottom)); z-index: 90;
+    display: flex; align-items: center; gap: 4px; padding: 5px 5px 5px 14px; border-radius: 10px;
+    background: rgba(17, 17, 24, .88); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .6), 0 0 0 1px rgba(255, 255, 255, .12) inset;
+    font: 600 12px/1 system-ui, sans-serif; letter-spacing: .04em; color: rgba(255, 255, 255, .7) }
+  .preview-switch span { margin-right: 6px; text-transform: uppercase; font-size: 10.5px; letter-spacing: .12em }
+  .preview-switch a { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 7px; color: #fff; transition: background .2s }
+  .preview-switch a:hover { background: rgba(255, 255, 255, .14) }
+  .preview-switch a[aria-current] { background: #fff; color: #111118 }
+  @media (max-width: 760px) { .preview-switch span { display: none } .preview-switch { padding-left: 5px } }
+</style>

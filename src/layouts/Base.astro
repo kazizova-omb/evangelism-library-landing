@@ -21,6 +21,7 @@ import MobileMenu from '../components/MobileMenu.astro';
 import Footer from '../components/Footer.astro';
 import ConsentBanner from '../components/ConsentBanner.astro';
 import BackToTop from '../components/BackToTop.astro';
+import PreviewSwitcher from '../components/PreviewSwitcher.astro';
 import { useT, getLang, locales, localeCodes, switchPath, defaultLocale, localePath } from '../i18n';
 import { baseGraph, homeGraph } from '../lib/schema';
 import { config } from '../config';
@@ -43,7 +44,9 @@ interface Props {
 const theme = getTheme(Astro);
 const preloads = theme === 'v3' ? [v3DisplayFont, v2BodyFont, v2DisplayFont] : theme === 'v2' ? [v2DisplayFont, v2BodyFont] : [displayFont, displayItalicFont, bodyFont];
 
-const { title, description = site.meta.description, home = false, noindex = false, breadcrumb } = Astro.props;
+const { title, description = site.meta.description, home = false, noindex: noindexProp = false, breadcrumb } = Astro.props;
+// a client preview is never indexed
+const noindex = noindexProp || config.preview;
 const pageTitle = title ? `${title} | ${site.meta.title}` : home ? site.meta.homeTitle : site.meta.title;
 const canonical = new URL(Astro.url.pathname.replace(/\.html$/, ''), Astro.site).href;
 const alternates = localeCodes.map((code) => ({
@@ -137,6 +140,7 @@ const jsonLd = noindex && !breadcrumb ? null : {
   </main>
   <Footer home={home} />
   <BackToTop />
+  {config.preview && home && <PreviewSwitcher />}
   {config.ga4Id && <ConsentBanner />}
 
   <script>

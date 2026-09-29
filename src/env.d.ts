@@ -12,6 +12,7 @@ interface ImportMetaEnv {
   readonly PUBLIC_TRANSLATE_EMAIL?: string;
   readonly PUBLIC_SUPPORT_EMAIL?: string;
   readonly PUBLIC_SHOW_PLACEHOLDER_TAGS?: string;
+  readonly PUBLIC_PREVIEW?: string;
 }
 
 interface ImportMeta {
