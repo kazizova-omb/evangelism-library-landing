@@ -20,7 +20,7 @@ const j = site.journey;
           <div>
             <h3>{s.title}</h3>
             <p>{s.text}</p>
-            <ul class="chips" role="list">{s.chips.map((c) => <li class="chip">{c}</li>)}</ul>
+            <ul class="includes" role="list">{s.chips.map((c) => <li>{c}</li>)}</ul>
           </div>
         </li>
       ))}
@@ -29,18 +29,25 @@ const j = site.journey;
 </section>
 
 <style>
-  .journey { list-style: none; display: grid; grid-template-columns: repeat(5, 1fr); gap: 28px; position: relative }
+  .journey { list-style: none; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0 28px; position: relative }
   .journey::before { content: ""; position: absolute; left: 28px; right: 28px; top: 28px; height: 1px; background: linear-gradient(90deg, var(--gold), rgba(227, 178, 94, .12)) }
-  .step { position: relative }
+  /* desktop: each step spans 4 shared rows (number, title, text, list) so the
+     titles, texts and lists of all five columns line up */
+  .step { position: relative; display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0 }
+  .step > div { display: contents }
   .step__num { position: relative; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--bg); box-shadow: 0 0 0 1px rgba(227, 178, 94, .5) inset, 0 0 34px -6px rgba(227, 178, 94, .55); color: var(--gold-hi); font-family: var(--display); font-size: 22px; font-weight: 600 }
   .step h3 { font-family: var(--display); font-size: 28px; font-weight: 600; line-height: 1.08; margin: 28px 0 10px }
   .step p { font-size: 15.5px; color: var(--ink-2); line-height: 1.55 }
-  .chips { list-style: none }
+  /* what each stage includes: a short list, never wraps into ragged chip rows */
+  .includes { list-style: none; display: grid; align-content: start; gap: 8px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line) }
+  .includes li { display: flex; align-items: center; gap: 10px; font-size: 14px; line-height: 1.4; color: var(--ink-2) }
+  .includes li::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--gold) }
 
   @media (max-width: 1020px) {
     .journey { grid-template-columns: 1fr; gap: 0 }
     .journey::before { left: 28px; right: auto; top: 28px; bottom: 60px; width: 1px; height: auto; background: linear-gradient(180deg, var(--gold), rgba(227, 178, 94, .12)) }
-    .step { display: flex; gap: 24px; padding-bottom: 34px }
+    .step { display: flex; grid-row: auto; gap: 24px; padding-bottom: 34px }
+    .step > div { display: block }
     .step__num { flex: none }
     .step h3 { margin-top: 12px }
   }

@@ -21,7 +21,7 @@ const q = site.quality;
           <span class="icon-badge"><Icon name={f.icon as IconName} /></span>
           <h3>{f.title}</h3>
           <p>{f.text}</p>
-          {'chips' in f && <ul class="chips" role="list">{f.chips.map((c) => <li class="chip">{c}</li>)}</ul>}
+          {'chips' in f && <div class="formats-wrap"><ul class="formats" role="list">{f.chips.map((c) => <li>{c}</li>)}</ul></div>}
           {'link' in f && <div class="chips"><a href={f.link.href} class="chip">{f.link.label}</a></div>}
         </div>
       ))}
@@ -39,6 +39,13 @@ const q = site.quality;
   .feature h3 { font-family: var(--display); font-weight: 600; font-size: 26px; line-height: 1.1; margin: 22px 0 8px }
   .feature p { font-size: 15.5px; color: var(--muted-solid); line-height: 1.55 }
   .feature .chips { margin-top: 14px; list-style: none }
+  /* formats: one quiet dot-separated line. Every item carries its dot in front;
+     the list is shifted left by one dot slot inside a clipping wrapper, so the dot
+     that starts a line (first item or after a wrap) is always hidden. */
+  .formats-wrap { overflow: hidden; margin-top: 16px }
+  .formats { list-style: none; display: flex; flex-wrap: wrap; row-gap: 4px; margin-left: -22px; font-size: 13.5px; font-weight: 500; color: var(--ink-2) }
+  .formats li { white-space: nowrap }
+  .formats li::before { content: "·"; display: inline-block; width: 22px; text-align: center; color: var(--gold) }
 
   @media (max-width: 1020px) {
     .why { grid-template-columns: 1fr; gap: 48px }
