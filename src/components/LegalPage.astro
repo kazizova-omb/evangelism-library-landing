@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../content/site';
+import { config } from '../config';
+import { fill } from '../lib/rich';
+
+interface Props { page: 'terms' | 'privacy' }
+const doc = site.legal[Astro.props.page];
+const email = `<a href="mailto:${config.contactEmail}">${config.contactEmail}</a>`;
+---
+<Base title={doc.title} description={doc.description}>
+  <article class="section legal glow-r">
+    <div class="wrap legal__in">
+      <p class="eyebrow">{site.meta.title}</p>
+      <h1 class="h2">{doc.title}</h1>
+      <p class="legal__meta">{site.legal.updated}</p>
+      <p class="sub">{doc.intro}</p>
+      {doc.sections.map((s) => (
+        <section>
+          <h2>{s.heading}</h2>
+          <p set:html={fill(s.text, { email })} />
+        </section>
+      ))}
+      <a href="/" class="btn btn--ghost legal__back">{site.legal.backHome}</a>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .legal { padding-top: calc(76px + clamp(48px, 6vw, 96px)) }
+  .legal__in { max-width: 760px }
+  .legal__meta { margin-bottom: 28px; font-size: 14px; color: var(--muted-solid) }
+  .legal .sub { margin-bottom: 16px }
+  .legal section { margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--line) }
+  .legal h2 { font-family: var(--display); font-weight: 600; font-size: clamp(26px, 2.4vw, 32px); line-height: 1.15; margin-bottom: 12px }
+  .legal section p { color: var(--ink-2) }
+  .legal section p :global(a) { color: var(--gold-hi); text-decoration: underline; text-underline-offset: 3px }
+  .legal__back { margin-top: 56px }
+</style>
