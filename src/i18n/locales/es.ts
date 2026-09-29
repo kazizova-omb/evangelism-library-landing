@@ -26,6 +26,7 @@ const es: Site = {
 
   brand: 'Revelation Media Resources',
   skipLink: 'Saltar al contenido',
+  backToTop: 'Volver arriba',
 
   nav: [
     { label: 'Qué incluye', href: '#inside' },
@@ -169,7 +170,7 @@ const es: Site = {
     ],
     fields: {
       name: { label: 'Nombre completo', placeholder: 'Juan Pérez', error: 'Escriba su nombre.' },
-      email: { label: 'Correo electrónico', placeholder: 'usted@iglesia.org', error: 'Escriba un correo electrónico válido.' },
+      email: { label: 'Correo electrónico', placeholder: 'usted@iglesia.org', error: 'Escriba un correo electrónico válido.', suggest: '¿Quiso decir {email}?' },
       country: { label: 'País', placeholder: 'Empiece a escribir...', error: 'Escriba su país.' },
       organization: { label: 'Iglesia u organización', placeholder: 'Nombre de su iglesia', error: 'Escriba su iglesia u organización.' },
       division: { label: 'División', placeholder: 'Seleccione una división' },
@@ -245,7 +246,9 @@ const es: Site = {
 
   footer: {
     tagline: 'Una biblioteca visual moderna de materiales para series evangelísticas. Gratuita para pastores y líderes de ministerio.',
+    columns: { explore: 'Explorar', help: 'Ayuda', legal: 'Legal' },
     links: {
+      faq: 'Preguntas',
       inside: 'Qué incluye',
       support: 'Soporte',
       demo: 'Demo',
@@ -256,7 +259,6 @@ const es: Site = {
       privacy: 'Política de privacidad',
     },
     copyright: '© 2026 Lorem Ipsum Ministries',
-    questions: '¿Preguntas?',
     cookieSettings: 'Configuración de cookies',
   },
 
@@ -305,6 +307,7 @@ const es: Site = {
     heading: 'Esta página *no existe*',
     text: 'La página que busca puede haberse movido o nunca existió.',
     cta: 'Volver al inicio',
+    secondaryCta: 'Obtener los materiales',
   },
 };
 

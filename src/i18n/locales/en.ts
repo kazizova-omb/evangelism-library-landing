@@ -32,6 +32,7 @@ const en = {
 
   brand: 'Revelation Media Resources',
   skipLink: 'Skip to content',
+  backToTop: 'Back to top',
 
   nav: [
     { label: "What's inside", href: '#inside' },
@@ -177,7 +178,8 @@ const en = {
     ],
     fields: {
       name: { label: 'Full name', placeholder: 'John Smith', error: 'Please enter your name.' },
-      email: { label: 'Email', placeholder: 'you@church.org', error: 'Please enter a valid email.' },
+      // {email} in suggest is replaced with the corrected address (a button)
+      email: { label: 'Email', placeholder: 'you@church.org', error: 'Please enter a valid email.', suggest: 'Did you mean {email}?' },
       country: { label: 'Country', placeholder: 'Start typing...', error: 'Please enter your country.' },
       organization: { label: 'Church or organization', placeholder: 'Name of your church', error: 'Please enter your church or organization.' },
       division: { label: 'Division', placeholder: 'Select a division' },
@@ -265,7 +267,9 @@ const en = {
 
   footer: {
     tagline: 'A modern visual library of materials for evangelistic series. Free for pastors and ministry leaders.',
+    columns: { explore: 'Explore', help: 'Help', legal: 'Legal' },
     links: {
+      faq: 'Questions',
       inside: "What's inside",
       support: 'Support',
       demo: 'Demo',
@@ -276,7 +280,6 @@ const en = {
       privacy: 'Privacy Policy',
     },
     copyright: '© 2026 Lorem Ipsum Ministries',
-    questions: 'Questions?',
     cookieSettings: 'Cookie settings',
   },
 
@@ -326,6 +329,7 @@ const en = {
     heading: 'This page is *not here*',
     text: 'The page you are looking for may have moved or never existed.',
     cta: 'Back to home',
+    secondaryCta: 'Get the materials',
   },
 } as const;
 

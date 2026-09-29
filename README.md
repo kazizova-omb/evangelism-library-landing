@@ -34,7 +34,7 @@ so redeploy after changing one.
 | `PUBLIC_CONTACT_EMAIL` | Contact links, legal pages, JSON-LD | `hello@revelationresource.org` |
 | `PUBLIC_TRANSLATE_EMAIL` | "Volunteer as a translator" button and the address shown under it | `translate@revelationresource.org` |
 | `PUBLIC_SUPPORT_EMAIL` | "Didn't get the email?" help in the form section, success screen, footer | `support@revelationresource.org` |
-| `PUBLIC_SHOW_PLACEHOLDER_TAGS` | Show the dashed "placeholder" tags (`true` / `false`) | Hidden |
+| `PUBLIC_SHOW_PLACEHOLDER_TAGS` | Dashed labels ("Key visual placeholder", "Sample figures and content"...) that mark where real images and sample content go. A design aid only | Hidden |
 
 Set `PUBLIC_SHOW_PLACEHOLDER_TAGS=false` for production.
 
@@ -103,6 +103,19 @@ Without an `og` image, `public/og-default.jpg` (rendered from the hero) is used 
 - Turnstile loads only when the form comes close to the viewport. On screens under ~392px it uses
   the compact widget so it fits the card.
 
+### Spam protection
+
+Three layers on the page, one on the server:
+
+1. **Cloudflare Turnstile** (invisible to most people, a checkbox when in doubt). Its token is sent as `turnstileToken`.
+2. **Honeypot:** a hidden `website` field people never see. If it is filled, the form shows the normal
+   success screen and sends nothing, so bots get no signal.
+3. **Timing:** a submit less than 3 seconds after the page loaded is treated the same way.
+4. **Server (backend TODO):** verify the Turnstile token and rate-limit by IP and email.
+
+The email field is checked on blur and on submit (format, length, domain), and common typos get a
+one-click fix ("gmial.con" becomes "Did you mean ...@gmail.com?"). See `src/lib/email.ts`.
+
 > **TODO (backend):** verify `turnstileToken` server-side with Cloudflare's `siteverify` API
 > using the secret key. The landing page only collects the token.
 
@@ -134,8 +147,8 @@ Add `data-track="event_name"` (and optionally `data-track-location`) to any link
 4. Add the environment variables above (Production and Preview), including `NODE_VERSION=22` (Astro 7 needs 22.12+).
 5. Deploy, then add the custom domain under the project's Custom domains tab and set `PUBLIC_SITE_URL` to it.
 
-`public/_headers` sets security headers and long-term caching for hashed assets. `404.html` is served
-automatically for unknown paths.
+`public/_headers` sets security headers and long-term caching for hashed assets. `404.html` and `es/404.html` are served
+automatically for unknown paths (Cloudflare Pages picks the closest one).
 
 ## Project structure
 
@@ -150,8 +163,8 @@ src/i18n/config.mjs   list of languages
 src/styles/global.css design tokens and shared styles
 src/layouts/Base.astro  <head>, SEO, fonts, consent defaults, header/footer
 src/components/       one component per section, plus Icon and SlotImage
-src/pages/[...lang]/  index, terms, privacy for every language
-src/pages/            404, robots.txt
+src/pages/[...lang]/  index, terms, privacy, 404 for every language
+src/pages/            robots.txt
 src/assets/slots/     drop real images here
 ```
 
