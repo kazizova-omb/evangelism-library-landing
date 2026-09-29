@@ -1,0 +1,336 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../content/site';
+import { config } from '../config';
+import { rich, fill } from '../lib/rich';
+
+const g = site.getKit;
+const f = g.fields;
+const link = (href: string, label: string) =>
+  `<a href="${href}" target="_blank" rel="noopener">${label}</a>`;
+const consentHtml = fill(g.consent.text, {
+  terms: link('/terms', site.footer.links.terms),
+  privacy: link('/privacy', site.footer.links.privacy),
+});
+const successHtml = fill(g.success.text, { email: '<b id="sentTo"></b>' });
+---
+<section class="section glow-r" id="get" aria-labelledby="get-title">
+  <div class="wrap get">
+    <div class="get__head reveal">
+      <p class="eyebrow">{g.eyebrow}</p>
+      <h2 class="h2" id="get-title" set:html={rich(g.title)} />
+      <p class="sub">{g.sub}</p>
+      <ol class="next">
+        {g.steps.map((s) => <li><div><b>{s.title}</b><span>{s.text}</span></div></li>)}
+      </ol>
+    </div>
+
+    <div class="formcard reveal" id="formcard"
+      data-api-url={config.apiUrl}
+      data-sitekey={config.turnstileSiteKey}>
+      <form id="kitForm" novalidate>
+        <div class="form-err" id="formErr" role="alert" hidden>{g.networkError}</div>
+        <div class="grid2">
+          <div class="field">
+            <label for="f-name">{f.name.label}</label>
+            <input id="f-name" name="name" autocomplete="name" required placeholder={f.name.placeholder} />
+            <span class="err" id="f-name-err">{f.name.error}</span>
+          </div>
+          <div class="field">
+            <label for="f-email">{f.email.label}</label>
+            <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder={f.email.placeholder} />
+            <span class="err" id="f-email-err">{f.email.error}</span>
+          </div>
+          <div class="field">
+            <label for="f-country">{f.country.label}</label>
+            <input id="f-country" name="country" list="countries" autocomplete="country-name" required placeholder={f.country.placeholder} />
+            <span class="err" id="f-country-err">{f.country.error}</span>
+          </div>
+          <div class="field">
+            <label for="f-org">{f.organization.label}</label>
+            <input id="f-org" name="organization" autocomplete="organization" required placeholder={f.organization.placeholder} />
+            <span class="err" id="f-org-err">{f.organization.error}</span>
+          </div>
+          <div class="field">
+            <label for="f-division">{f.division.label} <em>{g.optional}</em></label>
+            <select id="f-division" name="division">
+              <option value="">{f.division.placeholder}</option>
+              {g.divisions.map((d) => <option>{d}</option>)}
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-conf">{f.conference.label} <em>{g.optional}</em></label>
+            <input id="f-conf" name="conference" placeholder={f.conference.placeholder} />
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-comment">{f.comment.label} <em>{g.optional}</em></label>
+          <textarea id="f-comment" name="comment" placeholder={f.comment.placeholder}></textarea>
+        </div>
+        <div class="field consent-wrap">
+          <label class="consent">
+            <input type="checkbox" id="f-consent" name="consent" required />
+            <span set:html={consentHtml} />
+          </label>
+          <span class="err" id="f-consent-err">{g.consent.error}</span>
+        </div>
+        <div class="field turnstile-wrap">
+          <div class="turnstile" id="turnstile"></div>
+          <span class="err" id="turnstile-err">{g.turnstileError}</span>
+        </div>
+        <button type="submit" class="btn btn--gold btn--block" id="submitBtn" data-label={g.submit} data-sending={g.sending}>{g.submit}</button>
+        <p class="form-note">{g.note}</p>
+      </form>
+
+      <div class="success" id="success">
+        <div class="success__ic"><Icon name="success" /></div>
+        <h3 id="successTitle" tabindex="-1">{g.success.title}</h3>
+        <p set:html={successHtml} />
+        <a href={config.libraryUrl} class="btn btn--gold" data-track="login_click" data-track-location="success">{g.success.cta}</a><br />
+        <button type="button" class="link" id="editEmail">{g.success.change}</button>
+      </div>
+    </div>
+  </div>
+  <datalist id="countries">
+    {g.countries.map((c) => <option value={c} />)}
+  </datalist>
+</section>
+
+<style>
+  .get { display: grid; grid-template-columns: 5fr 7fr; gap: 72px; align-items: start }
+  .get__head { position: sticky; top: 120px }
+  .next { list-style: none; counter-reset: s; display: grid; gap: 22px; margin-top: 36px }
+  .next li { display: flex; gap: 16px; align-items: flex-start }
+  .next li::before { counter-increment: s; content: counter(s); flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-family: var(--display); font-weight: 600; font-size: 19px; color: var(--gold-hi); box-shadow: 0 0 0 1px rgba(227, 178, 94, .45) inset }
+  .next b { display: block; font-weight: 600; color: var(--ink) }
+  .next span { font-size: 15px; color: var(--muted-solid) }
+
+  .formcard { position: relative; padding: clamp(26px, 3.6vw, 48px); border-radius: 20px; background: linear-gradient(180deg, #17120D, #0F0C09); box-shadow: 0 0 0 1px var(--line) inset, 0 40px 100px -40px rgba(0, 0, 0, .9), 0 0 140px -50px rgba(227, 178, 94, .4) }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px }
+  .field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px }
+  .field label { font-size: 14px; font-weight: 500; color: var(--ink-2) }
+  .field label em { font-style: normal; font-weight: 400; font-size: 13px; color: var(--muted-solid) }
+  .field input, .field select, .field textarea { width: 100%; font: inherit; font-size: 16px; color: var(--ink); background: rgba(243, 235, 221, .04); border: 1px solid rgba(243, 235, 221, .15); border-radius: 10px; height: 52px; padding: 0 16px; outline: none; transition: border-color .2s, box-shadow .2s, background .2s }
+  .field textarea { height: auto; min-height: 104px; padding: 14px 16px; resize: vertical; line-height: 1.5 }
+  .field select { appearance: none; -webkit-appearance: none; padding-right: 44px; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23E3B25E' stroke-width='1.6'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 18px center }
+  .field select option { background: #17120D; color: var(--ink) }
+  .field ::placeholder { color: rgba(163, 150, 130, .7) }
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--gold); background: rgba(243, 235, 221, .06); box-shadow: 0 0 0 4px rgba(227, 178, 94, .14) }
+  .err { display: none; font-size: 13px; color: var(--error) }
+  .is-invalid input, .is-invalid select { border-color: var(--error-line) }
+  .is-invalid .err { display: block }
+
+  .consent { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--ink-2); margin: 4px 0 6px; cursor: pointer }
+  .consent input { flex: none; appearance: none; -webkit-appearance: none; width: 20px; height: 20px; margin-top: 2px; border-radius: 5px; border: 1px solid rgba(243, 235, 221, .3); background: rgba(243, 235, 221, .04); cursor: pointer; display: grid; place-items: center; transition: background .2s, border-color .2s }
+  .consent input:checked { background: var(--gold); border-color: var(--gold) }
+  .consent input:checked::after { content: ""; width: 10px; height: 6px; border-left: 2px solid #1E1408; border-bottom: 2px solid #1E1408; transform: translateY(-1px) rotate(-45deg) }
+  .consent input:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; box-shadow: 0 0 0 4px rgba(227, 178, 94, .2) }
+  .is-invalid .consent input { border-color: var(--error-line) }
+  .consent :global(a) { color: var(--gold-hi); text-decoration: underline; text-underline-offset: 3px }
+  .consent-wrap { margin-bottom: 22px }
+
+  /* Cloudflare Turnstile: space is reserved so the widget does not shift the layout */
+  .turnstile-wrap { margin-bottom: 24px; gap: 6px }
+  .turnstile { width: 100%; max-width: 300px; min-height: 65px }
+  /* under ~392px the card is narrower than the 300px widget: the script switches to "compact" (150x140) */
+  @media (max-width: 391px) { .turnstile { min-height: 140px } }
+
+  .btn.is-loading { pointer-events: none; opacity: .85 }
+  .btn.is-loading::after { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(30, 20, 8, .3); border-top-color: #1E1408; animation: spin .8s linear infinite }
+  .form-err { margin-bottom: 16px; padding: 12px 14px; border-radius: 10px; background: rgba(224, 120, 90, .1); color: var(--error); font-size: 14px }
+
+  .success { display: none; text-align: center; padding: 36px 8px }
+  .formcard.is-done form { display: none }
+  .formcard.is-done .success { display: block; animation: rise .7s var(--ease) }
+  .success__ic { width: 84px; height: 84px; margin: 0 auto 26px; border-radius: 50%; display: grid; place-items: center; color: #1E1408; background: linear-gradient(180deg, var(--gold-hi), var(--gold)); box-shadow: 0 0 70px -6px rgba(227, 178, 94, .7) }
+  .success__ic :global(svg) { width: 34px; height: 34px }
+  .success h3 { font-family: var(--display); font-weight: 600; font-size: clamp(34px, 3.4vw, 46px); line-height: 1.05; margin-bottom: 14px; outline: none }
+  .success p { color: var(--ink-2); max-width: 420px; margin: 0 auto 30px }
+  .success p :global(b) { color: var(--ink); font-weight: 600; word-break: break-all }
+  .success .btn { min-width: 260px }
+  .success .link { display: inline-block; margin-top: 18px; font-size: 14px; color: var(--muted-solid); text-decoration: underline; text-underline-offset: 3px }
+  .success .link:hover { color: var(--gold-hi) }
+
+  @media (max-width: 1020px) {
+    .get { grid-template-columns: 1fr; gap: 48px }
+    .get__head { position: static }
+  }
+  @media (max-width: 760px) {
+    .grid2 { grid-template-columns: 1fr }
+    .success .btn { min-width: 0; width: 100% }
+  }
+</style>
+
+<script>
+  import { track } from '../scripts/analytics';
+
+  const card = document.getElementById('formcard')!;
+  const form = document.getElementById('kitForm') as HTMLFormElement;
+  const btn = document.getElementById('submitBtn') as HTMLButtonElement;
+  const formErr = document.getElementById('formErr')!;
+  const tsBox = document.getElementById('turnstile')!;
+  const tsField = tsBox.closest<HTMLElement>('.field')!;
+  const apiUrl = card.dataset.apiUrl ?? '';
+  const sitekey = card.dataset.sitekey ?? '';
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // UTM params, captured once on page load and kept in memory only
+  const q = new URLSearchParams(location.search);
+  const utm = Object.fromEntries(
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].map((k) => [k, q.get(k) ?? '']),
+  );
+
+  /* ---------- Turnstile (loaded when the form gets close) ---------- */
+  let widgetId: string | null = null;
+  let tsRequested = false;
+
+  function loadTurnstile() {
+    if (tsRequested) return;
+    tsRequested = true;
+    (window as any).onTurnstileLoad = () => {
+      widgetId = window.turnstile!.render(tsBox, {
+        sitekey,
+        theme: 'dark',
+        size: tsBox.clientWidth < 300 ? 'compact' : 'normal',
+        callback: () => setInvalid(tsField, null, false),
+      });
+    };
+    const s = document.createElement('script');
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad';
+    s.async = true;
+    s.defer = true;
+    document.head.appendChild(s);
+  }
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        loadTurnstile();
+        io.disconnect();
+      }
+    }, { rootMargin: '800px 0px' });
+    io.observe(card);
+  } else {
+    loadTurnstile();
+  }
+  form.addEventListener('focusin', loadTurnstile, { once: true });
+
+  const token = () => (widgetId !== null ? window.turnstile?.getResponse(widgetId) ?? '' : '');
+  const resetTurnstile = () => { if (widgetId !== null) window.turnstile?.reset(widgetId); };
+
+  /* ---------- Validation ---------- */
+  function setInvalid(field: HTMLElement, input: HTMLElement | null, invalid: boolean) {
+    field.classList.toggle('is-invalid', invalid);
+    const el = input ?? field.querySelector('input, select, textarea');
+    const err = field.querySelector<HTMLElement>('.err');
+    if (!el || !err) return;
+    if (invalid) {
+      el.setAttribute('aria-invalid', 'true');
+      el.setAttribute('aria-describedby', err.id);
+    } else {
+      el.removeAttribute('aria-invalid');
+      el.removeAttribute('aria-describedby');
+    }
+  }
+
+  function validate(): boolean {
+    let firstBad: HTMLElement | null = null;
+    form.querySelectorAll<HTMLInputElement>('[required]').forEach((inp) => {
+      const v = inp.value.trim();
+      const ok = inp.type === 'checkbox' ? inp.checked : inp.type === 'email' ? EMAIL_RE.test(v) : v !== '';
+      setInvalid(inp.closest('.field')!, inp, !ok);
+      if (!ok && !firstBad) firstBad = inp;
+    });
+    if (firstBad) (firstBad as HTMLElement).focus();
+    return !firstBad;
+  }
+
+  form.querySelectorAll<HTMLElement>('input, select, textarea').forEach((inp) => {
+    const clear = () => {
+      const field = inp.closest<HTMLElement>('.field');
+      if (field?.classList.contains('is-invalid')) setInvalid(field, inp, false);
+    };
+    inp.addEventListener('input', clear);
+    inp.addEventListener('change', clear);
+  });
+
+  /* ---------- Submit ---------- */
+  let busy = false;
+
+  function setLoading(on: boolean) {
+    busy = on;
+    btn.classList.toggle('is-loading', on);
+    btn.setAttribute('aria-busy', String(on));
+    btn.textContent = (on ? btn.dataset.sending : btn.dataset.label) ?? '';
+  }
+
+  async function send(payload: Record<string, unknown>) {
+    if (!apiUrl) {
+      await new Promise((r) => setTimeout(r, 900)); // mock endpoint
+      return;
+    }
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 15000);
+    try {
+      const res = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: ctrl.signal,
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`); // any 2xx is a success
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (busy) return;
+    formErr.hidden = true;
+    if (!validate()) return;
+
+    const turnstileToken = token();
+    if (!turnstileToken) {
+      setInvalid(tsField, null, true);
+      loadTurnstile();
+      return;
+    }
+
+    const data = new FormData(form);
+    const val = (k: string) => String(data.get(k) ?? '').trim();
+    const payload = {
+      name: val('name'),
+      email: val('email'),
+      country: val('country'),
+      organization: val('organization'),
+      division: val('division'),
+      conference: val('conference'),
+      comment: val('comment'),
+      consent: true,
+      turnstileToken,
+      source: 'landing',
+      ...utm,
+    };
+
+    setLoading(true);
+    try {
+      await send(payload);
+      document.getElementById('sentTo')!.textContent = payload.email;
+      card.classList.add('is-done');
+      document.getElementById('successTitle')!.focus();
+      track('form_submit');
+    } catch {
+      formErr.hidden = false;
+      resetTurnstile(); // tokens are single use
+    } finally {
+      setLoading(false);
+    }
+  });
+
+  document.getElementById('editEmail')!.addEventListener('click', () => {
+    card.classList.remove('is-done');
+    resetTurnstile();
+    document.getElementById('f-email')!.focus();
+  });
+</script>
