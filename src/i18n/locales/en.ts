@@ -175,18 +175,18 @@ const en = {
       { q: 'What formats are included?', a: 'Presentations come in PowerPoint, Keynote, and Google Slides. Images and videos are provided in standard formats that work on any device.' },
       { q: 'Can I edit the materials?', a: "Yes. You can change text, reorder slides, and add your church's details to fit your program." },
       { q: 'Which languages are available?', a: "The kit is available in several languages, listed in the translation section below. Don't see yours? You can help us translate it." },
-      { q: 'How do I access the materials after signing up?', a: "Your email is added to the library right away. Sign in with that email at any time, and we'll send you a one-time code to log in. There's no password to remember." },
+      { q: 'How do I get the materials after signing up?', a: "Right after you submit the form, we email you a personal download link. Open it to download the kit in the formats and languages you need. Lost the email? Submit the form again with the same address and we'll send the link again." },
     ],
   },
 
   getKit: {
     eyebrow: 'Get the full kit',
     title: 'Get *free access* to the complete library',
-    sub: "Tell us a little about your church, and we'll open the library for you right away.",
+    sub: "Tell us a little about your church, and we'll email you a personal link to download the full kit.",
     steps: [
       { title: 'Fill out the form', text: 'It takes about a minute.' },
-      { title: 'Check your email', text: "We'll send you sign-in instructions." },
-      { title: 'Sign in and download', text: 'All programs, languages, and formats in one place.' },
+      { title: 'Check your email', text: "We'll send you a personal download link." },
+      { title: 'Download the kit', text: 'All programs, languages, and formats in one place.' },
     ],
     fields: {
       name: { label: 'Full name', placeholder: 'John Smith', error: 'Please enter your name.' },
@@ -206,10 +206,10 @@ const en = {
     },
     // Shown under the steps for people who signed up before
     returning: {
-      title: 'Already registered?',
-      text: 'Your access is waiting in your inbox. Look for the email from Revelation Media Resources and follow the sign-in link.',
+      title: 'Already requested the kit?',
+      text: 'Your personal download link is in your inbox. Look for the email from Revelation Media Resources.',
       // {support} is replaced with the support email link
-      help: "Didn't get the email? Write to {support}.",
+      help: "Didn't get it? Submit the form again with the same address, or write to {support}.",
     },
     turnstileError: 'Please complete the spam check.',
     submit: 'Get free access',
@@ -217,13 +217,15 @@ const en = {
     note: "We'll only use your details to give you access and send updates about the kit.",
     networkError: 'Something went wrong. Please try again in a moment.',
     success: {
-      title: 'Access granted',
+      title: 'Your link is on its way',
       // {email} is replaced with the submitted address
-      text: "We've sent an email to {email} with sign-in instructions. Can't find it? Check your spam folder.",
+      text: "We've emailed a personal download link to {email}. Can't find it? Check your spam folder.",
       // {support} is replaced with the support email link
       help: 'Still nothing? Write to {support}.',
       cta: 'Go to the library',
       change: 'Wrong email? Change it',
+      // shown only while the server runs in test mode (no real email is sent)
+      preview: 'Test mode: open the email',
     },
     // Keys are fixed codes; the English name is what the form sends.
     divisions: {
@@ -342,6 +344,49 @@ const en = {
     text: 'The page you are looking for may have moved or never existed.',
     cta: 'Back to home',
     secondaryCta: 'Get the materials',
+  },
+
+  // Download page (/download?t=...), opened from the link in the email
+  download: {
+    title: 'Download the kit',
+    eyebrow: 'Your kit',
+    heading: 'Your kit is *ready*',
+    // {name} is replaced with the first name from the form
+    greeting: 'Welcome, {name}.',
+    text: 'Here are all the files. Download what you need, whenever you need it: this link keeps working.',
+    loading: 'Checking your link...',
+    filesTitle: 'Files',
+    downloadLabel: 'Download',
+    invalidTitle: "This link doesn't work",
+    invalidText: 'It may have expired or been copied incompletely. Submit the form again with the same email and we will send you a fresh link.',
+    invalidCta: 'Request a new link',
+    testNote: 'Test mode: these files are placeholders until the real kit is uploaded.',
+    help: 'Questions? Write to {support}.',
+  },
+
+  // Automatic email sent after the form (see functions/_lib/email.ts)
+  email: {
+    subject: 'Your Revelation Media Resources download link',
+    preheader: 'Your free evangelistic series kit is ready to download.',
+    greeting: 'Hi {name},',
+    thanks: 'Thank you for your interest in Revelation Media Resources. Your free kit is ready to download.',
+    cta: 'Download the kit',
+    personal: 'This link is personal, so please do not forward it.',
+    // {days} is replaced with the number of days
+    expiry: 'It stays active for {days} days. You can always request a new one from the website.',
+    fallback: "If the button doesn't work, copy this link into your browser:",
+    // Draft: replace with the client's short terms
+    termsTitle: 'Terms of use, in short',
+    terms: [
+      'The materials are free for use in your church and ministry.',
+      'You may edit and adapt them for your programs.',
+      'Please do not sell them or share the kit files outside your ministry.',
+    ],
+    termsLink: 'Full Terms of Use',
+    questions: 'Questions? Write to us at {support}.',
+    signoff: 'Blessings,',
+    team: 'The Revelation Media Resources team',
+    footer: 'You received this email because this address was used to request the kit at {site}.',
   },
 } as const;
 
