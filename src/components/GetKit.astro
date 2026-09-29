@@ -75,7 +75,7 @@ const successHtml = fill(g.success.text, { email: '<b id="sentTo"></b>' });
           <span class="err" id="f-consent-err">{g.consent.error}</span>
         </div>
         <div class="field turnstile-wrap">
-          <div class="turnstile" id="turnstile"></div>
+          <div class="turnstile" id="ts-widget"></div>
           <span class="err" id="turnstile-err">{g.turnstileError}</span>
         </div>
         <button type="submit" class="btn btn--gold btn--block" id="submitBtn" data-label={g.submit} data-sending={g.sending}>{g.submit}</button>
@@ -168,7 +168,7 @@ const successHtml = fill(g.success.text, { email: '<b id="sentTo"></b>' });
   const form = document.getElementById('kitForm') as HTMLFormElement;
   const btn = document.getElementById('submitBtn') as HTMLButtonElement;
   const formErr = document.getElementById('formErr')!;
-  const tsBox = document.getElementById('turnstile')!;
+  const tsBox = document.getElementById('ts-widget')!;
   const tsField = tsBox.closest<HTMLElement>('.field')!;
   const apiUrl = card.dataset.apiUrl ?? '';
   const sitekey = card.dataset.sitekey ?? '';
