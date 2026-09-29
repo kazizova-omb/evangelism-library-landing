@@ -121,7 +121,24 @@ import '@fontsource/inter/600.css';
     :root.v2:not(#v1) .journey::before { background: linear-gradient(180deg, var(--cyan), rgba(22, 195, 222, .15)) }
   }
 
-  /* ---------- quality ---------- */
+  /* ---------- quality: heading row on top (text left, CTA right), cards 3 across ---------- */
+  :root.v2:not(#v1) .why { grid-template-columns: 1fr; gap: 48px }
+  :root.v2:not(#v1) .why__head { position: static; display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 48px; align-items: end }
+  :root.v2:not(#v1) .why__head .h2 { font-size: clamp(34px, 3.9vw, 56px) }
+  :root.v2:not(#v1) .why__head > :not(.btn) { grid-column: 1 }
+  :root.v2:not(#v1) .why__head .sub { margin-bottom: 0; max-width: 620px }
+  :root.v2:not(#v1) .why__head .btn { grid-column: 2; grid-row: 1 / span 3; align-self: end }
+  :root.v2:not(#v1) .features { grid-template-columns: repeat(3, minmax(0, 1fr)) }
+  @media (max-width: 1020px) {
+    :root.v2:not(#v1) .features { grid-template-columns: 1fr 1fr }
+  }
+  @media (max-width: 760px) {
+    :root.v2:not(#v1) .why__head { grid-template-columns: 1fr }
+    :root.v2:not(#v1) .why__head .btn { grid-column: 1; grid-row: auto; justify-self: start; margin-top: 24px }
+    :root.v2:not(#v1) .features { grid-template-columns: 1fr }
+  }
+  /* two-column headings: DM Serif runs wide, so a notch smaller than section titles */
+  :root.v2:not(#v1) :is(.get__head, .demo) .h2 { font-size: clamp(34px, 3.4vw, 48px) }
   :root.v2:not(#v1) .feature { background: #fff; border-radius: 18px; box-shadow: 0 0 0 1px var(--line) inset }
   :root.v2:not(#v1) .feature:hover { box-shadow: 0 0 0 1px rgba(10, 156, 182, .5) inset, 0 20px 40px -26px rgba(11, 20, 70, .35) }
   :root.v2:not(#v1) .feature h3 { font-size: 24px; color: var(--navy) }

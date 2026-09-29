@@ -1,5 +1,6 @@
 import { locales as codes, defaultLocale } from './config.mjs';
 import type { Site } from './types';
+import { typoDeep } from './typo';
 
 export type { Site };
 export { defaultLocale };
@@ -10,7 +11,8 @@ export const locales: Record<string, Site> = Object.fromEntries(
   (codes as string[]).map((code) => {
     const mod = files[`./locales/${code}.ts`];
     if (!mod) throw new Error(`i18n: missing src/i18n/locales/${code}.ts for locale "${code}"`);
-    return [code, mod.default];
+    // every string gets the line-break rules (see typo.ts)
+    return [code, typoDeep(mod.default, mod.default.locale.htmlLang)];
   }),
 );
 

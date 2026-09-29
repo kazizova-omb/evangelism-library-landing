@@ -82,6 +82,9 @@ Edit the locale files and rebuild; no markup changes are needed.
   because the grid layout is designed around them.
 - Design rules: no decorative lines next to eyebrow labels, no em dashes in copy, and no changes to
   colors, fonts or section order without approval.
+- Line breaks are handled for you: short words (articles, prepositions, "every", "your"; in Spanish
+  "el", "los", "de", "todos"...) are tied to the next word when the copy loads (`src/i18n/typo.ts`),
+  headings are balanced and paragraphs avoid a lone last word. Add words to the lists there if needed.
 
 ## Images
 

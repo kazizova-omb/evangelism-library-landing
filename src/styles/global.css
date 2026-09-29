@@ -53,6 +53,13 @@ body::after {
 .h2 em { font-style: italic; font-weight: 500; color: var(--gold-hi) }
 .sub { color: var(--ink-2); font-size: 18px }
 
+/* Line breaks: headings split into even lines, running text avoids a lone last
+   word. Short words are also tied to the next word in the copy (src/i18n/typo.ts). */
+:is(h1, h2, h3, .h1, .h2, blockquote, summary) { text-wrap: balance }
+:is(p, li, dd, dt, figcaption) { text-wrap: pretty }
+/* the accent phrase of a heading ("final certificate", an organisation name) stays on one line */
+@media (min-width: 761px) { :is(.h1, .h2) em { white-space: nowrap } }
+
 /* ---------- Sections ---------- */
 .section { position: relative; overflow-x: clip; padding: clamp(64px, 7.5vw, 112px) var(--gutter) }
 .wrap { position: relative; max-width: 1200px; margin: 0 auto }

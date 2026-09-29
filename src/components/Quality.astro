@@ -30,8 +30,10 @@ const q = site.quality;
 </section>
 
 <style>
-  .why { display: grid; grid-template-columns: 5fr 7fr; gap: 72px; align-items: start }
+  .why { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 72px; align-items: start }
   .why__head { position: sticky; top: 120px }
+  /* sized for the narrower column so the heading breaks into two even lines */
+  .why__head .h2 { font-size: clamp(40px, 3.9vw, 56px) }
   .why__head .sub { margin-bottom: 32px }
   .features { display: grid; grid-template-columns: 1fr 1fr; gap: 16px }
   .feature { padding: 30px; border-radius: 14px; background: linear-gradient(180deg, rgba(243, 235, 221, .04), rgba(243, 235, 221, .012)); box-shadow: 0 0 0 1px var(--line) inset; transition: box-shadow .3s, transform .3s var(--ease) }

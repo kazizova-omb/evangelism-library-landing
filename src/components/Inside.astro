@@ -21,6 +21,12 @@ const img = {
 };
 const wide = { sizes: '(max-width: 760px) calc(100vw - 40px), (max-width: 1240px) 66vw, 800px', widths: [480, 800, 1200, 1600] };
 const narrow = { sizes: '(max-width: 760px) 50vw, (max-width: 1240px) 33vw, 400px', widths: [320, 480, 800] };
+
+// "1,200+" -> number "1,200" + suffix "+", so the suffix can be set smaller in the accent colour
+const splitValue = (v: string) => {
+  const m = v.match(/^([\d.,\s ]+)(.*)$/);
+  return m ? { num: m[1].trim(), suffix: m[2].trim() } : { num: v, suffix: '' };
+};
 ---
 <section class="section glow-r" id="inside" aria-labelledby="inside-title">
   <div class="wrap">
@@ -33,7 +39,7 @@ const narrow = { sizes: '(max-width: 760px) 50vw, (max-width: 1240px) 33vw, 400p
     </div>
     <dl class="stats reveal">
       {s.stats.map((st) => (
-        <div class="stat"><dt>{st.label}</dt><dd>{st.value}</dd></div>
+        <div class="stat"><dt>{st.label}</dt><dd>{splitValue(st.value).num}{splitValue(st.value).suffix && <span class="stat__suffix">{splitValue(st.value).suffix}</span>}</dd></div>
       ))}
     </dl>
     <div class="stats-note reveal">
@@ -91,6 +97,9 @@ const narrow = { sizes: '(max-width: 760px) 50vw, (max-width: 1240px) 33vw, 400p
   .stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line) }
   .stat { display: flex; flex-direction: column; gap: 12px; padding: 32px 24px 30px; border-left: 1px solid var(--line) }
   .stat:first-child { border-left: 0; padding-left: 0 }
+  /* "+" set smaller, raised and in the accent colour, so the number leads */
+  .stat__suffix { display: inline-block; margin-left: .04em; font-family: var(--body); font-weight: 500; font-size: .5em; line-height: 1; vertical-align: .62em;
+    color: var(--gold); -webkit-text-fill-color: currentColor }
   .stat dd { font-family: var(--display); font-weight: 600; font-size: clamp(44px, 4.6vw, 66px); line-height: .9; letter-spacing: -.01em;
     font-variant-numeric: lining-nums proportional-nums; font-feature-settings: "lnum" 1, "pnum" 1;
     background: linear-gradient(180deg, var(--gold-hi), var(--gold) 70%); -webkit-background-clip: text; background-clip: text; color: transparent }
