@@ -45,9 +45,6 @@ import '@fontsource/anton/400.css';
   :root.v3:not(#v1):not(#v2) .h2 { margin-top: 10px }
   :root.v3:not(#v1):not(#v2) .sub { color: var(--ink-2) }
 
-  /* gradient rule used as a separator (never beside a label) */
-  :root.v3:not(#v1):not(#v2) .stats { border-top: 0; position: relative }
-  :root.v3:not(#v1):not(#v2) .stats::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--rule) }
 
   /* ---------- buttons: squarer, poster-like ---------- */
   :root.v3:not(#v1):not(#v2) .btn { border-radius: 6px; text-transform: uppercase; letter-spacing: .08em; font-size: 13.5px; font-weight: 700 }
@@ -96,8 +93,15 @@ import '@fontsource/anton/400.css';
   :root.v3:not(#v1):not(#v2) .video__play::before { border-color: rgba(127, 224, 236, .8) }
 
   /* ---------- what's inside ---------- */
-  :root.v3:not(#v1):not(#v2) .stat dd { font-family: var(--poster); font-size: clamp(52px, 5.4vw, 84px); line-height: .95; color: var(--indigo) }
-  :root.v3:not(#v1):not(#v2) .stat__suffix { font-family: var(--poster); font-size: .62em; vertical-align: .5em; color: var(--teal) }
+  /* numbers carry the brand gradient (a deeper cut of the rule colours so they stay
+     readable on paper: pink 4.4:1, indigo, teal 3.4:1). Each number is sized to its
+     own text, so every figure shows the full sweep. */
+  :root.v3:not(#v1):not(#v2) .stat { padding-left: 20px; padding-right: 20px }
+  :root.v3:not(#v1):not(#v2) .stat:first-child { padding-left: 0 }
+  :root.v3:not(#v1):not(#v2) .stat dd { align-self: flex-start; font-family: var(--poster); font-size: clamp(60px, 6.2vw, 92px); line-height: .95;
+    background: linear-gradient(90deg, #B0508A 0%, #2A2C7C 55%, #0E8FA2 100%); -webkit-background-clip: text; background-clip: text;
+    color: transparent; -webkit-text-fill-color: transparent; padding-right: .02em }
+  :root.v3:not(#v1):not(#v2) .stat__suffix { font-family: var(--poster); font-size: .55em; vertical-align: .6em; color: var(--teal); -webkit-text-fill-color: var(--teal) }
   :root.v3:not(#v1):not(#v2) .stat dt { color: var(--ink-2); font-weight: 600 }
   :root.v3:not(#v1):not(#v2) .tile { border-radius: 6px; box-shadow: none; background: var(--paper-2) }
   :root.v3:not(#v1):not(#v2) .tile figcaption { border-radius: 4px; background: var(--indigo); color: #fff }
