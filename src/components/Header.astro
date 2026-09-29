@@ -7,6 +7,7 @@ import { anchor } from '../lib/links';
 interface Props { home: boolean }
 const { home } = Astro.props;
 ---
+<div class="scroll-sentinel" id="scrollSentinel" aria-hidden="true"></div>
 <header class="header" id="header">
   <div class="header__in">
     <a href={home ? '#top' : '/'} class="brand">
@@ -26,6 +27,7 @@ const { home } = Astro.props;
 </header>
 
 <style>
+  .scroll-sentinel { position: absolute; top: 24px; left: 0; width: 1px; height: 1px; pointer-events: none }
   .header { position: fixed; inset: 0 0 auto 0; z-index: 50; transition: background .4s var(--ease), border-color .4s var(--ease), backdrop-filter .4s; border-bottom: 1px solid transparent }
   .header.is-scrolled { background: rgba(10, 8, 6, .82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-color: var(--line) }
   /* keep the header (and its close button) above the open mobile menu */
@@ -61,8 +63,9 @@ const { home } = Astro.props;
 </style>
 
 <script>
+  // Solid header once the page is scrolled past 24px. Watching a sentinel
+  // avoids reading scrollY (a forced layout) on load and on every scroll.
   const header = document.getElementById('header')!;
-  const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 24);
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
+  const sentinel = document.getElementById('scrollSentinel')!;
+  new IntersectionObserver(([e]) => header.classList.toggle('is-scrolled', !e.isIntersecting)).observe(sentinel);
 </script>

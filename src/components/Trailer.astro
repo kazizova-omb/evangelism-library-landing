@@ -16,7 +16,8 @@ const image = slot('trailer');
     <p class="sub">{t.sub}</p>
   </div>
 
-  <button class="video" id="openVideo" type="button" aria-label={t.playLabel} aria-haspopup="dialog" aria-controls="videoModal">
+  <button class="video" id="openVideo" type="button" aria-haspopup="dialog" aria-controls="videoModal">
+    <span class="visually-hidden">{t.playLabel}:</span>
     <div class="video__scene" aria-hidden="true">
       {image ? (
         <SlotImage src={image} alt="" sizes="(max-width: 1240px) calc(100vw - 2 * clamp(20px, 5vw, 72px)), 1160px" widths={[480, 800, 1160, 1600, 2320]} />
@@ -34,7 +35,7 @@ const image = slot('trailer');
     {!image && <div class="v-bars" aria-hidden="true"></div>}
     <span class="video__play"><Icon name="play" /></span>
     <span class:list={['video__meta', { 'video__meta--image': image }]}><b>{t.metaLabel}</b><span>{t.duration}</span></span>
-    {config.showPlaceholderTags && !image && <span class="ph-tag">{site.placeholderTags.trailer}</span>}
+    {config.showPlaceholderTags && !image && <span class="ph-tag" aria-hidden="true">{site.placeholderTags.trailer}</span>}
   </button>
 </section>
 
