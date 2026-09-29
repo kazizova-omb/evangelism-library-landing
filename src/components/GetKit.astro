@@ -109,6 +109,7 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
         <p set:html={successHtml} />
         {config.libraryUrl && <Fragment><a href={config.libraryUrl} class="btn btn--gold" data-track="login_click" data-track-location="success">{g.success.cta}</a><br /></Fragment>}
         <p class="success__help" set:html={successHelp} />
+        <a class="success__preview" id="emailPreview" href="#" target="_blank" rel="noopener" hidden>{g.success.preview}</a>
         <button type="button" class="link" id="editEmail">{g.success.change}</button>
       </div>
     </div>
@@ -185,6 +186,8 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
   .success p { color: var(--ink-2); max-width: 420px; margin: 0 auto 30px }
   .success p :global(b) { color: var(--ink); font-weight: 600; overflow-wrap: anywhere }
   .success .btn { min-width: 260px }
+  .success__preview { display: inline-block; margin: 18px 0 4px; padding: 8px 14px; border-radius: 6px; border: 1px dashed var(--gold); font-size: 14px; font-weight: 600; color: var(--gold-hi) }
+  .success__preview[hidden] { display: none }
   .success__help { margin: 22px auto 0 !important; font-size: 13px; color: var(--muted-solid) !important }
   .success .link { display: inline-block; margin-top: 18px; font-size: 14px; color: var(--muted-solid); text-decoration: underline; text-underline-offset: 3px }
   .success .link:hover { color: var(--gold-hi) }
@@ -335,10 +338,11 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
     btn.textContent = (on ? btn.dataset.sending : btn.dataset.label) ?? '';
   }
 
-  async function send(payload: Record<string, unknown>) {
+  /** Resolves with the server's JSON (may carry previewUrl in test mode). */
+  async function send(payload: Record<string, unknown>): Promise<{ previewUrl?: string }> {
     if (!apiUrl) {
       await new Promise((r) => setTimeout(r, 900)); // mock endpoint
-      return;
+      return {};
     }
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 15000);
@@ -350,6 +354,7 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
         signal: ctrl.signal,
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`); // any 2xx is a success
+      return await res.json().catch(() => ({}));
     } finally {
       clearTimeout(timer);
     }
@@ -385,14 +390,19 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
       consent: true,
       turnstileToken,
       source: 'landing',
+      lang: document.documentElement.lang || 'en', // the email goes out in the page language
       ...utm,
     };
 
     setLoading(true);
     try {
+      let result: { previewUrl?: string } = {};
       if (isBot) await new Promise((r) => setTimeout(r, 900));
-      else await send(payload);
+      else result = await send(payload);
       document.getElementById('sentTo')!.textContent = payload.email;
+      const preview = document.getElementById('emailPreview') as HTMLAnchorElement;
+      preview.hidden = !result.previewUrl;
+      if (result.previewUrl) preview.href = result.previewUrl;
       card.classList.add('is-done');
       document.getElementById('successTitle')!.focus();
       if (!isBot) track('form_submit');

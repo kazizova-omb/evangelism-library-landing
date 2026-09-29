@@ -137,8 +137,7 @@ Three layers on the page, one on the server:
 The email field is checked on blur and on submit (format, length, domain), and common typos get a
 one-click fix ("gmial.con" becomes "Did you mean ...@gmail.com?"). See `src/lib/email.ts`.
 
-> **TODO (backend):** verify `turnstileToken` server-side with Cloudflare's `siteverify` API
-> using the secret key. The landing page only collects the token.
+> Server side: `functions/api/lead.ts` verifies `turnstileToken` (see "Email and downloads").
 
 ### Testing against a local stub
 
@@ -167,6 +166,49 @@ PUBLIC_API_URL=http://localhost:8787/lead npm run dev
 
 After launch: verify the domain in Google Search Console and Bing Webmaster Tools, submit
 `/sitemap-index.xml`, and check the page in Google's Rich Results Test.
+
+## Email and downloads (server)
+
+After the form, the visitor gets an email with a personal download link. This runs on
+Cloudflare Pages Functions in `functions/` (same project as the site) with a D1 database.
+
+```
+form -> POST /api/lead  -> checks Turnstile, rate limit (6 per 10 min per IP)
+                        -> saves/updates the lead in D1 (same email = same lead)
+                        -> reuses or creates a personal token
+                        -> email (test: stored, live: sent through Resend)
+email -> /download?t=<token> (or /es/download) -> /api/download lists the files
+      -> /api/file?t=...&f=<id> -> file from R2 / external url / placeholder, download logged
+```
+
+| Path | What |
+| --- | --- |
+| `functions/api/lead.ts` | form endpoint |
+| `functions/_lib/email.ts` | email template (copy: `email` in the locale files) |
+| `functions/_lib/kit.ts` | the files on the download page and where each comes from |
+| `src/pages/[...lang]/download.astro` | download page (copy: `download` in the locale files) |
+| `functions/api/admin/leads.csv.ts` | all leads as CSV, needs `ADMIN_TOKEN` |
+| `migrations/` | D1 schema |
+| `wrangler.toml` | bindings and non-secret settings |
+
+**Test mode** (`EMAIL_MODE = "test"` in `wrangler.toml`, the current state): nothing is sent; the
+success screen shows "Test mode: open the email" and the whole flow can be clicked through.
+
+**Going live:**
+1. Upload the kit files: create an R2 bucket `revelation-kit`, upload the ZIPs under the keys in
+   `functions/_lib/kit.ts`, uncomment `[[r2_buckets]]` in `wrangler.toml` (or give each file a `url`).
+2. Create a Resend account, add and verify the domain `revelationresource.org` (DNS records it shows).
+3. Set secrets:
+   `npx wrangler pages secret put RESEND_API_KEY --project-name revelation-media-resources`
+   (also `TURNSTILE_SECRET` for the real Turnstile site key, `ADMIN_TOKEN` for the CSV export).
+4. In `wrangler.toml` set `EMAIL_MODE = "live"`, optionally `LINK_TTL_DAYS`, then deploy.
+5. Leads: `https://<site>/api/admin/leads.csv?key=<ADMIN_TOKEN>` (opens in Excel / Google Sheets).
+
+Local run with functions and a local database: `npx wrangler d1 migrations apply revelation-leads --local`
+once, then `npm run dev:full` (http://localhost:8788). Local secrets go in `.dev.vars`.
+Schema changes: add a file to `migrations/` and run `npm run db:migrate`.
+
+When adding a language, also add it to `functions/_lib/copy.ts`.
 
 ## Analytics and consent
 

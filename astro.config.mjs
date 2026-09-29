@@ -18,7 +18,7 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      filter: (page) => !page.includes('/404') && (legalPagesReady || !/\/(terms|privacy)$/.test(page)),
+      filter: (page) => !page.includes('/404') && !page.includes('/download') && (legalPagesReady || !/\/(terms|privacy)$/.test(page)),
       serialize: (item) => ({ ...item, lastmod: new Date().toISOString() }),
       i18n: { defaultLocale, locales: Object.fromEntries(locales.map((l) => [l, l])) },
     }),
