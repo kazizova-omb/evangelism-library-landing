@@ -67,6 +67,12 @@ import '@fontsource/inter/600.css';
   :root.v2:not(#v1) .header.is-scrolled { background: rgba(255, 255, 255, .9); border-color: var(--line) }
   :root.v2:not(#v1) .nav a { color: var(--ink-2); opacity: 1 }
   :root.v2:not(#v1) .nav a:hover { color: var(--cyan-text) }
+  :root.v2:not(#v1) .nav a { white-space: nowrap }
+  /* the wider brand needs more room: below 1100px the nav steps aside (as v1 does below 1020px) */
+  @media (max-width: 1100px) {
+    :root.v2:not(#v1) .nav { display: none }
+    :root.v2:not(#v1) .header__actions { margin-left: auto }
+  }
   :root.v2:not(#v1) .menu { background: rgba(255, 255, 255, .98) }
   :root.v2:not(#v1) .lang__btn { color: var(--ink-2) }
   :root.v2:not(#v1) :is(.lang__btn:hover, .lang__btn[aria-expanded="true"]) { color: var(--navy); background: var(--lavender) }

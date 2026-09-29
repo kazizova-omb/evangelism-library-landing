@@ -39,7 +39,7 @@ const { home } = Astro.props;
   .brand { display: flex; align-items: center; gap: 12px; font-family: var(--display); font-weight: 600; font-size: 22px; letter-spacing: .02em; white-space: nowrap }
   .brand :global(.brand__mark) { width: 26px; height: 26px; color: var(--gold) }
   .nav { display: flex; gap: 32px; margin: 0 auto }
-  .nav a { font-size: 14px; letter-spacing: .04em; color: var(--ink-2); opacity: .8; transition: opacity .2s, color .2s }
+  .nav a { white-space: nowrap; font-size: 14px; letter-spacing: .04em; color: var(--ink-2); opacity: .8; transition: opacity .2s, color .2s }
   .nav a:hover { opacity: 1; color: var(--gold-hi) }
   .header__actions { display: flex; align-items: center; gap: 12px }
   .burger { display: none; width: 40px; height: 40px; align-items: center; justify-content: center }
@@ -51,7 +51,8 @@ const { home } = Astro.props;
   .burger[aria-expanded="true"] span::before { transform: translateY(6px) rotate(45deg) }
   .burger[aria-expanded="true"] span::after { transform: translateY(-6px) rotate(-45deg) }
 
-  @media (max-width: 1020px) {
+  /* the full brand name needs the room: nav steps aside below 1080px */
+  @media (max-width: 1080px) {
     .nav { display: none }
     .header__actions { margin-left: auto }
   }
