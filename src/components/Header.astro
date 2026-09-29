@@ -21,7 +21,7 @@ const { home } = Astro.props;
       {site.nav.map((l) => <a href={anchor(l.href, home, lang)}>{l.label}</a>)}
     </nav>
     <div class="header__actions">
-      <LangSwitch compact class="header__lang" />
+      <LangSwitch class="header__lang" />
       <a href={anchor('#get', home, lang)} class="btn btn--gold btn--sm" data-track="cta_click" data-track-location="header">{site.header.cta}</a>
       <button class="burger" id="burger" type="button" aria-controls="menu" aria-expanded="false"
         aria-label={site.header.openMenu} data-open-label={site.header.openMenu} data-close-label={site.header.closeMenu}><span></span></button>
@@ -41,7 +41,7 @@ const { home } = Astro.props;
   .nav { display: flex; gap: 32px; margin: 0 auto }
   .nav a { font-size: 14px; letter-spacing: .04em; color: var(--ink-2); opacity: .8; transition: opacity .2s, color .2s }
   .nav a:hover { opacity: 1; color: var(--gold-hi) }
-  .header__actions { display: flex; align-items: center; gap: 18px }
+  .header__actions { display: flex; align-items: center; gap: 12px }
   .burger { display: none; width: 40px; height: 40px; align-items: center; justify-content: center }
   .burger span { position: relative; width: 20px; height: 1.5px; background: var(--ink); transition: background .2s }
   .burger span::before, .burger span::after { content: ""; position: absolute; left: 0; width: 20px; height: 1.5px; background: var(--ink); transition: transform .3s var(--ease) }

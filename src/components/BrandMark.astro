@@ -1,10 +1,12 @@
 ---
 import Icon from './Icon.astro';
-import { logoUrl } from '../lib/slots';
+import { logo } from '../lib/slots';
+
+const h = 32;
 
 // Brand symbol: the uploaded logo if there is one, otherwise the star mark.
 ---
-{logoUrl ? <img class="brand__logo" src={logoUrl} alt="" height="32" /> : <Icon name="mark" class="brand__mark" />}
+{logo ? <img class="brand__logo" src={logo.url} alt="" width={Math.round(h * logo.ratio)} height={h} /> : <Icon name="mark" class="brand__mark" />}
 
 <style>
   .brand__logo { height: 32px; width: auto; max-width: 64px; object-fit: contain }

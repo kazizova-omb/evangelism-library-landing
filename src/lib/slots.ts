@@ -33,9 +33,24 @@ export function slot(name: SlotName): ImageMetadata | undefined {
 
 // Logo: src/assets/slots/logo.svg (or .png/.webp). Replaces the star mark
 // next to the brand name in the header and footer.
-const logoFiles = import.meta.glob<string>('/src/assets/slots/logo.{svg,png,webp}', {
+const logoUrls = import.meta.glob<string>('/src/assets/slots/logo.{svg,png,webp}', {
   eager: true,
   query: '?url',
   import: 'default',
 });
-export const logoUrl: string | undefined = Object.values(logoFiles)[0];
+const logoSvgs = import.meta.glob<string>('/src/assets/slots/logo.svg', { eager: true, query: '?raw', import: 'default' });
+const logoBitmaps = import.meta.glob<{ default: ImageMetadata }>('/src/assets/slots/logo.{png,webp}', { eager: true });
+
+function logoRatio(): number {
+  const svg = Object.values(logoSvgs)[0];
+  if (svg) {
+    const vb = svg.match(/viewBox="[\d.\s-]*?([\d.]+)\s+([\d.]+)"/);
+    if (vb) return Number(vb[1]) / Number(vb[2]);
+  }
+  const bmp = Object.values(logoBitmaps)[0]?.default;
+  return bmp ? bmp.width / bmp.height : 1;
+}
+
+export const logo = Object.values(logoUrls)[0]
+  ? { url: Object.values(logoUrls)[0], ratio: logoRatio() }
+  : undefined;
