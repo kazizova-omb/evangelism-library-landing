@@ -5,6 +5,15 @@ import { rich } from '../lib/rich';
 const site = useT(Astro);
 
 const j = site.journey;
+
+// consecutive steps of the same phase form one segment of the phase bar
+const segments: { label: string; span: number }[] = [];
+for (const st of j.steps) {
+  const last = segments[segments.length - 1];
+  const label = j.phases[st.phase];
+  if (last && last.label === label) last.span++;
+  else segments.push({ label, span: 1 });
+}
 ---
 <section class="section glow-l" id="journey" aria-labelledby="journey-title">
   <div class="wrap">
@@ -13,11 +22,15 @@ const j = site.journey;
       <h2 class="h2" id="journey-title" set:html={rich(j.title)} />
       <p class="sub">{j.sub}</p>
     </div>
+    <div class="phases reveal" aria-hidden="true">
+      {segments.map((seg) => <div class="phase" style={`grid-column: span ${seg.span}`}><span>{seg.label}</span></div>)}
+    </div>
     <ol class="journey">
       {j.steps.map((s, i) => (
         <li class="step reveal">
           <span class="step__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
           <div>
+            <span class="step__phase">{j.phases[s.phase]}</span>
             <h3>{s.title}</h3>
             <p>{s.text}</p>
             <ul class="includes" role="list">{s.chips.map((c) => <li>{c}</li>)}</ul>
@@ -29,6 +42,10 @@ const j = site.journey;
 </section>
 
 <style>
+  /* phase bar and per-step phase label: part of design option 2 (V2Theme);
+     in v1 the label stays for screen readers only */
+  .phases { display: none }
+  .step__phase { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap }
   .journey { list-style: none; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0 28px; position: relative }
   .journey::before { content: ""; position: absolute; left: 28px; right: 28px; top: 28px; height: 1px; background: linear-gradient(90deg, var(--gold), rgba(227, 178, 94, .12)) }
   /* desktop: each step spans 4 shared rows (number, title, text, list) so the

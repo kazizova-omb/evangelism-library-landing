@@ -104,12 +104,13 @@ const es: Site = {
     eyebrow: 'El programa completo',
     title: 'De la primera invitación al *certificado final*',
     sub: 'El kit cubre cada etapa de la serie, para que nada quede a la improvisación.',
+    phases: ['Antes de la serie', 'Durante la serie', 'Después de la serie'],
     steps: [
-      { title: 'Promover e invitar', text: 'Materiales para anunciar la serie y llenar el lugar.', chips: ['Carteles', 'Redes sociales', 'Invitaciones'] },
-      { title: 'Dirigir las reuniones', text: 'Una presentación lista para cada sesión de la serie.', chips: ['Presentaciones', 'Diapositivas'] },
-      { title: 'Enriquecer con medios', text: 'Imágenes y videos adicionales para los momentos clave.', chips: ['Imágenes', 'Videos'] },
-      { title: 'Entregar', text: 'Materiales impresos que los asistentes pueden llevar a casa.', chips: ['Folletos', 'Guías de estudio'] },
-      { title: 'Celebrar', text: 'Plantillas para honrar a quienes completaron la serie.', chips: ['Certificados', 'Reconocimientos'] },
+      { phase: 0, title: 'Promover e invitar', text: 'Materiales para anunciar la serie y llenar el lugar.', chips: ['Carteles', 'Redes sociales', 'Invitaciones'] },
+      { phase: 1, title: 'Dirigir las reuniones', text: 'Una presentación lista para cada sesión de la serie.', chips: ['Presentaciones', 'Diapositivas'] },
+      { phase: 1, title: 'Enriquecer con medios', text: 'Imágenes y videos adicionales para los momentos clave.', chips: ['Imágenes', 'Videos'] },
+      { phase: 1, title: 'Entregar', text: 'Materiales impresos que los asistentes pueden llevar a casa.', chips: ['Folletos', 'Guías de estudio'] },
+      { phase: 2, title: 'Celebrar', text: 'Plantillas para honrar a quienes completaron la serie.', chips: ['Certificados', 'Reconocimientos'] },
     ],
   },
 

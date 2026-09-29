@@ -114,12 +114,14 @@ const en = {
     eyebrow: 'The full program',
     title: 'From the first invitation to the *final certificate*',
     sub: 'The kit covers every stage of running a series, so nothing is left to improvise.',
+    // Stages of a series; each step points to one by index (shown as a bar above the steps)
+    phases: ['Before the series', 'During the series', 'After the series'],
     steps: [
-      { title: 'Promote and invite', text: 'Materials to announce the series and fill the room.', chips: ['Posters', 'Social posts', 'Invitations'] },
-      { title: 'Lead the meetings', text: 'A ready presentation for every session of the series.', chips: ['Presentations', 'Slides'] },
-      { title: 'Enrich with media', text: 'Extra images and video clips for the key moments.', chips: ['Images', 'Videos'] },
-      { title: 'Hand out', text: 'Printable materials attendees can take home.', chips: ['Handouts', 'Study sheets'] },
-      { title: 'Celebrate', text: 'Templates to honor everyone who completed the series.', chips: ['Certificates', 'Awards'] },
+      { phase: 0, title: 'Promote and invite', text: 'Materials to announce the series and fill the room.', chips: ['Posters', 'Social posts', 'Invitations'] },
+      { phase: 1, title: 'Lead the meetings', text: 'A ready presentation for every session of the series.', chips: ['Presentations', 'Slides'] },
+      { phase: 1, title: 'Enrich with media', text: 'Extra images and video clips for the key moments.', chips: ['Images', 'Videos'] },
+      { phase: 1, title: 'Hand out', text: 'Printable materials attendees can take home.', chips: ['Handouts', 'Study sheets'] },
+      { phase: 2, title: 'Celebrate', text: 'Templates to honor everyone who completed the series.', chips: ['Certificates', 'Awards'] },
     ],
   },
 
