@@ -38,7 +38,7 @@ body::after {
 }
 
 /* ---------- Buttons ---------- */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 52px; padding: 0 28px; border-radius: 999px; font-weight: 600; font-size: 15px; letter-spacing: .02em; transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .25s, border-color .25s; white-space: nowrap }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 52px; padding: 0 28px; border-radius: 6px; font-weight: 600; font-size: 15px; letter-spacing: .02em; transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .25s, border-color .25s; white-space: nowrap }
 .btn--gold { background: linear-gradient(180deg, var(--gold-hi), var(--gold)); color: #1E1408; box-shadow: 0 0 0 1px rgba(244, 212, 142, .4) inset, 0 10px 40px -10px rgba(227, 178, 94, .55) }
 .btn--gold:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(255, 230, 170, .6) inset, 0 16px 50px -10px rgba(227, 178, 94, .75) }
 .btn--ghost { border: 1px solid rgba(243, 235, 221, .28); color: var(--ink) }
