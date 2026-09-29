@@ -1,18 +1,28 @@
 ---
 import Icon from './Icon.astro';
-import { site } from '../content/site';
+import { useT, getLang, localePath, locales, defaultLocale } from '../i18n';
+import { countryNames } from '../i18n/countries';
 import { config } from '../config';
 import { rich, fill } from '../lib/rich';
+
+const site = useT(Astro);
+const lang = getLang(Astro);
 
 const g = site.getKit;
 const f = g.fields;
 const link = (href: string, label: string) =>
   `<a href="${href}" target="_blank" rel="noopener">${label}</a>`;
 const consentHtml = fill(g.consent.text, {
-  terms: link('/terms', site.footer.links.terms),
-  privacy: link('/privacy', site.footer.links.privacy),
+  terms: link(localePath(lang, '/terms'), site.footer.links.terms),
+  privacy: link(localePath(lang, '/privacy'), site.footer.links.privacy),
 });
 const successHtml = fill(g.success.text, { email: '<b id="sentTo"></b>' });
+const supportLink = `<a href="mailto:${config.supportEmail}">${config.supportEmail}</a>`;
+const returningHelp = fill(g.returning.help, { support: supportLink });
+const successHelp = fill(g.success.help, { support: supportLink });
+// The form always sends the English division name, whatever the page language
+const divisionValues = locales[defaultLocale].getKit.divisions;
+const countries = countryNames(site.locale.htmlLang, g.countryNames);
 ---
 <section class="section glow-r" id="get" aria-labelledby="get-title">
   <div class="wrap get">
@@ -23,6 +33,14 @@ const successHtml = fill(g.success.text, { email: '<b id="sentTo"></b>' });
       <ol class="next">
         {g.steps.map((s) => <li><div><b>{s.title}</b><span>{s.text}</span></div></li>)}
       </ol>
+      <aside class="returning" aria-labelledby="returning-title">
+        <span class="icon-badge"><Icon name="mail" /></span>
+        <div>
+          <h3 id="returning-title">{g.returning.title}</h3>
+          <p>{g.returning.text}</p>
+          <p class="returning__help" set:html={returningHelp} />
+        </div>
+      </aside>
     </div>
 
     <div class="formcard reveal" id="formcard"
@@ -55,7 +73,7 @@ const successHtml = fill(g.success.text, { email: '<b id="sentTo"></b>' });
             <label for="f-division">{f.division.label} <em>{g.optional}</em></label>
             <select id="f-division" name="division">
               <option value="">{f.division.placeholder}</option>
-              {g.divisions.map((d) => <option>{d}</option>)}
+              {Object.entries(g.divisions).map(([code, label]) => <option value={divisionValues[code] ?? label}>{label}</option>)}
             </select>
           </div>
           <div class="field">
@@ -86,13 +104,14 @@ const successHtml = fill(g.success.text, { email: '<b id="sentTo"></b>' });
         <div class="success__ic"><Icon name="success" /></div>
         <h3 id="successTitle" tabindex="-1">{g.success.title}</h3>
         <p set:html={successHtml} />
-        <a href={config.libraryUrl} class="btn btn--gold" data-track="login_click" data-track-location="success">{g.success.cta}</a><br />
+        {config.libraryUrl && <Fragment><a href={config.libraryUrl} class="btn btn--gold" data-track="login_click" data-track-location="success">{g.success.cta}</a><br /></Fragment>}
+        <p class="success__help" set:html={successHelp} />
         <button type="button" class="link" id="editEmail">{g.success.change}</button>
       </div>
     </div>
   </div>
   <datalist id="countries">
-    {g.countries.map((c) => <option value={c} />)}
+    {countries.map((c) => <option value={c} />)}
   </datalist>
 </section>
 
@@ -104,6 +123,12 @@ const successHtml = fill(g.success.text, { email: '<b id="sentTo"></b>' });
   .next li::before { counter-increment: s; content: counter(s); flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-family: var(--display); font-weight: 600; font-size: 19px; color: var(--gold-hi); box-shadow: 0 0 0 1px rgba(227, 178, 94, .45) inset }
   .next b { display: block; font-weight: 600; color: var(--ink) }
   .next span { font-size: 15px; color: var(--muted-solid) }
+
+  .returning { display: flex; gap: 16px; align-items: flex-start; margin-top: 40px; padding: 22px 24px; border-radius: 14px; background: linear-gradient(180deg, rgba(243, 235, 221, .04), rgba(243, 235, 221, .012)); box-shadow: 0 0 0 1px var(--line) inset }
+  .returning h3 { font-family: var(--display); font-weight: 600; font-size: 24px; line-height: 1.15; margin: 2px 0 6px }
+  .returning p { font-size: 15px; color: var(--ink-2); line-height: 1.55 }
+  .returning__help { margin-top: 10px; font-size: 13px !important; color: var(--muted-solid) !important }
+  .returning__help :global(a), .success__help :global(a) { color: var(--gold-hi); text-decoration: underline; text-underline-offset: 3px; white-space: nowrap }
 
   .formcard { position: relative; padding: clamp(26px, 3.6vw, 48px); border-radius: 20px; background: linear-gradient(180deg, #17120D, #0F0C09); box-shadow: 0 0 0 1px var(--line) inset, 0 40px 100px -40px rgba(0, 0, 0, .9), 0 0 140px -50px rgba(227, 178, 94, .4) }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px }
@@ -133,7 +158,7 @@ const successHtml = fill(g.success.text, { email: '<b id="sentTo"></b>' });
   .turnstile-wrap { margin-bottom: 24px; gap: 6px }
   .turnstile { width: 100%; max-width: 300px; min-height: 65px }
   /* under ~392px the card is narrower than the 300px widget: the script switches to "compact" (150x140) */
-  @media (max-width: 391px) { .turnstile { min-height: 140px } }
+  @media (max-width: 391px) { .turnstile { min-height: 148px } }
 
   .btn.is-loading { pointer-events: none; opacity: .85 }
   .btn.is-loading::after { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(30, 20, 8, .3); border-top-color: #1E1408; animation: spin .8s linear infinite }
@@ -146,13 +171,18 @@ const successHtml = fill(g.success.text, { email: '<b id="sentTo"></b>' });
   .success__ic :global(svg) { width: 34px; height: 34px }
   .success h3 { font-family: var(--display); font-weight: 600; font-size: clamp(34px, 3.4vw, 46px); line-height: 1.05; margin-bottom: 14px; outline: none }
   .success p { color: var(--ink-2); max-width: 420px; margin: 0 auto 30px }
-  .success p :global(b) { color: var(--ink); font-weight: 600; word-break: break-all }
+  .success p :global(b) { color: var(--ink); font-weight: 600; overflow-wrap: anywhere }
   .success .btn { min-width: 260px }
+  .success__help { margin: 22px auto 0 !important; font-size: 13px; color: var(--muted-solid) !important }
   .success .link { display: inline-block; margin-top: 18px; font-size: 14px; color: var(--muted-solid); text-decoration: underline; text-underline-offset: 3px }
   .success .link:hover { color: var(--gold-hi) }
 
   @media (max-width: 1020px) {
     .get { grid-template-columns: 1fr; gap: 48px }
+    .get__head { position: static }
+  }
+  /* the left column is taller than short laptop screens: do not pin it */
+  @media (max-height: 860px) {
     .get__head { position: static }
   }
   @media (max-width: 760px) {

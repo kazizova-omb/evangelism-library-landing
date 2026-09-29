@@ -10,6 +10,7 @@ interface ImportMetaEnv {
   readonly PUBLIC_TRAILER_YOUTUBE_ID?: string;
   readonly PUBLIC_CONTACT_EMAIL?: string;
   readonly PUBLIC_TRANSLATE_EMAIL?: string;
+  readonly PUBLIC_SUPPORT_EMAIL?: string;
   readonly PUBLIC_SHOW_PLACEHOLDER_TAGS?: string;
 }
 

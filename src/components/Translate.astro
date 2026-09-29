@@ -1,10 +1,13 @@
 ---
-import { site } from '../content/site';
+import { useT } from '../i18n';
 import { config } from '../config';
-import { rich } from '../lib/rich';
+import { rich, fill } from '../lib/rich';
+
+const site = useT(Astro);
 
 const t = site.translate;
 const mailto = `mailto:${config.translateEmail}?subject=${encodeURIComponent(t.mailSubject)}`;
+const orWrite = fill(t.orWrite, { email: `<a href="${mailto}" data-track="translate_click">${config.translateEmail}</a>` });
 ---
 <section class="section" id="translate" aria-labelledby="translate-title">
   <div class="translate reveal">
@@ -17,6 +20,7 @@ const mailto = `mailto:${config.translateEmail}?subject=${encodeURIComponent(t.m
     <div class="legend" aria-hidden="true"><span>{t.legendAvailable}</span><span>{t.legendInProgress}</span></div>
     <p class="sub">{t.sub}</p>
     <a href={mailto} class="btn btn--ghost" data-track="translate_click">{t.cta}</a>
+    <p class="or-write" set:html={orWrite} />
     {config.showPlaceholderTags && <p class="form-note sample"><span class="tag">{site.placeholderTags.languages}</span></p>}
   </div>
 </section>
@@ -30,5 +34,8 @@ const mailto = `mailto:${config.translateEmail}?subject=${encodeURIComponent(t.m
   .legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%; border: 1px solid rgba(227, 178, 94, .6); margin-right: 8px; vertical-align: -1px }
   .legend span + span::before { border-style: dashed; border-color: rgba(243, 235, 221, .3) }
   .translate .sub { margin-bottom: 28px }
+  .or-write { margin-top: 16px; font-size: 14px; color: var(--muted-solid) }
+  .or-write :global(a) { color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px }
+  .or-write :global(a:hover) { color: var(--gold-hi) }
   .sample { margin-top: 22px }
 </style>

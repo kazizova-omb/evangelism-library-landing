@@ -1,8 +1,11 @@
 ---
-import Icon from './Icon.astro';
-import { site } from '../content/site';
+import BrandMark from './BrandMark.astro';
+import { useT, getLang, localePath } from '../i18n';
 import { config } from '../config';
 import { anchor } from '../lib/links';
+
+const site = useT(Astro);
+const lang = getLang(Astro);
 
 interface Props { home: boolean }
 const { home } = Astro.props;
@@ -11,21 +14,21 @@ const l = site.footer.links;
 <footer class="footer">
   <div class="footer__in">
     <div>
-      <a href={home ? '#top' : '/'} class="brand">
-        <Icon name="mark" class="brand__mark" />
+      <a href={home ? '#top' : localePath(lang, '/')} class="brand">
+        <BrandMark />
         <span>{site.brand}</span>
       </a>
       <p>{site.footer.tagline}</p>
     </div>
     <nav aria-label="Footer">
-      <a href={anchor('#inside', home)}>{l.inside}</a>
-      <a href={config.libraryUrl} data-track="login_click" data-track-location="footer">{l.login}</a>
-      <a href={anchor('#demo', home)}>{l.demo}</a>
+      <a href={anchor('#inside', home, lang)}>{l.inside}</a>
+      <a href={`mailto:${config.supportEmail}`}>{l.support}</a>
+      <a href={anchor('#demo', home, lang)}>{l.demo}</a>
       <a href={`mailto:${config.contactEmail}`}>{l.contact}</a>
-      <a href={anchor('#about', home)}>{l.about}</a>
-      <a href="/terms">{l.terms}</a>
-      <a href={anchor('#translate', home)}>{l.translate}</a>
-      <a href="/privacy">{l.privacy}</a>
+      <a href={anchor('#about', home, lang)}>{l.about}</a>
+      <a href={localePath(lang, '/terms')}>{l.terms}</a>
+      <a href={anchor('#translate', home, lang)}>{l.translate}</a>
+      <a href={localePath(lang, '/privacy')}>{l.privacy}</a>
     </nav>
   </div>
   <div class="footer__bottom">
