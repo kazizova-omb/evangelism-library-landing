@@ -21,7 +21,8 @@ import MobileMenu from '../components/MobileMenu.astro';
 import Footer from '../components/Footer.astro';
 import ConsentBanner from '../components/ConsentBanner.astro';
 import BackToTop from '../components/BackToTop.astro';
-import PreviewSwitcher from '../components/PreviewSwitcher.astro';
+import V2Theme from '../components/V2Theme.astro';
+import V3Theme from '../components/V3Theme.astro';
 import { useT, getLang, locales, localeCodes, switchPath, defaultLocale, localePath } from '../i18n';
 import { baseGraph, homeGraph } from '../lib/schema';
 import { config } from '../config';
@@ -93,7 +94,7 @@ const jsonLd = noindex && !breadcrumb ? null : {
   <meta name="color-scheme" content={theme === 'v1' ? 'dark' : 'light'} />
   <!-- tab icon: church symbol on a tile in each design option's colours; ICO/PNG for older browsers -->
   <link rel="icon" href="/favicon.ico" sizes="32x32" />
-  <link rel="icon" href={theme === 'v3' ? '/favicon-v3.svg' : theme === 'v2' ? '/favicon-v2.svg' : '/favicon.svg'} type="image/svg+xml" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="sitemap" href="/sitemap-index.xml" />
 
@@ -132,6 +133,8 @@ const jsonLd = noindex && !breadcrumb ? null : {
   </script>
 </head>
 <body id="top">
+  {theme !== 'v1' && <V2Theme />}
+  {theme === 'v3' && <V3Theme />}
   <a class="skip" href="#main">{site.skipLink}</a>
   <Header home={home} />
   <MobileMenu home={home} />
@@ -140,7 +143,6 @@ const jsonLd = noindex && !breadcrumb ? null : {
   </main>
   <Footer home={home} />
   <BackToTop />
-  {config.preview && home && <PreviewSwitcher />}
   {config.ga4Id && <ConsentBanner />}
 
   <script>

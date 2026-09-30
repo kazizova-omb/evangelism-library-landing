@@ -17,7 +17,7 @@ const support = `<a href="mailto:${config.supportEmail}">${config.supportEmail}<
   <section class="section dl glow-r" data-lang={lang}>
     <div class="wrap dl__in">
       <p class="eyebrow">{d.eyebrow}</p>
-      <h1 class="h2" set:html={rich(d.heading)} />
+      <h1 class="h2" id="dlHeading" data-invalid={d.invalidTitle} set:html={rich(d.heading)} />
 
       <p class="dl__status" id="dlLoading" role="status">{d.loading}</p>
 
@@ -29,7 +29,6 @@ const support = `<a href="mailto:${config.supportEmail}">${config.supportEmail}<
       </div>
 
       <div id="dlInvalid" hidden>
-        <h2 class="dl__title">{d.invalidTitle}</h2>
         <p class="sub">{d.invalidText}</p>
         <a href={`${localePath(lang, '/')}#get`} class="btn btn--gold dl__cta">{d.invalidCta}</a>
       </div>
@@ -52,6 +51,7 @@ const support = `<a href="mailto:${config.supportEmail}">${config.supportEmail}<
   .dl__files :global(small) { display: block; margin-top: 2px; font-size: 13px; color: var(--muted-solid) }
   .dl__files :global(.btn) { flex: none }
   .dl__cta { margin-top: 28px }
+  #dlInvalid .sub { margin-top: 12px }
   .dl__help { margin-top: 48px; font-size: 14px; color: var(--muted-solid) }
   .dl__help :global(a) { color: var(--gold-hi); text-decoration: underline; text-underline-offset: 3px }
   @media (max-width: 760px) {
@@ -64,6 +64,12 @@ const support = `<a href="mailto:${config.supportEmail}">${config.supportEmail}<
   const t = new URLSearchParams(location.search).get('t');
   const show = (id: string) => {
     ['dlLoading', 'dlReady', 'dlInvalid'].forEach((x) => (document.getElementById(x)!.hidden = x !== id));
+    // the page heading says what happened: "ready" or "this link doesn't work"
+    if (id === 'dlInvalid') {
+      const h = document.getElementById('dlHeading')!;
+      h.textContent = h.dataset.invalid ?? '';
+      document.title = `${h.textContent} | ${document.title.split(' | ').pop()}`;
+    }
   };
 
   async function load() {

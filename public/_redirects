@@ -1,0 +1,5 @@
+# The design options were previewed at these addresses; option 3 is now the site.
+/v2      /     301
+/v3      /     301
+/es/v2   /es   301
+/es/v3   /es   301

@@ -38,23 +38,19 @@ so redeploy after changing one.
 
 Set `PUBLIC_SHOW_PLACEHOLDER_TAGS=false` for production.
 
-## Design options
+## Design
 
-Two designs share one codebase, content and behaviour, so the client compares only the look:
+The client chose **option 3, "poster editorial"**: Anton capitals for headlines, serif lead-ins,
+indigo blocks, paper texture, black-and-white photos. It is built as layers:
 
-| Option | URL | Style |
-| --- | --- | --- |
-| v1 | `/`, `/es` | Dark cinematic: gold on black, Cormorant Garamond + Hanken Grotesk |
-| v2 | `/v2`, `/es/v2` | Light editorial ("Imagery Guidelines"): navy + cyan, DM Serif Display + Inter, photo cards |
-| v3 | `/v3`, `/es/v3` | Poster editorial: v2 plus Anton capitals for headlines, serif lead-ins, indigo blocks (trailer, about, form), paper texture, black-and-white photos |
+- base component styles (the original dark design, options 1) in each component,
+- `src/components/V2Theme.astro` (light editorial layer, option 2),
+- `src/components/V3Theme.astro` on top (option 3).
 
-- v2 is `src/pages/[...lang]/v2.astro` plus one stylesheet, `src/components/V2Theme.astro`
-  (every rule is prefixed `:root.v2:not(#v1)` so it overrides the components' scoped styles).
-- v3 (`v3.astro`) loads V2Theme and `V3Theme.astro` on top (`:root.v3:not(#v1):not(#v2)`). Photos: `slots/v3/`, then `slots/v2/`.
-- v2 photos live in `src/assets/slots/v2/` and override the regular slots on v2 pages only.
-  They are cut from the guidelines board and upscaled: replace them with the original high-resolution files.
-- `/v2` and `/v3` are `noindex`. When the client picks one: if v2 wins, move `<V2Theme />` and `noindex`-free
-  Base into `index.astro` (or make v2 the default) and delete the other option.
+`src/lib/theme.ts` sets `ACTIVE_THEME = 'v3'`; `Base.astro` loads both theme layers on every page.
+Options 1 and 2 are switched off (the old `/v2`, `/v3` addresses redirect to the home page,
+see `public/_redirects`). Photos come from `src/assets/slots/v3/`, then `slots/v2/`: they are cut
+from the client's imagery board, so replace them with the original high-resolution files.
 
 ## Languages
 
@@ -223,8 +219,8 @@ Add `data-track="event_name"` (and optionally `data-track-location`) to any link
 
 ## Client preview
 
-Live preview for the client (all three design options, switcher bottom left, not indexed):
-**https://revelation-media-resources.pages.dev** (`/v2`, `/v3`, Spanish under `/es`).
+Live preview for the client (not indexed):
+**https://revelation-media-resources.pages.dev** (Spanish under `/es`).
 
 Update it after changes (needs `npx wrangler login` once on this machine):
 
