@@ -14,6 +14,8 @@ export const config = {
   ga4Id: str(env.PUBLIC_GA4_ID),
   demoUrl: str(env.PUBLIC_DEMO_URL) || '#',
   trailerYoutubeId: str(env.PUBLIC_TRAILER_YOUTUBE_ID),
+  /** self-hosted trailer file, used when no YouTube id is set */
+  trailerVideoSrc: str(env.PUBLIC_TRAILER_VIDEO_SRC) || '/media/trailer.mp4',
   contactEmail: str(env.PUBLIC_CONTACT_EMAIL) || 'hello@revelationresource.org',
   translateEmail: str(env.PUBLIC_TRANSLATE_EMAIL) || 'translate@revelationresource.org',
   supportEmail: str(env.PUBLIC_SUPPORT_EMAIL) || 'support@revelationresource.org',
