@@ -56,10 +56,14 @@ const alternates = localeCodes.map((code) => ({
 }));
 const xDefault = new URL(switchPath(Astro.url.pathname, lang, defaultLocale), Astro.site).href;
 
+// Default share images, one per language. Imported as assets so the file name carries a
+// content hash: when the picture changes, the URL changes and Slack, Telegram, Facebook
+// etc. fetch the new one instead of showing their cached copy.
+const ogDefaults = import.meta.glob<string>('/src/assets/og/og-*.jpg', { eager: true, query: '?url', import: 'default' });
 const ogSrc = slot('og');
 const ogImage = ogSrc
   ? new URL((await getImage({ src: ogSrc, width: 1200, height: 630, fit: 'cover', format: 'jpg' })).src, Astro.site).href
-  : new URL(lang === defaultLocale ? '/og-default.jpg' : `/og-default-${lang}.jpg`, Astro.site).href;
+  : new URL(ogDefaults[`/src/assets/og/og-${lang}.jpg`] ?? ogDefaults[`/src/assets/og/og-${defaultLocale}.jpg`], Astro.site).href;
 
 const ctx = {
   site,

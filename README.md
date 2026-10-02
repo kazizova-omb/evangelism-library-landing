@@ -98,7 +98,7 @@ header and footer, shown 32px high (28px on phones).
 The build generates AVIF and WebP in several widths, sets `width`/`height`, lazy-loads everything
 below the fold and loads the hero with high priority. The matching placeholder tag disappears.
 Recommended sizes are in [`src/assets/slots/README.md`](src/assets/slots/README.md); alt texts are in the locale files.
-Without an `og` image, `public/og-default.jpg` (rendered from the hero) is used for link previews.
+Without an `og` image, `src/assets/og/og-en.jpg` (rendered from the hero) is used for link previews.
 
 ## Form
 
@@ -156,7 +156,7 @@ PUBLIC_API_URL=http://localhost:8787/lead npm run dev
   Keep answers direct: answer first, detail after.
 - **/llms.txt**: plain-text summary for AI assistants, generated from the English copy.
 - `hreflang` + `x-default`, canonical, sitemap with `lastmod`, `max-image-preview:large`,
-  per-language Open Graph images (`public/og-default.jpg`, `og-default-es.jpg`).
+  per-language Open Graph images (`src/assets/og/og-en.jpg`, `og-es.jpg`).
 - **Legal pages** are `noindex` and out of the sitemap while `legalPagesReady` is `false` in
   `src/i18n/config.mjs`. Flip it when the client's texts are in.
 
