@@ -71,7 +71,8 @@ const splitValue = (v: string) => {
       </figure>
       <figure class="tile t-video">
         {img.video ? <SlotImage src={img.video} alt={g.video.alt} {...narrow} /> : <div class="tile__bg"></div>}
-        <span class="mini-play" aria-hidden="true"><Icon name="play" /></span>
+        {/* a real cover image brings its own play button */}
+        {!img.video && <span class="mini-play" aria-hidden="true"><Icon name="play" /></span>}
         <figcaption>{g.video.caption}</figcaption>
       </figure>
       <figure class="tile t-social">
@@ -100,7 +101,7 @@ const splitValue = (v: string) => {
   /* "+" set smaller, raised and in the accent colour, so the number leads */
   .stat__suffix { display: inline-block; margin-left: .04em; font-family: var(--body); font-weight: 500; font-size: .5em; line-height: 1; vertical-align: .62em;
     color: var(--gold); -webkit-text-fill-color: currentColor }
-  .stat dd { font-family: var(--display); font-weight: 600; font-size: clamp(44px, 4.6vw, 66px); line-height: .9; letter-spacing: -.01em;
+  .stat dd { white-space: nowrap; font-family: var(--display); font-weight: 600; font-size: clamp(44px, 4.6vw, 66px); line-height: .9; letter-spacing: -.01em;
     font-variant-numeric: lining-nums proportional-nums; font-feature-settings: "lnum" 1, "pnum" 1;
     background: linear-gradient(180deg, var(--gold-hi), var(--gold) 70%); -webkit-background-clip: text; background-clip: text; color: transparent }
   .stat dt { order: 2; font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--muted-solid) }

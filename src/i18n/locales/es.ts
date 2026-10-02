@@ -69,10 +69,10 @@ const es: Site = {
   trailer: {
     eyebrow: 'Tráiler',
     title: 'Descubra lo que *incluye*',
-    sub: 'Un recorrido de 90 segundos por las presentaciones, imágenes y recursos del kit completo.',
+    sub: 'Un breve recorrido por las presentaciones, imágenes y recursos del kit completo.',
     playLabel: 'Reproducir tráiler',
     metaLabel: 'Tráiler oficial',
-    duration: '1:30',
+    duration: '0:19',
     modalLabel: 'Tráiler',
     closeLabel: 'Cerrar',
     placeholder: 'Aquí se reproducirá el tráiler (video de YouTube, se carga al hacer clic).',
@@ -92,11 +92,11 @@ const es: Site = {
     ],
     note: 'Una muestra de algunos materiales del kit.',
     gallery: {
-      slide: { caption: 'Diapositiva', kicker: 'Sesión 01', title: 'La profecía *se revela*', alt: 'Diapositiva de una presentación de la serie' },
-      flyer: { caption: 'Volante impreso', kicker: 'Muy pronto', title: 'Esperanza para el mañana', alt: 'Volante impreso de la serie' },
-      art: { caption: 'Arte de la serie', alt: 'Arte de la serie' },
-      video: { caption: 'Video', alt: 'Fotograma de un video' },
-      social: { caption: 'Publicación en redes', title: 'Hay esperanza para el mañana', alt: 'Publicación para redes sociales de la serie' },
+      slide: { caption: 'Diapositiva', kicker: 'Sesión 01', title: 'La profecía *se revela*', alt: 'Una diapositiva de la serie en una pantalla frente al público' },
+      flyer: { caption: 'Volante impreso', kicker: 'Muy pronto', title: 'Esperanza para el mañana', alt: 'Manos sosteniendo un volante impreso de la serie' },
+      art: { caption: 'Arte de la serie', alt: 'Arte de la serie en un cartel, tarjetas, una tableta y un teléfono' },
+      video: { caption: 'Video', alt: 'Un video de la serie reproduciéndose en un portátil' },
+      social: { caption: 'Publicación en redes', title: 'Hay esperanza para el mañana', alt: 'Una publicación de la serie para redes sociales en un teléfono' },
     },
   },
 
@@ -140,16 +140,17 @@ const es: Site = {
   },
 
   about: {
-    eyebrow: 'Sobre el equipo',
-    title: 'Creado por *Lorem Ipsum Ministries*',
+    eyebrow: 'El autor del proyecto',
+    title: 'Conozca a *Justin Kim*',
+    teamTitle: 'Creado con Lorem Ipsum Ministries',
     paragraphs: [
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.',
     ],
     quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus, ut fermentum massa justo sit amet risus.',
-    author: 'Justin Lorem',
+    author: 'Justin Kim',
     role: 'Líder del proyecto, Lorem Ipsum Ministries',
-    imageAlt: 'Justin Lorem, líder del proyecto',
+    imageAlt: 'Justin Kim, líder del proyecto',
   },
 
   faq: {

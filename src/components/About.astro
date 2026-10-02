@@ -1,4 +1,5 @@
 ---
+import Brush from './Brush.astro';
 import SlotImage from './SlotImage.astro';
 import { useT } from '../i18n';
 import { config } from '../config';
@@ -13,6 +14,7 @@ const a = site.about;
 const image = slot('team', theme);
 ---
 <section class="section glow-l" id="about" aria-labelledby="about-title">
+  <Brush w={582} h={490} at="left:0;bottom:0" box={1585.025} x={-822} y={-273} size={1121.578} rotate={132.84} opacity={0.14} tone="teal" />
   <div class="wrap about">
     <div class:list={['portrait reveal', { 'portrait--image': image }]}>
       {image && <SlotImage src={image} alt={a.imageAlt} sizes="(max-width: 1020px) min(420px, calc(100vw - 40px)), 440px" widths={[420, 640, 880]} />}
@@ -21,11 +23,15 @@ const image = slot('team', theme);
     <div class="about__copy reveal">
       <p class="eyebrow">{a.eyebrow}</p>
       <h2 class="h2" id="about-title" set:html={rich(a.title)} />
-      {a.paragraphs.map((p) => <p>{p}</p>)}
+      <p class="about__role">{a.role}</p>
       <figure class="quote">
         <blockquote><p>“{a.quote}”</p></blockquote>
-        <figcaption><b>{a.author}</b>{a.role}</figcaption>
+        <figcaption class="visually-hidden">{a.author}, {a.role}</figcaption>
       </figure>
+      <div class="about__team">
+        <h3>{a.teamTitle}</h3>
+        {a.paragraphs.map((p) => <p>{p}</p>)}
+      </div>
     </div>
   </div>
 </section>
@@ -37,8 +43,13 @@ const image = slot('team', theme);
   .portrait:not(.portrait--image)::before { content: ""; position: absolute; left: 50%; top: 30%; width: 30%; aspect-ratio: 1; border-radius: 50%; transform: translateX(-50%); background: #0F0A07 }
   .portrait:not(.portrait--image)::after { content: ""; position: absolute; left: 50%; bottom: -8%; width: 74%; height: 42%; border-radius: 50% 50% 0 0; transform: translateX(-50%); background: #0F0A07 }
   .portrait .ph-tag { top: auto; bottom: 20px; right: 50%; transform: translateX(50%); z-index: 2 }
-  .about__copy > p:not(.eyebrow) { color: var(--ink-2); margin-bottom: 16px; max-width: 620px }
-  .quote { margin: 36px 0 0; padding-top: 32px; border-top: 1px solid var(--line) }
+  .about__role { margin-top: -6px; font-size: 14px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--gold) }
+  /* his words lead; the team text follows, quieter */
+  .quote { margin: 28px 0 0 }
+  .about__team { margin-top: 32px; padding-top: 28px; border-top: 1px solid var(--line); max-width: 620px }
+  .about__team h3 { margin-bottom: 10px; font-size: 16px; font-weight: 600; color: var(--ink) }
+  .about__team p { font-size: 15.5px; line-height: 1.6; color: var(--ink-2) }
+  .about__team p + p { margin-top: 12px }
   .quote blockquote { font-family: var(--display); font-style: italic; font-weight: 500; font-size: clamp(24px, 2.3vw, 33px); line-height: 1.28 }
   .quote figcaption { display: block; margin-top: 18px; font-size: 14px; color: var(--muted-solid) }
   .quote figcaption b { color: var(--ink); font-weight: 600; margin-right: 8px }

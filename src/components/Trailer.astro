@@ -1,4 +1,5 @@
 ---
+import Brush from './Brush.astro';
 import Icon from './Icon.astro';
 import SlotImage from './SlotImage.astro';
 import { useT } from '../i18n';
@@ -14,6 +15,7 @@ const t = site.trailer;
 const image = slot('trailer', theme);
 ---
 <section class="trailer" id="trailer" aria-labelledby="trailer-title">
+  <Brush w={582} h={490} at="left:0;bottom:0" box={1585.025} x={-822} y={-273} size={1121.578} rotate={132.84} opacity={0.14} tone="teal" />
   <div class="section-head">
     <p class="eyebrow">{t.eyebrow}</p>
     <h2 class="h2" id="trailer-title" set:html={rich(t.title)} />

@@ -13,7 +13,7 @@ import '@fontsource/anton/400.css';
     --paper-2: #ECE9E1;
     --indigo: #2A2C7C;        /* block background */
     --navy: #1F2160;          /* text on paper */
-    --teal: #0E8FA2;          /* accent on paper, 24px+ (3.4:1) */
+    --teal: #36B1BE;          /* accent on paper (Figma) */
     --teal-text: #0A7383;     /* small links on paper (5:1) */
     --cyan-light: #7FE0EC;    /* accent on indigo (7.9:1) */
     --pink: #D98BB8;
@@ -64,9 +64,15 @@ import '@fontsource/anton/400.css';
 
   /* ---------- hero: poster type on paper, B/W figure bleeding off the right ---------- */
   :root.v3:not(#v1):not(#v2) .hero { background: var(--paper); padding: 120px 0 72px }
-  :root.v3:not(#v1):not(#v2) .hero .scene { inset: 0 0 0 auto; width: 52%; border-radius: 0; box-shadow: none;
-    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 28%); mask-image: linear-gradient(90deg, transparent 0, #000 28%) }
-  :root.v3:not(#v1):not(#v2) .hero .slot-img img { object-position: 40% 20% }
+  /* The photo is dark, so it starts below the header (nav and language stay on paper)
+     and dissolves into the paper on its left edge. */
+  /* Hero artwork (Figma): colour image in the right 60%, dissolving into the paper
+     on its left edge with a long eased fade; it runs to the very top, behind the header. */
+  :root.v3:not(#v1):not(#v2) .hero .scene { inset: 0 0 0 auto; width: 60%; border-radius: 0; box-shadow: none;
+    --fade-x: linear-gradient(90deg, transparent 0, rgba(0,0,0,.01) 4%, rgba(0,0,0,.04) 8%, rgba(0,0,0,.09) 12%, rgba(0,0,0,.17) 16%, rgba(0,0,0,.28) 20%,
+      rgba(0,0,0,.42) 24%, rgba(0,0,0,.57) 28%, rgba(0,0,0,.71) 32%, rgba(0,0,0,.83) 36%, rgba(0,0,0,.92) 40%, rgba(0,0,0,.975) 44%, #000 48%);
+    -webkit-mask-image: var(--fade-x); mask-image: var(--fade-x) }
+  :root.v3:not(#v1):not(#v2) .hero .slot-img img { filter: none; object-position: 50% 50% }
   :root.v3:not(#v1):not(#v2) .h1 { font-size: clamp(64px, 8.6vw, 136px); line-height: .9; margin: 16px 0 26px }
   :root.v3:not(#v1):not(#v2) .hero__copy { max-width: min(640px, 52%) }
   :root.v3:not(#v1):not(#v2) .trust { color: var(--muted-solid) }
@@ -88,7 +94,9 @@ import '@fontsource/anton/400.css';
   :root.v3:not(#v1):not(#v2) .trailer .section-head .h2 { margin-bottom: 0 }
   :root.v3:not(#v1):not(#v2) .trailer .section-head .sub { text-align: right; padding-bottom: 8px }
   :root.v3:not(#v1):not(#v2) .video { border-radius: 8px; box-shadow: 0 40px 80px -40px rgba(0, 0, 0, .7) }
-  :root.v3:not(#v1):not(#v2) .video .video__scene::after { background: linear-gradient(180deg, rgba(42, 44, 124, .1), rgba(42, 44, 124, .6)) }
+  :root.v3:not(#v1):not(#v2) .video { background: #1F2160 }
+  :root.v3:not(#v1):not(#v2) .video .slot-img img { filter: none; transform: scale(1.06) }
+  :root.v3:not(#v1):not(#v2) .video .video__scene::after { background: linear-gradient(180deg, rgba(42, 44, 124, .1), rgba(42, 44, 124, .4)) }
   :root.v3:not(#v1):not(#v2) .video__play { background: var(--cyan-light); color: var(--indigo) }
   :root.v3:not(#v1):not(#v2) .video__play::before { border-color: rgba(127, 224, 236, .8) }
 
@@ -96,11 +104,27 @@ import '@fontsource/anton/400.css';
   /* numbers in the headline accent teal (same as "RESOURCE"); "+" in navy */
   :root.v3:not(#v1):not(#v2) .stat { padding-left: 20px; padding-right: 20px }
   :root.v3:not(#v1):not(#v2) .stat:first-child { padding-left: 0 }
-  :root.v3:not(#v1):not(#v2) .stat dd { align-self: flex-start; font-family: var(--poster); font-size: clamp(60px, 6.2vw, 92px); line-height: .95;
+  /* The size follows the cell: (cell width - padding) / 2.4, where 2.4em is a little more
+     than the widest value ("1,200+" is 2.2em), so number and "+" always fit on one line.
+     --stat-cols is the number of columns in the row at the current breakpoint. */
+  :root.v3:not(#v1):not(#v2) .stats { container-type: inline-size; --stat-cols: 5 }
+  /* equal content widths: the first cell has no left padding, so it is 20px narrower (Figma) */
+  @media (min-width: 1021px) { :root.v3:not(#v1):not(#v2) .stats { grid-template-columns: 224fr repeat(4, 244fr) } }
+  :root.v3:not(#v1):not(#v2) .stat { min-width: 0 }
+  :root.v3:not(#v1):not(#v2) .stat dd { align-self: flex-start; white-space: nowrap; font-family: var(--poster);
+    font-size: clamp(36px, calc((100cqw / var(--stat-cols) - 40px) / 2.4), 92px); line-height: .95;
     background: none; color: var(--teal); -webkit-text-fill-color: currentColor }
   :root.v3:not(#v1):not(#v2) .stat__suffix { font-family: var(--poster); font-size: .55em; vertical-align: .6em; color: var(--navy); -webkit-text-fill-color: currentColor }
   :root.v3:not(#v1):not(#v2) .stat dt { color: var(--ink-2); font-weight: 600 }
   :root.v3:not(#v1):not(#v2) .tile { border-radius: 6px; box-shadow: none; background: var(--paper-2) }
+  /* gallery shows the real materials, so these photos stay in colour; crops per tile */
+  :root.v3:not(#v1):not(#v2) .tile .slot-img img { filter: none }
+  :root.v3:not(#v1):not(#v2) .t-slide .slot-img img { object-position: 50% 30% }
+  :root.v3:not(#v1):not(#v2) .t-flyer .slot-img img { object-position: 50% 50% }
+  :root.v3:not(#v1):not(#v2) .t-art .slot-img img { object-position: 50% 50% }
+  :root.v3:not(#v1):not(#v2) .t-video .slot-img img { object-position: 50% 50% }
+  :root.v3:not(#v1):not(#v2) .t-social .slot-img img { object-position: 50% 50% }
+  :root.v3:not(#v1):not(#v2) .tile::after { background: linear-gradient(180deg, transparent 62%, rgba(20, 21, 70, .45)) }
   :root.v3:not(#v1):not(#v2) .tile figcaption { border-radius: 4px; background: var(--indigo); color: #fff }
 
   /* two-column headings: poster type is wide in capitals, so one step smaller */
@@ -126,7 +150,10 @@ import '@fontsource/anton/400.css';
   :root.v3:not(#v1):not(#v2) .icon-badge { border-radius: 6px; background: var(--indigo); color: #fff }
 
   /* ---------- demo ---------- */
-  :root.v3:not(#v1):not(#v2) .demo { border-radius: 8px; background: #E3F4F6; box-shadow: none }
+  /* off-white card; the collage fills its box (Figma) */
+  :root.v3:not(#v1):not(#v2) .demo { border-radius: 8px; background: #FBFAF7; box-shadow: none; grid-template-columns: minmax(0, .82fr) minmax(0, 1fr) }
+  :root.v3:not(#v1):not(#v2) .demo__collage { aspect-ratio: 620.3 / 418.18 }
+  :root.v3:not(#v1):not(#v2) .demo__collage .slot-img img { filter: none; object-fit: cover }
   :root.v3:not(#v1):not(#v2) .demo::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--rule) }
   :root.v3:not(#v1):not(#v2) .fan__card { border-radius: 6px; box-shadow: 0 30px 50px -24px rgba(31, 33, 96, .6), 0 0 0 4px #fff }
 
@@ -134,7 +161,15 @@ import '@fontsource/anton/400.css';
   :root.v3:not(#v1):not(#v2) .portrait { border-radius: 8px; background: linear-gradient(180deg, #34378F, #23256B); box-shadow: none }
   :root.v3:not(#v1):not(#v2) .portrait:not(.portrait--image)::before, :root.v3:not(#v1):not(#v2) .portrait:not(.portrait--image)::after { background: rgba(127, 224, 236, .22) }
   :root.v3:not(#v1):not(#v2) .quote blockquote { font-family: var(--display); color: #fff; font-size: clamp(24px, 2.2vw, 32px) }
-  :root.v3:not(#v1):not(#v2) .quote figcaption b { color: #fff }
+  :root.v3:not(#v1):not(#v2) .about__role { color: var(--cyan-light) }
+  :root.v3:not(#v1):not(#v2) .about__team h3 { color: #fff }
+  :root.v3:not(#v1):not(#v2) .about__team p { color: rgba(255, 255, 255, .8) }
+  /* author portrait: B/W like the rest, name plate on the photo */
+  /* author portrait: natural colour (the one photo that is not black and white), a touch
+     warmer and brighter; shown close to its real resolution so it stays sharp */
+  :root.v3:not(#v1):not(#v2) .portrait--image .slot-img img { object-position: 50% 10%; filter: saturate(1.05) brightness(1.03) sepia(.08) }
+  :root.v3:not(#v1):not(#v2) .about { grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 72px }
+  :root.v3:not(#v1):not(#v2) .portrait--image { box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .55) }
 
   /* ---------- faq ---------- */
   :root.v3:not(#v1):not(#v2) .faq summary { font-family: var(--body); font-weight: 600; font-size: clamp(18px, 1.5vw, 21px); color: var(--navy) }
@@ -165,7 +200,8 @@ import '@fontsource/anton/400.css';
   :root.v3:not(#v1):not(#v2) .langs .lang--soon { border-color: rgba(31, 33, 96, .3) }
 
   /* ---------- footer ---------- */
-  :root.v3:not(#v1):not(#v2) .footer { background: #16174A; position: relative }
+  :root.v3:not(#v1):not(#v2) .footer { background: #16174A; position: relative; overflow: hidden }
+  :root.v3:not(#v1):not(#v2) .footer > :not(.brush) { position: relative; z-index: 1 }
   :root.v3:not(#v1):not(#v2) .footer::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 3px; background: var(--rule) }
   :root.v3:not(#v1):not(#v2) .footer .brand { font-size: 22px }
 
@@ -178,19 +214,39 @@ import '@fontsource/anton/400.css';
 
   /* ---------- tablet / phone ---------- */
   @media (max-width: 1020px) {
+    :root.v3:not(#v1):not(#v2) .stats { --stat-cols: 3 }
+    :root.v3:not(#v1):not(#v2) .demo { grid-template-columns: 1fr }
+    :root.v3:not(#v1):not(#v2) .about { grid-template-columns: 1fr; gap: 40px }
+    :root.v3:not(#v1):not(#v2) .portrait { max-width: 340px }
     :root.v3:not(#v1):not(#v2) .hero__copy { max-width: 58% }
   }
   @media (max-width: 760px) {
     :root.v3:not(#v1):not(#v2) .hero { padding: 76px 0 48px }
     :root.v3:not(#v1):not(#v2) .hero .scene { position: relative; inset: auto; width: auto; height: 76vw; margin: 0 0 4px;
-      -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent); mask-image: linear-gradient(180deg, #000 70%, transparent) }
+      --fade-x: linear-gradient(#000, #000);
+      -webkit-mask-image: linear-gradient(180deg, #000 55%, rgba(0,0,0,.85) 68%, rgba(0,0,0,.5) 82%, rgba(0,0,0,.15) 93%, transparent); mask-image: linear-gradient(180deg, #000 55%, rgba(0,0,0,.85) 68%, rgba(0,0,0,.5) 82%, rgba(0,0,0,.15) 93%, transparent) }
+    :root.v3:not(#v1):not(#v2) .hero .slot-img img { object-position: 62% 18% } /* phone: head and crown in frame */
     :root.v3:not(#v1):not(#v2) .hero__copy { max-width: none }
     :root.v3:not(#v1):not(#v2) .h1 { font-size: clamp(56px, 17vw, 76px) }
     :root.v3:not(#v1):not(#v2) .h2 { font-size: clamp(34px, 9.6vw, 46px) }
     :root.v3:not(#v1):not(#v2) :is(.get__head, .about__copy) .h2 { font-size: clamp(30px, 8.6vw, 38px) }
+    /* phones: 2 + 2 + 1; cells that start a row sit on the text edge; the last, full-width
+       cell keeps the same number size as the others */
+    :root.v3:not(#v1):not(#v2) .stat { padding: 22px 0 20px 20px }
+    :root.v3:not(#v1):not(#v2) .stat:nth-child(odd) { padding-left: 0 }
+    :root.v3:not(#v1):not(#v2) .stat:nth-child(even) { padding-right: 0 }
+    :root.v3:not(#v1):not(#v2) .stat dd { font-size: clamp(36px, calc((100cqw / 2 - 24px) / 2.4), 64px) }
+    :root.v3:not(#v1):not(#v2) .stats { --stat-cols: 2 }
+    :root.v3:not(#v1):not(#v2) .about { grid-template-columns: 1fr; gap: 32px }
+    :root.v3:not(#v1):not(#v2) .portrait { max-width: 300px }
     :root.v3:not(#v1):not(#v2) .trailer .section-head { grid-template-columns: 1fr }
     :root.v3:not(#v1):not(#v2) .trailer .section-head .sub { text-align: left; margin-top: 14px }
     :root.v3:not(#v1):not(#v2) .menu a:not(.btn) { font-size: 34px }
+  }
+
+  /* tablet: 3 + 2, the cell that starts the second row sits on the text edge */
+  @media (min-width: 761px) and (max-width: 1020px) {
+    :root.v3:not(#v1):not(#v2) .stat:nth-child(4) { padding-left: 0 }
   }
 
   /* ================= motion =================
@@ -240,13 +296,20 @@ import '@fontsource/anton/400.css';
       if (!text || !target) return null;
       const span = document.createElement('span');
       span.className = 'stat__num';
-      span.textContent = raw;
+      // the final value stays in place, invisible, so it reserves the width at any
+      // font size; the running count is drawn on top of it
+      const sizer = document.createElement('span');
+      sizer.textContent = raw;
+      sizer.setAttribute('aria-hidden', 'true');
+      sizer.style.cssText = 'grid-area:1/1;visibility:hidden';
+      const live = document.createElement('span');
+      live.textContent = '0';
+      live.style.cssText = 'grid-area:1/1;text-align:left';
+      span.style.display = 'inline-grid';
+      span.append(sizer, live);
       text.replaceWith(span);
-      span.style.display = 'inline-block';
-      span.style.minWidth = `${span.getBoundingClientRect().width}px`;
-      span.textContent = '0';
       dd.closest('.stat')?.classList.add('is-counting');
-      return { dd, span, target, sep };
+      return { dd, span: live, target, sep };
     }).filter(Boolean) as { dd: HTMLElement; span: HTMLElement; target: number; sep: string }[];
 
     const format = (n: number, sep: string) => (sep ? String(n).replace(/\B(?=(\d{3})+(?!\d))/g, sep) : String(n));

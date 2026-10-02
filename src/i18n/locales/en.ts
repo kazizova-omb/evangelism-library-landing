@@ -78,10 +78,10 @@ const en = {
   trailer: {
     eyebrow: 'Trailer',
     title: "See what's *inside*",
-    sub: 'A 90-second look at the presentations, visuals, and resources in the full kit.',
+    sub: 'A quick look at the presentations, visuals, and resources in the full kit.',
     playLabel: 'Play trailer',
     metaLabel: 'Official trailer',
-    duration: '1:30',
+    duration: '0:19',
     modalLabel: 'Trailer',
     closeLabel: 'Close',
     placeholder: 'The trailer will play here (YouTube embed, loaded on click).',
@@ -102,11 +102,11 @@ const en = {
     note: 'A look at some of the materials in the kit.',
     // Order and keys are fixed by the grid layout. Image files: src/assets/slots/gallery-<key>.*
     gallery: {
-      slide: { caption: 'Presentation slide', kicker: 'Session 01', title: 'The prophecy *unfolds*', alt: 'Presentation slide from the series' },
-      flyer: { caption: 'Printed flyer', kicker: 'Starting soon', title: 'Hope Beyond Tomorrow', alt: 'Printed flyer for the series' },
-      art: { caption: 'Series artwork', alt: 'Series artwork' },
-      video: { caption: 'Video clip', alt: 'Still from a video clip' },
-      social: { caption: 'Social post', title: 'There is hope for tomorrow', alt: 'Social media post for the series' },
+      slide: { caption: 'Presentation slide', kicker: 'Session 01', title: 'The prophecy *unfolds*', alt: 'A presentation slide from the series on a screen in front of an audience' },
+      flyer: { caption: 'Printed flyer', kicker: 'Starting soon', title: 'Hope Beyond Tomorrow', alt: 'Hands holding a printed flyer for the series' },
+      art: { caption: 'Series artwork', alt: 'Series artwork on a poster, cards, a tablet and a phone' },
+      video: { caption: 'Video clip', alt: 'A video clip from the series playing on a laptop' },
+      social: { caption: 'Social post', title: 'There is hope for tomorrow', alt: 'A social media post for the series on a phone' },
     },
   },
 
@@ -152,16 +152,18 @@ const en = {
   },
 
   about: {
-    eyebrow: 'About the team',
-    title: 'Created by *Lorem Ipsum Ministries*',
+    // The block is about the author of the project: name, role, his words, then the team
+    eyebrow: 'The author of the project',
+    title: 'Meet *Justin Kim*',
+    teamTitle: 'Created with Lorem Ipsum Ministries',
     paragraphs: [
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.',
     ],
     quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus, ut fermentum massa justo sit amet risus.',
-    author: 'Justin Lorem',
+    author: 'Justin Kim',
     role: 'Project Lead, Lorem Ipsum Ministries',
-    imageAlt: 'Justin Lorem, Project Lead',
+    imageAlt: 'Justin Kim, Project Lead',
   },
 
   faq: {

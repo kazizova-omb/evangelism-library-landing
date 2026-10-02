@@ -11,6 +11,7 @@ export type SlotName =
   | 'gallery-art'
   | 'gallery-video'
   | 'gallery-social'
+  | 'demo'
   | 'demo-flyer'
   | 'demo-slide'
   | 'demo-image'

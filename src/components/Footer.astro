@@ -1,4 +1,5 @@
 ---
+import Brush from './Brush.astro';
 import BrandMark from './BrandMark.astro';
 import LangSwitch from './LangSwitch.astro';
 import { useT, getLang, localePath } from '../i18n';
@@ -14,6 +15,7 @@ const c = site.footer.columns;
 const a = (href: string) => anchor(href, home, lang);
 ---
 <footer class="footer">
+  <Brush w={756} h={379} at="left:50%;top:0;margin-left:-378px" box={993.557} x={-80} y={-118} size={863.943} rotate={-170.59} opacity={0.07} tone="teal" />
   <div class="footer__top">
     <div class="footer__brand">
       <a href={home ? '#top' : localePath(lang, '/')} class="brand">

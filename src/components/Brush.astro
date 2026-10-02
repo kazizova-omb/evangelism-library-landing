@@ -1,0 +1,35 @@
+---
+// Decorative brush-stroke texture behind a section (from the Figma design).
+// A clipping window (w x h, anchored to a section corner) shows part of a large,
+// square masked by the brush image (not rotated), with a rotated gradient square inside.
+import brushUrl from '../assets/textures/brush.webp?url';
+
+interface Props {
+  /** clipping window size, px */
+  w: number; h: number;
+  /** where the window sits in the section, e.g. "bottom:0;left:0" */
+  at: string;
+  /** square holding the stroke: size and offset inside the window, px */
+  box: number; x: number; y: number;
+  /** the stroke itself: size, rotation, opacity */
+  size: number; rotate: number; opacity: number;
+  tone: 'teal' | 'indigo';
+}
+const { w, h, at, box, x, y, size, rotate, opacity, tone } = Astro.props;
+const gradient = tone === 'teal'
+  ? 'linear-gradient(137.68deg, rgb(177, 239, 246) 21.05%, rgb(14, 116, 150) 98.96%)'
+  : 'linear-gradient(137.68deg, rgb(137, 140, 239) 21.05%, rgb(31, 33, 96) 98.96%)';
+---
+<div class="brush" aria-hidden="true" style={`width:${w}px;height:${h}px;${at}`}>
+  <div class="brush__box" style={`width:${box}px;height:${box}px;left:${x}px;top:${y}px;-webkit-mask-image:url(${brushUrl});mask-image:url(${brushUrl})`}>
+    <div class="brush__stroke" style={`width:${size}px;height:${size}px;transform:rotate(${rotate}deg);opacity:${opacity};background-image:${gradient}`}></div>
+  </div>
+</div>
+
+<style>
+  .brush { position: absolute; z-index: 0; max-width: 100%; overflow: hidden; pointer-events: none }
+  .brush__box { position: absolute; display: grid; place-items: center; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat }
+  .brush__stroke { flex: none }
+  /* phones: the strokes are sized for wide screens; keep the page light */
+  @media (max-width: 760px) { .brush { display: none } }
+</style>

@@ -1,4 +1,5 @@
 ---
+import Brush from './Brush.astro';
 import Icon from './Icon.astro';
 import { useT, getLang, localePath, locales, defaultLocale } from '../i18n';
 import { countryNames } from '../i18n/countries';
@@ -25,6 +26,7 @@ const divisionValues = locales[defaultLocale].getKit.divisions;
 const countries = countryNames(site.locale.htmlLang, g.countryNames);
 ---
 <section class="section glow-r" id="get" aria-labelledby="get-title">
+  <Brush w={756} h={636} at="right:0;top:0" box={1924.835} x={-240.31} y={-1035.28} size={1456.895} rotate={155.9} opacity={0.15} tone="teal" />
   <div class="wrap get">
     <div class="get__head reveal">
       <p class="eyebrow">{g.eyebrow}</p>
