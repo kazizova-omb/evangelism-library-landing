@@ -1,0 +1,22 @@
+---
+// The CC0 motto as a tracked caps line: "FREE TO USE • FREE TO ADAPT • FREE TO SHARE".
+// Phrases come from license.motto (split on the full stops); screen readers still hear the sentences.
+import { useT } from '../i18n';
+
+const site = useT(Astro);
+const phrases = site.license.motto.split(/\.\s*/).filter(Boolean);
+---
+<span class="motto">
+  {phrases.map((p) => <span class="motto__item">{p}<span class="visually-hidden">. </span></span>)}
+</span>
+
+<style>
+  /* Separator dots sit in the gap before each phrase. The list is shifted left by one gap and
+     clipped there, so a phrase that wraps to the start of a line never carries a stray dot. */
+  .motto { --gap: 26px; flex: 1 1 0; min-width: 0; display: flex; flex-wrap: wrap; row-gap: 0; column-gap: var(--gap); margin-left: calc(var(--gap) * -1); padding-left: var(--gap);
+    clip-path: inset(-12px -12px -12px var(--gap)); font-family: var(--body); font-size: 13px; font-weight: 700; line-height: 26px; letter-spacing: .16em; text-transform: uppercase; color: var(--navy, currentColor) }
+  /* sits beside the CC0 badge and wraps there; each line is the badge's height so the first one lines up */
+  .motto__item { position: relative; white-space: nowrap }
+  .motto__item::before { content: ""; position: absolute; left: calc(var(--gap) / -2 - 2px); top: 50%; width: 4px; height: 4px; margin-top: -2px; border-radius: 50%; background: var(--motto-dot, var(--teal, currentColor)) }
+  @media (max-width: 760px) { .motto { --gap: 20px; font-size: 12px; letter-spacing: .12em } }
+</style>

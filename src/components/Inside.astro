@@ -22,10 +22,11 @@ const img = {
 const wide = { sizes: '(max-width: 760px) calc(100vw - 40px), (max-width: 1240px) 66vw, 800px', widths: [480, 800, 1200, 1600] };
 const narrow = { sizes: '(max-width: 760px) 50vw, (max-width: 1240px) 33vw, 400px', widths: [320, 480, 800] };
 
-// "1,200+" -> number "1,200" + suffix "+", so the suffix can be set smaller in the accent colour
+// "~450" -> approximate mark + "450"; "1,200+" -> "1,200" + suffix "+". The marks are set small,
+// so the number leads.
 const splitValue = (v: string) => {
-  const m = v.match(/^([\d.,\s ]+)(.*)$/);
-  return m ? { num: m[1].trim(), suffix: m[2].trim() } : { num: v, suffix: '' };
+  const m = v.match(/^(~?)\s*([\d.,\s\u00A0]+)(.*)$/);
+  return m ? { approx: m[1] === '~', num: m[2].trim(), suffix: m[3].trim() } : { approx: false, num: v, suffix: '' };
 };
 ---
 <section class="section glow-r" id="inside" aria-labelledby="inside-title">
@@ -39,7 +40,7 @@ const splitValue = (v: string) => {
     </div>
     <dl class="stats reveal">
       {s.stats.map((st) => (
-        <div class="stat"><dt>{st.label}</dt><dd>{splitValue(st.value).num}{splitValue(st.value).suffix && <span class="stat__suffix">{splitValue(st.value).suffix}</span>}</dd></div>
+        <div class="stat"><dt>{st.label}</dt><dd>{splitValue(st.value).approx && <span class="stat__approx" title={site.inside.approx}><span aria-hidden="true">~</span><span class="visually-hidden">{site.inside.approx} </span></span>}{splitValue(st.value).num}{splitValue(st.value).suffix && <span class="stat__suffix">{splitValue(st.value).suffix}</span>}</dd></div>
       ))}
     </dl>
     <div class="stats-note reveal">
@@ -99,6 +100,7 @@ const splitValue = (v: string) => {
   .stat { display: flex; flex-direction: column; gap: 12px; padding: 32px 24px 30px; border-left: 1px solid var(--line) }
   .stat:first-child { border-left: 0; padding-left: 0 }
   /* "+" set smaller, raised and in the accent colour, so the number leads */
+  .stat__approx { display: inline-block; margin-right: .06em; font-size: .5em; line-height: 1; vertical-align: .62em; color: var(--gold); -webkit-text-fill-color: currentColor }
   .stat__suffix { display: inline-block; margin-left: .04em; font-family: var(--body); font-weight: 500; font-size: .5em; line-height: 1; vertical-align: .62em;
     color: var(--gold); -webkit-text-fill-color: currentColor }
   .stat dd { white-space: nowrap; font-family: var(--display); font-weight: 600; font-size: clamp(44px, 4.6vw, 66px); line-height: .9; letter-spacing: -.01em;

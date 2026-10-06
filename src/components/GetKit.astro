@@ -1,29 +1,23 @@
 ---
 import Brush from './Brush.astro';
 import Icon from './Icon.astro';
-import { useT, getLang, localePath, locales, defaultLocale } from '../i18n';
-import { countryNames } from '../i18n/countries';
+import { useT, getLang, localePath } from '../i18n';
 import { config } from '../config';
 import { rich, fill } from '../lib/rich';
 
+// "Download" section: every kit file is a direct link (no registration), next to an
+// optional signup for One Voice 27 updates (one list for all One Voice 27 projects).
 const site = useT(Astro);
 const lang = getLang(Astro);
 
 const g = site.getKit;
-const f = g.fields;
-const link = (href: string, label: string) =>
-  `<a href="${href}" target="_blank" rel="noopener">${label}</a>`;
-const consentHtml = fill(g.consent.text, {
-  terms: link(localePath(lang, '/terms'), site.footer.links.terms),
-  privacy: link(localePath(lang, '/privacy'), site.footer.links.privacy),
-});
-const successHtml = fill(g.success.text, { email: '<b id="sentTo"></b>' });
-const supportLink = `<a href="mailto:${config.supportEmail}">${config.supportEmail}</a>`;
-const returningHelp = fill(g.returning.help, { support: supportLink });
-const successHelp = fill(g.success.help, { support: supportLink });
-// The form always sends the English division name, whatever the page language
-const divisionValues = locales[defaultLocale].getKit.divisions;
-const countries = countryNames(site.locale.htmlLang, g.countryNames);
+const sub = g.subscribe;
+const f = sub.fields;
+const privacy = `<a href="${localePath(lang, '/privacy')}" target="_blank" rel="noopener">${site.footer.links.privacy}</a>`;
+const consentHtml = fill(sub.consent.text, { privacy });
+const successHtml = fill(sub.success.text, { email: '<b id="sentTo"></b>' });
+const fileUrl = (id: string) => (config.kitUrl ? `${config.kitUrl}/${id}.zip` : '');
+
 ---
 <section class="section glow-r" id="get" aria-labelledby="get-title">
   <Brush w={756} h={636} at="right:0;top:0" box={1924.835} x={-240.31} y={-1035.28} size={1456.895} rotate={155.9} opacity={0.15} tone="teal" />
@@ -32,26 +26,29 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
       <p class="eyebrow">{g.eyebrow}</p>
       <h2 class="h2" id="get-title" set:html={rich(g.title)} />
       <p class="sub">{g.sub}</p>
-      <ol class="next">
-        {g.steps.map((s, i) => <li><span class="next__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span><div><b>{s.title}</b><span>{s.text}</span></div></li>)}
-      </ol>
-      <aside class="returning" aria-labelledby="returning-title">
-        <h3 id="returning-title">{g.returning.title}</h3>
-        <p>{g.returning.text}</p>
-        <p class="returning__help" set:html={returningHelp} />
-      </aside>
+      <ul class="files" role="list">
+        {g.files.map((file) => (
+          <li>
+            <div><b>{file.label}</b><span>{file.detail}</span></div>
+            {fileUrl(file.id)
+              ? <a href={fileUrl(file.id)} class="btn btn--gold btn--sm" download data-track="kit_download" data-track-location={file.id}><Icon name="download" />{g.downloadLabel}</a>
+              : <span class="files__soon">{g.soon}</span>}
+          </li>
+        ))}
+      </ul>
     </div>
 
     <div class="formcard reveal" id="formcard"
-      data-api-url={config.apiUrl}
+      data-api-url={config.subscribeUrl}
       data-sitekey={config.turnstileSiteKey}>
-      <form id="kitForm" novalidate>
-        <div class="form-err" id="formErr" role="alert" hidden>{g.networkError}</div>
+      <form id="kitForm" novalidate aria-labelledby="subscribe-title">
+        <h3 class="subscribe__title" id="subscribe-title" set:html={rich(sub.title)} />
+        <p class="subscribe__text">{sub.text}</p>
+        <div class="form-err" id="formErr" role="alert" hidden>{sub.networkError}</div>
         <div class="grid2">
           <div class="field">
-            <label for="f-name">{f.name.label}</label>
-            <input id="f-name" name="name" autocomplete="name" required placeholder={f.name.placeholder} />
-            <span class="err" id="f-name-err">{f.name.error}</span>
+            <label for="f-name">{f.name.label} <em>{sub.optional}</em></label>
+            <input id="f-name" name="name" autocomplete="given-name" placeholder={f.name.placeholder} />
           </div>
           <div class="field">
             <label for="f-email">{f.email.label}</label>
@@ -59,31 +56,6 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
             <span class="err" id="f-email-err">{f.email.error}</span>
             <p class="email-suggest" id="f-email-suggest" aria-live="polite" data-template={f.email.suggest} hidden></p>
           </div>
-          <div class="field">
-            <label for="f-country">{f.country.label}</label>
-            <input id="f-country" name="country" list="countries" autocomplete="country-name" required placeholder={f.country.placeholder} />
-            <span class="err" id="f-country-err">{f.country.error}</span>
-          </div>
-          <div class="field">
-            <label for="f-org">{f.organization.label}</label>
-            <input id="f-org" name="organization" autocomplete="organization" required placeholder={f.organization.placeholder} />
-            <span class="err" id="f-org-err">{f.organization.error}</span>
-          </div>
-          <div class="field">
-            <label for="f-division">{f.division.label} <em>{g.optional}</em></label>
-            <select id="f-division" name="division">
-              <option value="">{f.division.placeholder}</option>
-              {Object.entries(g.divisions).map(([code, label]) => <option value={divisionValues[code] ?? label}>{label}</option>)}
-            </select>
-          </div>
-          <div class="field">
-            <label for="f-conf">{f.conference.label} <em>{g.optional}</em></label>
-            <input id="f-conf" name="conference" placeholder={f.conference.placeholder} />
-          </div>
-        </div>
-        <div class="field">
-          <label for="f-comment">{f.comment.label} <em>{g.optional}</em></label>
-          <textarea id="f-comment" name="comment" placeholder={f.comment.placeholder}></textarea>
         </div>
         <!-- Honeypot: invisible to people, bots tend to fill it. Filled = silently dropped. -->
         <div class="hp" aria-hidden="true">
@@ -95,30 +67,24 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
             <input type="checkbox" id="f-consent" name="consent" required />
             <span set:html={consentHtml} />
           </label>
-          <span class="err" id="f-consent-err">{g.consent.error}</span>
+          <span class="err" id="f-consent-err">{sub.consent.error}</span>
         </div>
         <div class="field turnstile-wrap">
           <div class="turnstile" id="ts-widget"></div>
-          <span class="err" id="turnstile-err">{g.turnstileError}</span>
+          <span class="err" id="turnstile-err">{sub.turnstileError}</span>
         </div>
-        <button type="submit" class="btn btn--gold btn--block" id="submitBtn" data-label={g.submit} data-sending={g.sending}>{g.submit}</button>
-        <p class="form-note">{g.note}</p>
+        <button type="submit" class="btn btn--gold btn--block" id="submitBtn" data-label={sub.submit} data-sending={sub.sending}>{sub.submit}</button>
+        <p class="form-note">{sub.note}</p>
       </form>
 
       <div class="success" id="success">
         <div class="success__ic"><Icon name="success" /></div>
-        <h3 id="successTitle" tabindex="-1">{g.success.title}</h3>
+        <h3 id="successTitle" tabindex="-1">{sub.success.title}</h3>
         <p set:html={successHtml} />
-        {config.libraryUrl && <Fragment><a href={config.libraryUrl} class="btn btn--gold" data-track="login_click" data-track-location="success">{g.success.cta}</a><br /></Fragment>}
-        <p class="success__help" set:html={successHelp} />
-        <a class="success__preview" id="emailPreview" href="#" target="_blank" rel="noopener" hidden>{g.success.preview}</a>
-        <button type="button" class="link" id="editEmail">{g.success.change}</button>
+        <button type="button" class="link" id="editEmail">{sub.success.change}</button>
       </div>
     </div>
   </div>
-  <datalist id="countries">
-    {countries.map((c) => <option value={c} />)}
-  </datalist>
 </section>
 
 <style>
@@ -126,19 +92,16 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
   .get__head { position: sticky; top: 120px }
   .get__head .h2 { font-size: clamp(40px, 3.9vw, 56px); text-wrap: balance }
   .get__head .h2 :global(em) { white-space: nowrap } /* keep the accent phrase on one line */
-  /* steps: numbered rows with hairlines, no badges */
-  .next { list-style: none; margin-top: 36px; border-bottom: 1px solid var(--line) }
-  .next li { display: grid; grid-template-columns: 40px 1fr; gap: 12px; padding: 16px 0; border-top: 1px solid var(--line) }
-  .next__num { padding-top: 3px; font-size: 12.5px; font-weight: 600; letter-spacing: .04em; color: var(--gold); font-variant-numeric: tabular-nums lining-nums }
-  .next b { display: block; font-weight: 500; font-size: 16px; color: var(--ink) }
-  .next div span { display: block; margin-top: 2px; font-size: 14.5px; color: var(--muted-solid) }
-
-  /* returning users: a quiet note, not a second card */
-  .returning { margin-top: 36px; padding-left: 16px; border-left: 2px solid rgba(227, 178, 94, .5) }
-  .returning h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 4px }
-  .returning p { font-size: 14.5px; color: var(--muted-solid); line-height: 1.55; max-width: 440px }
-  .returning__help { margin-top: 8px; font-size: 13px !important }
-  .returning__help :global(a), .success__help :global(a) { color: var(--gold-hi); text-decoration: underline; text-underline-offset: 3px; white-space: nowrap }
+  /* kit files: one row each, download button on the right */
+  .files { list-style: none; margin-top: 32px; border-bottom: 1px solid var(--line) }
+  .files li { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; border-top: 1px solid var(--line) }
+  .files b { display: block; font-weight: 600; font-size: 16px; color: var(--ink) }
+  .files li div span { display: block; margin-top: 2px; font-size: 14px; color: var(--muted-solid) }
+  .files .btn { flex: none }
+  .files__soon { flex: none; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-solid); box-shadow: 0 0 0 1px var(--line) inset }
+  .subscribe__title { font-family: var(--display); font-size: clamp(26px, 2.4vw, 34px); line-height: 1.1; color: var(--ink) }
+  .subscribe__title :global(em) { font-style: normal; color: var(--gold-hi) }
+  .subscribe__text { margin: 10px 0 24px; font-size: 15.5px; line-height: 1.6; color: var(--ink-2) }
 
   .formcard { position: relative; padding: clamp(24px, 3vw, 40px); border-radius: 18px; background: linear-gradient(180deg, #14100C, #0F0C09); box-shadow: 0 0 0 1px var(--line) inset, 0 30px 80px -40px rgba(0, 0, 0, .8) }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px }
@@ -188,8 +151,6 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
   .success p { color: var(--ink-2); max-width: 420px; margin: 0 auto 30px }
   .success p :global(b) { color: var(--ink); font-weight: 600; overflow-wrap: anywhere }
   .success .btn { min-width: 260px }
-  .success__preview { display: inline-block; margin: 18px 0 4px; padding: 8px 14px; border-radius: 6px; border: 1px dashed var(--gold); font-size: 14px; font-weight: 600; color: var(--gold-hi) }
-  .success__preview[hidden] { display: none }
   .success__help { margin: 22px auto 0 !important; font-size: 13px; color: var(--muted-solid) !important }
   .success .link { display: inline-block; margin-top: 18px; font-size: 14px; color: var(--muted-solid); text-decoration: underline; text-underline-offset: 3px }
   .success .link:hover { color: var(--gold-hi) }
@@ -340,11 +301,10 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
     btn.textContent = (on ? btn.dataset.sending : btn.dataset.label) ?? '';
   }
 
-  /** Resolves with the server's JSON (may carry previewUrl in test mode). */
-  async function send(payload: Record<string, unknown>): Promise<{ previewUrl?: string }> {
+  async function send(payload: Record<string, unknown>) {
     if (!apiUrl) {
-      await new Promise((r) => setTimeout(r, 900)); // mock endpoint
-      return {};
+      await new Promise((r) => setTimeout(r, 900)); // no endpoint configured yet: mock success
+      return;
     }
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 15000);
@@ -356,7 +316,6 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
         signal: ctrl.signal,
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`); // any 2xx is a success
-      return await res.json().catch(() => ({}));
     } finally {
       clearTimeout(timer);
     }
@@ -382,32 +341,24 @@ const countries = countryNames(site.locale.htmlLang, g.countryNames);
     const data = new FormData(form);
     const val = (k: string) => String(data.get(k) ?? '').trim();
     const payload = {
-      name: val('name'),
       email: val('email').replace(/@(.+)$/, (_, d: string) => '@' + d.toLowerCase()),
-      country: val('country'),
-      organization: val('organization'),
-      division: val('division'),
-      conference: val('conference'),
-      comment: val('comment'),
+      name: val('name'),
       consent: true,
       turnstileToken,
-      source: 'landing',
-      lang: document.documentElement.lang || 'en', // the email goes out in the page language
+      list: 'one-voice-27',
+      source: 'revelation-media-resources',
+      lang: document.documentElement.lang || 'en',
       ...utm,
     };
 
     setLoading(true);
     try {
-      let result: { previewUrl?: string } = {};
       if (isBot) await new Promise((r) => setTimeout(r, 900));
-      else result = await send(payload);
+      else await send(payload);
       document.getElementById('sentTo')!.textContent = payload.email;
-      const preview = document.getElementById('emailPreview') as HTMLAnchorElement;
-      preview.hidden = !result.previewUrl;
-      if (result.previewUrl) preview.href = result.previewUrl;
       card.classList.add('is-done');
       document.getElementById('successTitle')!.focus();
-      if (!isBot) track('form_submit');
+      if (!isBot) track('subscribe');
     } catch {
       formErr.hidden = false;
       resetTurnstile(); // tokens are single use

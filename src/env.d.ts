@@ -2,8 +2,8 @@
 
 interface ImportMetaEnv {
   readonly PUBLIC_SITE_URL?: string;
-  readonly PUBLIC_API_URL?: string;
-  readonly PUBLIC_LIBRARY_URL?: string;
+  readonly PUBLIC_SUBSCRIBE_URL?: string;
+  readonly PUBLIC_KIT_URL?: string;
   readonly PUBLIC_TURNSTILE_SITE_KEY?: string;
   readonly PUBLIC_GA4_ID?: string;
   readonly PUBLIC_DEMO_URL?: string;

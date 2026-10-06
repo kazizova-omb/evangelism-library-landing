@@ -86,6 +86,8 @@ const t = site.trailer;
   }
 
   trigger.addEventListener('click', open);
+  // other openers (the hero button) carry data-open-video
+  document.querySelectorAll('[data-open-video]').forEach((el) => el.addEventListener('click', open));
   modal.querySelector('[data-close]')!.addEventListener('click', close);
   // Esc: native "cancel" closes instantly; route it through close() to keep the fade + cleanup
   modal.addEventListener('cancel', (e) => { e.preventDefault(); close(); });

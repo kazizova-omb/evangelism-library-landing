@@ -1,64 +1,51 @@
 ---
 import Brush from './Brush.astro';
+import Motto from './Motto.astro';
 import SlotImage from './SlotImage.astro';
 import { useT } from '../i18n';
-import { config } from '../config';
 import { rich } from '../lib/rich';
 import { slot } from '../lib/slots';
 import { getTheme } from '../lib/theme';
 
 const site = useT(Astro);
-const theme = getTheme(Astro);
-
 const a = site.about;
-const image = slot('team', theme);
+// photo for the block: src/assets/slots/v3/about.* (any ratio; shown 4:5)
+const image = slot('about', getTheme(Astro));
 ---
 <section class="section glow-l" id="about" aria-labelledby="about-title">
   <Brush w={582} h={490} at="left:0;bottom:0" box={1585.025} x={-822} y={-273} size={1121.578} rotate={132.84} opacity={0.14} tone="teal" />
   <div class="wrap about">
-    <div class:list={['portrait reveal', { 'portrait--image': image }]}>
-      {image && <SlotImage src={image} alt={a.imageAlt} sizes="(max-width: 1020px) min(420px, calc(100vw - 40px)), 440px" widths={[420, 640, 880]} />}
-      {config.showPlaceholderTags && !image && <span class="ph-tag">{site.placeholderTags.portrait}</span>}
+    <div class="about__photo reveal">
+      {image && <SlotImage src={image} alt={a.imageAlt} sizes="(max-width: 1020px) min(440px, calc(100vw - 40px)), 460px" widths={[440, 502]} />}
     </div>
     <div class="about__copy reveal">
       <p class="eyebrow">{a.eyebrow}</p>
       <h2 class="h2" id="about-title" set:html={rich(a.title)} />
-      <p class="about__role">{a.role}</p>
-      <figure class="quote">
-        <blockquote><p>“{a.quote}”</p></blockquote>
-        <figcaption class="visually-hidden">{a.author}, {a.role}</figcaption>
-      </figure>
-      <div class="about__team">
-        <h3>{a.teamTitle}</h3>
-        {a.paragraphs.map((p) => <p>{p}</p>)}
-      </div>
+      <p class="about__lead">{a.lead}</p>
+      {a.paragraphs.map((p) => <p class="about__text">{p}</p>)}
+      <p class="about__motto">
+        <a href={site.license.url} target="_blank" rel="license noopener" class="about__badge" aria-label={site.license.label}>{site.license.badge}</a>
+        <Motto />
+      </p>
     </div>
   </div>
 </section>
 
 <style>
-  .about { display: grid; grid-template-columns: 5fr 7fr; gap: 80px; align-items: center }
-  .portrait { position: relative; aspect-ratio: 4/5; border-radius: 999px 999px 16px 16px; overflow: hidden;
-    background: radial-gradient(80% 55% at 50% 28%, rgba(246, 204, 130, .6), rgba(201, 119, 46, .22) 42%, transparent 75%), linear-gradient(180deg, #22160C, #0D0A07); box-shadow: 0 0 0 1px var(--line), 0 0 140px -30px rgba(227, 178, 94, .45) }
-  .portrait:not(.portrait--image)::before { content: ""; position: absolute; left: 50%; top: 30%; width: 30%; aspect-ratio: 1; border-radius: 50%; transform: translateX(-50%); background: #0F0A07 }
-  .portrait:not(.portrait--image)::after { content: ""; position: absolute; left: 50%; bottom: -8%; width: 74%; height: 42%; border-radius: 50% 50% 0 0; transform: translateX(-50%); background: #0F0A07 }
-  .portrait .ph-tag { top: auto; bottom: 20px; right: 50%; transform: translateX(50%); z-index: 2 }
-  .about__role { margin-top: -6px; font-size: 14px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--gold) }
-  /* his words lead; the team text follows, quieter */
-  .quote { margin: 28px 0 0 }
-  .about__team { margin-top: 32px; padding-top: 28px; border-top: 1px solid var(--line); max-width: 620px }
-  .about__team h3 { margin-bottom: 10px; font-size: 16px; font-weight: 600; color: var(--ink) }
-  .about__team p { font-size: 15.5px; line-height: 1.6; color: var(--ink-2) }
-  .about__team p + p { margin-top: 12px }
-  .quote blockquote { font-family: var(--display); font-style: italic; font-weight: 500; font-size: clamp(24px, 2.3vw, 33px); line-height: 1.28 }
-  .quote figcaption { display: block; margin-top: 18px; font-size: 14px; color: var(--muted-solid) }
-  .quote figcaption b { color: var(--ink); font-weight: 600; margin-right: 8px }
+  /* photo on the left, text on the right */
+  .about { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 40px 80px; align-items: center }
+  .about__photo { position: relative; aspect-ratio: 4 / 5; border-radius: 8px; overflow: hidden; background: rgba(255, 255, 255, .06); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .55) }
+  .about__lead { margin-top: 4px; font-size: clamp(17px, 1.35vw, 19px); line-height: 1.65; color: var(--ink-2) }
+  .about__text { margin-top: 16px; font-size: 16px; line-height: 1.7; color: var(--ink-2) }
+  .about__motto { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; align-items: flex-start; gap: 16px; color: var(--ink) }
+  .about__badge { flex: none; padding: 5px 10px; line-height: 16px; border-radius: 4px; font-family: var(--body); font-size: 12px; font-weight: 700; letter-spacing: .1em; color: var(--bg, #fff); background: var(--ink) }
+  .about__badge:hover { opacity: .85 }
 
   @media (max-width: 1020px) {
-    .about { grid-template-columns: 1fr; gap: 48px }
-    .portrait { max-width: 420px }
+    .about { grid-template-columns: 1fr; gap: 32px }
+    .about__photo { max-width: 440px }
   }
   @media (max-width: 760px) {
-    .about { gap: 36px }
+    .about__photo { aspect-ratio: 4 / 3 }
   }
 </style>

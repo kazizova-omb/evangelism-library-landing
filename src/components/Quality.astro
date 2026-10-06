@@ -21,9 +21,9 @@ const q = site.quality;
       {q.features.map((f) => (
         <div class="feature reveal">
           <span class="icon-badge"><Icon name={f.icon as IconName} /></span>
-          <h3>{f.title}</h3>
+          <h3>{f.title}{'badge' in f && <span class="feature__badge">{f.badge}</span>}</h3>
           <p>{f.text}</p>
-          {'chips' in f && <div class="formats-wrap"><ul class="formats" role="list">{f.chips.map((c) => <li>{c}</li>)}</ul></div>}
+          {'chips' in f && <div class="formats-wrap"><ul class="formats" role="list">{(f.chips as readonly string[]).map((c) => <li>{c}</li>)}</ul></div>}
           {'link' in f && <div class="chips"><a href={f.link.href} class="chip">{f.link.label}</a></div>}
         </div>
       ))}
@@ -43,6 +43,7 @@ const q = site.quality;
   .feature h3 { font-family: var(--display); font-weight: 600; font-size: 26px; line-height: 1.1; margin: 22px 0 8px }
   .feature p { font-size: 15.5px; color: var(--muted-solid); line-height: 1.55 }
   .feature .chips { margin-top: 14px; list-style: none }
+  .feature__badge { display: inline-block; margin-left: 10px; padding: 3px 8px; border-radius: 4px; vertical-align: .3em; font-family: var(--body); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; line-height: 1.4; color: var(--gold); box-shadow: 0 0 0 1px currentColor inset }
   /* formats: one quiet dot-separated line. Every item carries its dot in front;
      the list is shifted left by one dot slot inside a clipping wrapper, so the dot
      that starts a line (first item or after a wrap) is always hidden. */

@@ -25,14 +25,14 @@ so redeploy after changing one.
 | Variable | Purpose | When empty |
 | --- | --- | --- |
 | `PUBLIC_SITE_URL` | Canonical URL, Open Graph URLs, sitemap, robots.txt | `https://revelationresource.org` |
-| `PUBLIC_API_URL` | Form endpoint (POST JSON) | Form mocks success after 900 ms |
-| `PUBLIC_LIBRARY_URL` | "Go to the library" button after signing up | Button hidden |
+| `PUBLIC_SUBSCRIBE_URL` | One Voice 27 updates signup endpoint (POST JSON) | Form mocks success after 900 ms |
+| `PUBLIC_KIT_URL` | Folder with the kit ZIPs (`<url>/<id>.zip`) | Buttons show "Available soon" |
 | `PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key | Cloudflare test key (always passes) |
 | `PUBLIC_GA4_ID` | Google Analytics 4 measurement ID | No GA, no cookie banner |
 | `PUBLIC_DEMO_URL` | Direct link to the demo ZIP | `#` |
 | `PUBLIC_TRAILER_YOUTUBE_ID` | YouTube ID of the trailer | Modal shows placeholder text |
 | `PUBLIC_CONTACT_EMAIL` | Contact links, legal pages, JSON-LD | `hello@revelationresource.org` |
-| `PUBLIC_TRANSLATE_EMAIL` | "Volunteer as a translator" button and the address shown under it | `translate@revelationresource.org` |
+| `PUBLIC_TRANSLATE_EMAIL` | "Volunteer as a translator" button and the address shown under it | `ministerialassociation@gc.adventist.org` |
 | `PUBLIC_SUPPORT_EMAIL` | "Didn't get the email?" help in the form section, success screen, footer | `support@revelationresource.org` |
 | `PUBLIC_SHOW_PLACEHOLDER_TAGS` | Dashed labels ("Key visual placeholder", "Sample figures and content"...) that mark where real images and sample content go. A design aid only | Hidden |
 
@@ -100,25 +100,21 @@ below the fold and loads the hero with high priority. The matching placeholder t
 Recommended sizes are in [`src/assets/slots/README.md`](src/assets/slots/README.md); alt texts are in the locale files.
 Without an `og` image, `src/assets/og/og-en.jpg` (rendered from the hero) is used for link previews.
 
-## Form
+## Updates signup form
 
-"Get the full kit" posts JSON to `PUBLIC_API_URL`:
+The One Voice 27 updates form posts JSON to `PUBLIC_SUBSCRIBE_URL` (see "Downloads and updates signup"):
 
 ```json
-{
-  "name": "", "email": "", "country": "", "organization": "",
-  "division": "", "conference": "", "comment": "",
-  "consent": true, "turnstileToken": "", "source": "landing",
-  "utm_source": "", "utm_medium": "", "utm_campaign": "", "utm_content": "", "utm_term": ""
-}
+{ "email": "", "name": "", "consent": true, "turnstileToken": "", "list": "one-voice-27",
+  "source": "revelation-media-resources", "lang": "en",
+  "utm_source": "", "utm_medium": "", "utm_campaign": "", "utm_content": "", "utm_term": "" }
 ```
 
-- Any 2xx response counts as success (an email that already exists should also return 2xx).
+- Any 2xx response counts as success (an email that is already subscribed should also return 2xx).
   Anything else, a network error or a 15 s timeout shows the error message above the fields.
 - UTM parameters are read from the page URL on load. Nothing is stored on the client.
 - The endpoint must allow CORS from the site origin (`POST`, `Content-Type: application/json`).
-- Turnstile loads only when the form comes close to the viewport. On screens under ~392px it uses
-  the compact widget so it fits the card.
+- Turnstile loads only when the form comes close to the viewport.
 
 ### Spam protection
 
@@ -133,7 +129,7 @@ Three layers on the page, one on the server:
 The email field is checked on blur and on submit (format, length, domain), and common typos get a
 one-click fix ("gmial.con" becomes "Did you mean ...@gmail.com?"). See `src/lib/email.ts`.
 
-> Server side: `functions/api/lead.ts` verifies `turnstileToken` (see "Email and downloads").
+> The receiving One Voice 27 endpoint should verify `turnstileToken` with Cloudflare's siteverify API.
 
 ### Testing against a local stub
 
@@ -141,7 +137,7 @@ one-click fix ("gmial.con" becomes "Did you mean ...@gmail.com?"). See `src/lib/
 npm run stub                         # http://localhost:8787, logs each request, answers 200
 STUB_STATUS=500 npm run stub         # simulate a server error
 STUB_DELAY=3000 npm run stub         # slow response to see the loading state
-PUBLIC_API_URL=http://localhost:8787/lead npm run dev
+PUBLIC_SUBSCRIBE_URL=http://localhost:8787/subscribe npm run dev
 ```
 
 ## SEO and answer engines
@@ -163,48 +159,17 @@ PUBLIC_API_URL=http://localhost:8787/lead npm run dev
 After launch: verify the domain in Google Search Console and Bing Webmaster Tools, submit
 `/sitemap-index.xml`, and check the page in Google's Rich Results Test.
 
-## Email and downloads (server)
+## Downloads and updates signup
 
-After the form, the visitor gets an email with a personal download link. This runs on
-Cloudflare Pages Functions in `functions/` (same project as the site) with a D1 database.
+There is no registration and no database for this project.
 
-```
-form -> POST /api/lead  -> checks Turnstile, rate limit (6 per 10 min per IP)
-                        -> saves/updates the lead in D1 (same email = same lead)
-                        -> reuses or creates a personal token
-                        -> email (test: stored, live: sent through Resend)
-email -> /download?t=<token> (or /es/download) -> /api/download lists the files
-      -> /api/file?t=...&f=<id> -> file from R2 / external url / placeholder, download logged
-```
-
-| Path | What |
-| --- | --- |
-| `functions/api/lead.ts` | form endpoint |
-| `functions/_lib/email.ts` | email template (copy: `email` in the locale files) |
-| `functions/_lib/kit.ts` | the files on the download page and where each comes from |
-| `src/pages/[...lang]/download.astro` | download page (copy: `download` in the locale files) |
-| `functions/api/admin/leads.csv.ts` | all leads as CSV, needs `ADMIN_TOKEN` |
-| `migrations/` | D1 schema |
-| `wrangler.toml` | bindings and non-secret settings |
-
-**Test mode** (`EMAIL_MODE = "test"` in `wrangler.toml`, the current state): nothing is sent; the
-success screen shows "Test mode: open the email" and the whole flow can be clicked through.
-
-**Going live:**
-1. Upload the kit files: create an R2 bucket `revelation-kit`, upload the ZIPs under the keys in
-   `functions/_lib/kit.ts`, uncomment `[[r2_buckets]]` in `wrangler.toml` (or give each file a `url`).
-2. Create a Resend account, add and verify the domain `revelationresource.org` (DNS records it shows).
-3. Set secrets:
-   `npx wrangler pages secret put RESEND_API_KEY --project-name revelation-media-resources`
-   (also `TURNSTILE_SECRET` for the real Turnstile site key, `ADMIN_TOKEN` for the CSV export).
-4. In `wrangler.toml` set `EMAIL_MODE = "live"`, optionally `LINK_TTL_DAYS`, then deploy.
-5. Leads: `https://<site>/api/admin/leads.csv?key=<ADMIN_TOKEN>` (opens in Excel / Google Sheets).
-
-Local run with functions and a local database: `npx wrangler d1 migrations apply revelation-leads --local`
-once, then `npm run dev:full` (http://localhost:8788). Local secrets go in `.dev.vars`.
-Schema changes: add a file to `migrations/` and run `npm run db:migrate`.
-
-When adding a language, also add it to `functions/_lib/copy.ts`.
+- **Downloads:** the "Download the full kit" section lists the kit files (`getKit.files` in the locale
+  files). Each button links to `PUBLIC_KIT_URL/<id>.zip` (`presentations`, `images`, `videos`, `promo`,
+  `print`). Until `PUBLIC_KIT_URL` is set, the buttons read "Available soon".
+- **Updates signup:** the form next to it only subscribes to One Voice 27 updates (one list for all
+  One Voice 27 projects). It POSTs JSON to `PUBLIC_SUBSCRIBE_URL`:
+  `{ email, name, consent: true, turnstileToken, list: "one-voice-27", source: "revelation-media-resources", lang, utm_* }`.
+  Any 2xx is a success. Empty URL = mock success. The receiving end should verify the Turnstile token.
 
 ## Analytics and consent
 

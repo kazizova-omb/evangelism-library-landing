@@ -113,3 +113,7 @@ a.chip:hover { border-color: rgba(227, 178, 94, .5); color: var(--gold-hi) }
   .head-left { margin-bottom: 36px }
   .ph-tag { top: 80px; right: var(--gutter); font-size: 10px }
 }
+
+/* brand lockup (series name above the title) */
+.brand__name { display: flex; flex-direction: column; line-height: 1.05 }
+.brand__series { font-size: .62em; opacity: .85 }

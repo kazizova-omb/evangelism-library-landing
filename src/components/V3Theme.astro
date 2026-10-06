@@ -56,6 +56,12 @@ import '@fontsource/anton/400.css';
   /* ---------- header ---------- */
   :root.v3:not(#v1):not(#v2) .header.is-scrolled { background: rgba(245, 243, 238, .92) }
   :root.v3:not(#v1):not(#v2) .brand { font-family: var(--poster); text-transform: uppercase; letter-spacing: .02em; font-size: 20px }
+  /* lockup: "All Things New" as a serif lead-in above the name, like the section eyebrows */
+  :root.v3:not(#v1):not(#v2) .brand__name { display: flex; flex-direction: column; line-height: 1 }
+  /* "All Things New" as a small tracked label: semibold sans in deep teal (5:1 on paper),
+     so it reads at 11px; the poster title below stays the main line */
+  :root.v3:not(#v1):not(#v2) .brand__series { font-family: var(--body); font-weight: 700; text-transform: uppercase; letter-spacing: .2em; font-size: 11px; line-height: 1; color: var(--teal-text); margin-bottom: 5px }
+  :root.v3:not(#v1):not(#v2) .footer .brand__series { color: var(--cyan-light) }
   :root.v3:not(#v1):not(#v2) .menu { background: rgba(245, 243, 238, .98) }
   :root.v3:not(#v1):not(#v2) .menu a:not(.btn) { font-family: var(--poster); text-transform: uppercase; font-size: 40px }
 
@@ -75,8 +81,6 @@ import '@fontsource/anton/400.css';
   :root.v3:not(#v1):not(#v2) .hero .slot-img img { filter: none; object-position: 50% 50% }
   :root.v3:not(#v1):not(#v2) .h1 { font-size: clamp(64px, 8.6vw, 136px); line-height: .9; margin: 16px 0 26px }
   :root.v3:not(#v1):not(#v2) .hero__copy { max-width: min(640px, 52%) }
-  :root.v3:not(#v1):not(#v2) .trust { color: var(--muted-solid) }
-  :root.v3:not(#v1):not(#v2) .trust i { background: var(--teal) }
 
   /* ---------- indigo blocks: trailer, about, request form ---------- */
   :root.v3:not(#v1):not(#v2) :is(#trailer, #about, #get) {
@@ -114,6 +118,7 @@ import '@fontsource/anton/400.css';
   :root.v3:not(#v1):not(#v2) .stat dd { align-self: flex-start; white-space: nowrap; font-family: var(--poster);
     font-size: clamp(36px, calc((100cqw / var(--stat-cols) - 40px) / 2.4), 92px); line-height: .95;
     background: none; color: var(--teal); -webkit-text-fill-color: currentColor }
+  :root.v3:not(#v1):not(#v2) .stat__approx { font-family: var(--poster); font-size: .55em; vertical-align: .6em; color: var(--navy) }
   :root.v3:not(#v1):not(#v2) .stat__suffix { font-family: var(--poster); font-size: .55em; vertical-align: .6em; color: var(--navy); -webkit-text-fill-color: currentColor }
   :root.v3:not(#v1):not(#v2) .stat dt { color: var(--ink-2); font-weight: 600 }
   :root.v3:not(#v1):not(#v2) .tile { border-radius: 6px; box-shadow: none; background: var(--paper-2) }
@@ -129,6 +134,8 @@ import '@fontsource/anton/400.css';
 
   /* two-column headings: poster type is wide in capitals, so one step smaller */
   :root.v3:not(#v1):not(#v2) .about__copy .h2 { font-size: clamp(40px, 4.2vw, 62px) }
+  /* longer accent phrases (Spanish) may wrap here instead of running into the next column */
+  :root.v3:not(#v1):not(#v2) .about__copy .h2 em { white-space: normal }
   :root.v3:not(#v1):not(#v2) .get__head .h2 { font-size: clamp(38px, 3.6vw, 52px) } /* "to the complete library" on one line */
   /* accent phrases never split, at any width (sizes below keep them inside the column) */
   :root.v3:not(#v1):not(#v2) :is(.h1, .h2) em { white-space: nowrap }
@@ -147,6 +154,13 @@ import '@fontsource/anton/400.css';
   /* ---------- quality ---------- */
   :root.v3:not(#v1):not(#v2) .feature { border-radius: 6px; background: #FBFAF7 }
   :root.v3:not(#v1):not(#v2) .feature h3 { font-family: var(--poster); text-transform: uppercase; font-size: 24px; letter-spacing: .01em; line-height: 1.05 }
+  :root.v3:not(#v1):not(#v2) .feature__badge { color: #0E8FA2; text-transform: uppercase; letter-spacing: .12em }
+  /* five cards: 3 on the first row, 2 wider ones on the second (6-column grid) */
+  @media (min-width: 1021px) {
+    :root.v3:not(#v1):not(#v2) .features:has(> .feature:nth-child(5):last-child) { grid-template-columns: repeat(6, minmax(0, 1fr)) }
+    :root.v3:not(#v1):not(#v2) .features:has(> .feature:nth-child(5):last-child) > .feature { grid-column: span 2 }
+    :root.v3:not(#v1):not(#v2) .features:has(> .feature:nth-child(5):last-child) > .feature:nth-child(n+4) { grid-column: span 3 }
+  }
   :root.v3:not(#v1):not(#v2) .icon-badge { border-radius: 6px; background: var(--indigo); color: #fff }
 
   /* ---------- demo ---------- */
@@ -157,19 +171,13 @@ import '@fontsource/anton/400.css';
   :root.v3:not(#v1):not(#v2) .demo::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--rule) }
   :root.v3:not(#v1):not(#v2) .fan__card { border-radius: 6px; box-shadow: 0 30px 50px -24px rgba(31, 33, 96, .6), 0 0 0 4px #fff }
 
-  /* ---------- about (indigo): figure placeholder in tone ---------- */
-  :root.v3:not(#v1):not(#v2) .portrait { border-radius: 8px; background: linear-gradient(180deg, #34378F, #23256B); box-shadow: none }
-  :root.v3:not(#v1):not(#v2) .portrait:not(.portrait--image)::before, :root.v3:not(#v1):not(#v2) .portrait:not(.portrait--image)::after { background: rgba(127, 224, 236, .22) }
-  :root.v3:not(#v1):not(#v2) .quote blockquote { font-family: var(--display); color: #fff; font-size: clamp(24px, 2.2vw, 32px) }
-  :root.v3:not(#v1):not(#v2) .about__role { color: var(--cyan-light) }
-  :root.v3:not(#v1):not(#v2) .about__team h3 { color: #fff }
-  :root.v3:not(#v1):not(#v2) .about__team p { color: rgba(255, 255, 255, .8) }
-  /* author portrait: B/W like the rest, name plate on the photo */
-  /* author portrait: natural colour (the one photo that is not black and white), a touch
-     warmer and brighter; shown close to its real resolution so it stays sharp */
-  :root.v3:not(#v1):not(#v2) .portrait--image .slot-img img { object-position: 50% 10%; filter: saturate(1.05) brightness(1.03) sepia(.08) }
-  :root.v3:not(#v1):not(#v2) .about { grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 72px }
-  :root.v3:not(#v1):not(#v2) .portrait--image { box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .55) }
+  /* ---------- about (indigo) ---------- */
+  :root.v3:not(#v1):not(#v2) .about__lead { color: rgba(255, 255, 255, .9) }
+  :root.v3:not(#v1):not(#v2) .about__text { color: rgba(255, 255, 255, .8) }
+  :root.v3:not(#v1):not(#v2) .about__photo .slot-img img { filter: none; object-position: 50% 30% }
+  :root.v3:not(#v1):not(#v2) .about__motto { color: #fff; border-color: rgba(255, 255, 255, .2) }
+  :root.v3:not(#v1):not(#v2) .about__motto { --navy: #fff; --motto-dot: var(--cyan-light) }
+  :root.v3:not(#v1):not(#v2) .about__badge { background: var(--cyan-light); color: var(--indigo) }
 
   /* ---------- faq ---------- */
   :root.v3:not(#v1):not(#v2) .faq summary { font-family: var(--body); font-weight: 600; font-size: clamp(18px, 1.5vw, 21px); color: var(--navy) }
@@ -179,11 +187,12 @@ import '@fontsource/anton/400.css';
   :root.v3:not(#v1):not(#v2) .faq details[open] summary i { background: var(--teal) }
 
   /* ---------- request form (indigo block, white card) ---------- */
-  :root.v3:not(#v1):not(#v2) #get .next li, :root.v3:not(#v1):not(#v2) #get .next { border-color: rgba(255, 255, 255, .2) }
-  :root.v3:not(#v1):not(#v2) #get .next b { color: #fff }
-  :root.v3:not(#v1):not(#v2) #get .next__num { color: var(--cyan-light) }
-  :root.v3:not(#v1):not(#v2) #get .returning h3 { color: #fff }
-  :root.v3:not(#v1):not(#v2) #get .returning__help a { color: var(--cyan-light) }
+  :root.v3:not(#v1):not(#v2) #get .files, :root.v3:not(#v1):not(#v2) #get .files li { border-color: rgba(255, 255, 255, .2) }
+  :root.v3:not(#v1):not(#v2) #get .files b { color: #fff }
+  :root.v3:not(#v1):not(#v2) #get .files .btn--gold { background: var(--cyan-light); color: var(--indigo) }
+  :root.v3:not(#v1):not(#v2) #get .files__soon { color: rgba(255, 255, 255, .7); box-shadow: 0 0 0 1px rgba(255, 255, 255, .3) inset }
+  :root.v3:not(#v1):not(#v2) .subscribe__title { font-family: var(--poster); text-transform: uppercase; font-weight: 400; color: var(--navy) }
+  :root.v3:not(#v1):not(#v2) .subscribe__title em { color: var(--teal) }
   :root.v3:not(#v1):not(#v2) .formcard {
     --ink: var(--navy); --ink-2: #3F4170; --muted-solid: #5E607F; --line: rgba(31, 33, 96, .14);
     --teal: #0E8FA2; --gold: #0E8FA2; --gold-hi: #0A7383; --cyan: #3CC0CF;
@@ -216,8 +225,6 @@ import '@fontsource/anton/400.css';
   @media (max-width: 1020px) {
     :root.v3:not(#v1):not(#v2) .stats { --stat-cols: 3 }
     :root.v3:not(#v1):not(#v2) .demo { grid-template-columns: 1fr }
-    :root.v3:not(#v1):not(#v2) .about { grid-template-columns: 1fr; gap: 40px }
-    :root.v3:not(#v1):not(#v2) .portrait { max-width: 340px }
     :root.v3:not(#v1):not(#v2) .hero__copy { max-width: 58% }
   }
   @media (max-width: 760px) {
@@ -237,8 +244,6 @@ import '@fontsource/anton/400.css';
     :root.v3:not(#v1):not(#v2) .stat:nth-child(even) { padding-right: 0 }
     :root.v3:not(#v1):not(#v2) .stat dd { font-size: clamp(36px, calc((100cqw / 2 - 24px) / 2.4), 64px) }
     :root.v3:not(#v1):not(#v2) .stats { --stat-cols: 2 }
-    :root.v3:not(#v1):not(#v2) .about { grid-template-columns: 1fr; gap: 32px }
-    :root.v3:not(#v1):not(#v2) .portrait { max-width: 300px }
     :root.v3:not(#v1):not(#v2) .trailer .section-head { grid-template-columns: 1fr }
     :root.v3:not(#v1):not(#v2) .trailer .section-head .sub { text-align: left; margin-top: 14px }
     :root.v3:not(#v1):not(#v2) .menu a:not(.btn) { font-size: 34px }
@@ -289,7 +294,7 @@ import '@fontsource/anton/400.css';
   // measure only once the display font is in, or the reserved width would be wrong
   if (!reduced && 'IntersectionObserver' in window && stats.length) document.fonts.ready.then(() => {
     const items = [...stats].map((dd) => {
-      const text = dd.firstChild?.nodeType === Node.TEXT_NODE ? (dd.firstChild as Text) : null;
+      const text = ([...dd.childNodes].find((n) => n.nodeType === Node.TEXT_NODE && /\d/.test(n.textContent ?? '')) as Text | undefined) ?? null;
       const raw = text?.data ?? '';
       const target = Number(raw.replace(/[^\d]/g, ''));
       const sep = raw.match(/\d([,.  ])\d{3}/)?.[1] ?? '';

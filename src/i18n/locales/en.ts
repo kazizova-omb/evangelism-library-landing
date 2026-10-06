@@ -28,15 +28,26 @@ const en = {
     // Structured data (search engines and AI answers)
     kitName: 'Revelation Media Resources evangelistic series kit',
     audience: 'Pastors, church leaders and ministry organizations',
-    howToName: 'How to get the Revelation Media Resources kit',
     ogImageAlt: 'Revelation Media Resources: everything you need to lead a prophecy series',
   },
 
   organization: {
-    name: 'Lorem Ipsum Ministries',
+    name: 'Ministerial Association of the General Conference of Seventh-day Adventists',
     logo: '/favicon.svg',
   },
 
+  // Licence of the original resources (shown on the first screen, in the FAQ, footer and email)
+  license: {
+    badge: 'CC0 1.0',
+    motto: 'Free to Use. Free to Adapt. Free to Share.',
+    // link text / screen-reader label for the badge
+    label: 'Original resources released under CC0 1.0 (public domain dedication)',
+    url: 'https://creativecommons.org/publicdomain/zero/1.0/',
+    footer: 'Original resources released under CC0 1.0',
+  },
+
+  // Series brand shown above the name in the header and footer
+  brandSeries: 'All Things New',
   brand: 'Revelation Media Resources',
   skipLink: 'Skip to content',
   backToTop: 'Back to top',
@@ -50,8 +61,8 @@ const en = {
 
   header: {
     languageLabel: 'Language',
-    cta: 'Get materials',
-    mobileCta: 'Get the materials',
+    cta: 'Download',
+    mobileCta: 'Download the kit',
     openMenu: 'Open menu',
     closeMenu: 'Close menu',
   },
@@ -68,9 +79,9 @@ const en = {
     eyebrow: 'Evangelistic Series Library',
     title: 'Revelation Media *Resources*',
     lead: 'Everything you need to lead a prophecy series: presentations, images, videos, and promotional materials. Ready to use, fully editable, and **free for pastors and ministry leaders.**',
-    primaryCta: 'Get the materials',
-    secondaryCta: 'Download demo',
-    trust: ['PowerPoint', 'Keynote', 'Google Slides', 'Multiple languages'],
+    primaryCta: 'Download the kit',
+    secondaryCta: 'Watch the trailer',
+    trust: ['PowerPoint', 'Keynote', 'Google Slides', 'English now, more languages soon'],
     cue: 'Watch the trailer',
     imageAlt: '',
   },
@@ -93,12 +104,14 @@ const en = {
     title: 'One kit. Every *resource* you need.',
     sub: 'A complete, professionally designed set of materials for a full evangelistic series.',
     stats: [
-      { value: '24', label: 'Presentations' },
-      { value: '1,200+', label: 'Slides' },
-      { value: '600+', label: 'Images' },
-      { value: '30', label: 'Videos' },
-      { value: '50+', label: 'Marketing assets' },
+      // "~" = approximately (shown as a small mark before the number); "+" = at least
+      { value: '9', label: 'Presentations' },
+      { value: '~450', label: 'Slides' },
+      { value: '~400', label: 'Images' },
+      { value: '10', label: 'Videos' },
+      { value: '20', label: 'Marketing assets' },
     ],
+    approx: 'about',
     note: 'A look at some of the materials in the kit.',
     // Order and keys are fixed by the grid layout. Image files: src/assets/slots/gallery-<key>.*
     gallery: {
@@ -129,22 +142,22 @@ const en = {
     eyebrow: 'Quality',
     title: 'Made with care, *ready* for your church',
     sub: 'Every file is designed to look beautiful on screen and work without extra effort.',
-    cta: 'Get the materials',
+    cta: 'Download the kit',
     // icon: image | book | screen | pen | doc | globe
     features: [
-      { icon: 'image', title: 'Modern visual style', text: "Cinematic imagery that speaks to today's audiences." },
+    // badge: small label next to the title (e.g. a feature that is not available yet)
+      { icon: 'image', title: 'Modern visuals', text: "Cinematic imagery that speaks to today's audiences." },
       { icon: 'book', title: 'Theologically reviewed', text: 'Content carefully checked for biblical accuracy.' },
       { icon: 'screen', title: 'Ready to present', text: 'Open the file and start. No design skills needed.' },
       { icon: 'pen', title: 'Fully editable', text: 'Adapt text, order, and details to your church.' },
-      { icon: 'doc', title: 'Your favorite format', text: 'Works with the software you already use.', chips: ['PowerPoint', 'Keynote', 'Google Slides'] },
-      { icon: 'globe', title: 'Multiple languages', text: 'Available in several languages, with more on the way.', link: { label: 'See all languages', href: '#translate' } },
+      { icon: 'globe', title: 'Multilingual', badge: 'Coming soon', text: 'Translations into more languages are on the way.', link: { label: 'Help translate', href: '#translate' } },
     ],
   },
 
   demo: {
     eyebrow: 'Free demo',
     title: 'See the quality *for yourself*',
-    sub: 'Download a short sample before you request the full kit.',
+    sub: 'Download a short sample to see the quality first.',
     checklist: ['One complete presentation', 'A selection of images', 'Examples of promotional materials'],
     cta: 'Download demo',
     meta: 'ZIP · 120 MB',
@@ -152,19 +165,17 @@ const en = {
   },
 
   about: {
-    // The block is about the author of the project: name, role, his words, then the team
-    eyebrow: 'The author of the project',
-    title: 'Meet *Justin Kim*',
-    teamTitle: 'Created with Lorem Ipsum Ministries',
+    // About the initiative (client copy). The motto under it comes from license.motto.
+    eyebrow: 'About',
+    title: 'A global initiative to *equip pastors*',
+    lead: 'All Things New: Revelation Media Resources is a global initiative of the Ministerial Association of the General Conference of Seventh-day Adventists, created to equip pastors, evangelists, and churches with high-quality, Bible-centered resources for presenting the prophetic messages of Daniel and Revelation.',
     paragraphs: [
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.',
+      'Our vision is to make biblical truth more visual, accessible, adaptable, and useful across cultures and languages. The collection includes presentation slides, original images, videos, and promotional resources designed for practical ministry use.',
+      'These original resources are provided under CC0 1.0, allowing them to be freely used, adapted, translated, and shared for gospel ministry.',
     ],
-    quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus, ut fermentum massa justo sit amet risus.',
-    author: 'Justin Kim',
-    role: 'Project Lead, Lorem Ipsum Ministries',
-    imageAlt: 'Justin Kim, Project Lead',
+    imageAlt: 'A pastor presenting a Daniel and Revelation seminar to a church audience',
   },
+
 
   faq: {
     eyebrow: 'Questions',
@@ -172,108 +183,76 @@ const en = {
     // Also published as FAQPage structured data. Start answers with the direct answer.
     items: [
       { q: 'What is Revelation Media Resources?', a: 'Revelation Media Resources is a free library of ready-made materials for running an evangelistic prophecy series: presentations, slides, images, videos, and promotional materials for pastors, churches, and ministry organizations.', open: true },
-      { q: 'Is it really free?', a: 'Yes. The full kit is free for pastors, churches, and ministry organizations. Just fill out the short form to get access.' },
+      { q: 'Is it really free?', a: 'Yes. The full kit is free for pastors, churches, and ministry organizations: everything downloads directly, with no registration. The original resources are released under CC0 1.0, a public domain dedication, so you may freely use, adapt, translate, and share them for your ministry, without asking permission or giving credit.' },
       { q: 'Who can use these materials?', a: 'Pastors, church leaders, and ministry organizations who want to run an evangelistic series. No design skills are needed: the files are ready to present and easy to adapt to your church.' },
       { q: 'What formats are included?', a: 'Presentations come in PowerPoint, Keynote, and Google Slides. Images and videos are provided in standard formats that work on any device.' },
       { q: 'Can I edit the materials?', a: "Yes. You can change text, reorder slides, and add your church's details to fit your program." },
-      { q: 'Which languages are available?', a: "The kit is available in several languages, listed in the translation section below. Don't see yours? You can help us translate it." },
-      { q: 'How do I get the materials after signing up?', a: "Right after you submit the form, we email you a personal download link. Open it to download the kit in the formats and languages you need. Lost the email? Submit the form again with the same address and we'll send the link again." },
+      { q: 'Which languages are available?', a: "The kit is available in English today. More languages are coming soon and will be added progressively; see the list in the translation section below. Fluent in another language? You can help us translate it." },
     ],
   },
 
+  // "Get the full kit": direct downloads (no registration) + One Voice 27 updates signup.
+  // File links: PUBLIC_KIT_URL + "/<id>.zip" (see README). Until it is set, buttons say "Available soon".
   getKit: {
-    eyebrow: 'Get the full kit',
-    title: 'Get *free access* to the complete library',
-    sub: "Tell us a little about your church, and we'll email you a personal link to download the full kit.",
-    steps: [
-      { title: 'Fill out the form', text: 'It takes about a minute.' },
-      { title: 'Check your email', text: "We'll send you a personal download link." },
-      { title: 'Download the kit', text: 'All programs, languages, and formats in one place.' },
+    eyebrow: 'Download',
+    title: 'Download the *full kit*',
+    sub: 'Every resource is free to download. No registration and no sign-in: the original resources are released under CC0 1.0.',
+    files: [
+      { id: 'presentations', label: 'Presentations', detail: 'PowerPoint, Keynote, Google Slides' },
+      { id: 'images', label: 'Images', detail: 'Original artwork for slides and print' },
+      { id: 'videos', label: 'Videos', detail: 'Clips for the key moments of the series' },
+      { id: 'promo', label: 'Promotional materials', detail: 'Posters, social posts, invitations' },
+      { id: 'print', label: 'Handouts and certificates', detail: 'Study sheets, handouts, certificates' },
     ],
-    fields: {
-      name: { label: 'Full name', placeholder: 'John Smith', error: 'Please enter your name.' },
-      // {email} in suggest is replaced with the corrected address (a button)
-      email: { label: 'Email', placeholder: 'you@church.org', error: 'Please enter a valid email.', suggest: 'Did you mean {email}?' },
-      country: { label: 'Country', placeholder: 'Start typing...', error: 'Please enter your country.' },
-      organization: { label: 'Church or organization', placeholder: 'Name of your church', error: 'Please enter your church or organization.' },
-      division: { label: 'Division', placeholder: 'Select a division' },
-      conference: { label: 'Conference or mission', placeholder: 'e.g. Texas Conference' },
-      comment: { label: 'Comment', placeholder: "Anything you'd like us to know" },
+    downloadLabel: 'Download',
+    soon: 'Available soon',
+    // One Voice 27 keeps a single list for all its projects; this form only subscribes to updates
+    subscribe: {
+      title: 'Get *One Voice 27* updates',
+      text: 'Sign up to hear about new resources, translations, and announcements.',
+      fields: {
+        name: { label: 'First name', placeholder: 'John' },
+        email: { label: 'Email', placeholder: 'you@church.org', error: 'Please enter a valid email.', suggest: 'Did you mean {email}?' },
+      },
+      optional: '(optional)',
+      consent: {
+        // {privacy} is replaced with a link
+        text: 'I agree to receive One Voice 27 updates by email. I can unsubscribe at any time. See the {privacy}.',
+        error: 'Please confirm to subscribe.',
+      },
+      turnstileError: 'Please complete the spam check.',
+      submit: 'Subscribe',
+      sending: 'Subscribing',
+      note: 'One list for all One Voice 27 updates. No spam.',
+      networkError: 'Something went wrong. Please try again in a moment.',
+      success: {
+        title: "You're subscribed",
+        // {email} is replaced with the submitted address
+        text: "We'll send One Voice 27 updates to {email}.",
+        change: 'Use a different email',
+      },
     },
-    optional: '(optional)',
-    consent: {
-      // {terms} and {privacy} are replaced with links
-      text: 'I agree to the {terms} and the processing of my data under the {privacy}.',
-      error: 'Please accept the terms to continue.',
-    },
-    // Shown under the steps for people who signed up before
-    returning: {
-      title: 'Already requested the kit?',
-      text: 'Your personal download link is in your inbox. Look for the email from Revelation Media Resources.',
-      // {support} is replaced with the support email link
-      help: "Didn't get it? Submit the form again with the same address, or write to {support}.",
-    },
-    turnstileError: 'Please complete the spam check.',
-    submit: 'Get free access',
-    sending: 'Sending',
-    note: "We'll only use your details to give you access and send updates about the kit.",
-    networkError: 'Something went wrong. Please try again in a moment.',
-    success: {
-      title: 'Your link is on its way',
-      // {email} is replaced with the submitted address
-      text: "We've emailed a personal download link to {email}. Can't find it? Check your spam folder.",
-      // {support} is replaced with the support email link
-      help: 'Still nothing? Write to {support}.',
-      cta: 'Go to the library',
-      change: 'Wrong email? Change it',
-      // shown only while the server runs in test mode (no real email is sent)
-      preview: 'Test mode: open the email',
-    },
-    // Keys are fixed codes; the English name is what the form sends.
-    divisions: {
-      ECD: 'East-Central Africa Division',
-      ESD: 'Euro-Asia Division',
-      IAD: 'Inter-American Division',
-      EUD: 'Inter-European Division',
-      NAD: 'North American Division',
-      NSD: 'Northern Asia-Pacific Division',
-      SAD: 'South American Division',
-      SPD: 'South Pacific Division',
-      SID: 'Southern Africa-Indian Ocean Division',
-      SUD: 'Southern Asia Division',
-      SSD: 'Southern Asia-Pacific Division',
-      TED: 'Trans-European Division',
-      WAD: 'West-Central Africa Division',
-      OTHER: 'Other / not applicable',
-    } as Record<string, string>,
-    // Country names come from the browser's built-in list (Intl.DisplayNames) for each
-    // language. Override the ones that read badly, by ISO code.
-    countryNames: {
-      AG: 'Antigua and Barbuda', BA: 'Bosnia and Herzegovina', CD: 'Democratic Republic of the Congo',
-      CG: 'Congo', HK: 'Hong Kong', KN: 'Saint Kitts and Nevis', LC: 'Saint Lucia', MM: 'Myanmar',
-      ST: 'São Tomé and Príncipe', TT: 'Trinidad and Tobago', VC: 'Saint Vincent and the Grenadines',
-      PS: 'Palestine', CI: "Côte d'Ivoire",
-    } as Record<string, string>,
   },
 
   translate: {
     eyebrow: 'Translation',
     title: 'Help bring the kit to *more languages*',
     // lang = BCP 47 code, so screen readers pronounce each name correctly
+    // Languages the kit is available in today; the rest are marked "Coming soon"
     available: [
       { name: 'English', lang: 'en' },
+    ],
+    inProgress: [
       { name: 'Español', lang: 'es' },
       { name: 'Português', lang: 'pt' },
       { name: 'Français', lang: 'fr' },
-    ],
-    inProgress: [
       { name: 'Deutsch', lang: 'de' },
       { name: 'Русский', lang: 'ru' },
       { name: 'Українська', lang: 'uk' },
       { name: 'Kiswahili', lang: 'sw' },
     ],
     legendAvailable: 'Available',
-    legendInProgress: 'In progress',
+    legendInProgress: 'Coming soon',
     sub: 'Fluent in another language? Join our volunteer translators and help pastors around the world share this message.',
     cta: 'Volunteer as a translator',
     // {email} is replaced with the translation email link
@@ -295,7 +274,7 @@ const en = {
       translate: 'Translate',
       privacy: 'Privacy Policy',
     },
-    copyright: '© 2026 Lorem Ipsum Ministries',
+    copyright: '© 2026 Ministerial Association of the General Conference of Seventh-day Adventists',
     cookieSettings: 'Cookie settings',
   },
 
@@ -316,7 +295,7 @@ const en = {
       description: 'Terms of Use for Revelation Media Resources.',
       intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. These terms explain how you may use the library and its materials.',
       sections: [
-        { heading: 'Who we are', text: 'Lorem Ipsum Ministries provides Revelation Media Resources free of charge to pastors, churches, and ministry organizations.' },
+        { heading: 'Who we are', text: 'The Ministerial Association of the General Conference of Seventh-day Adventists provides Revelation Media Resources free of charge to pastors, churches, and ministry organizations.' },
         { heading: 'Using the materials', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam.' },
         { heading: 'What is not allowed', text: 'Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.' },
         { heading: 'Accounts and access', text: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
@@ -329,10 +308,10 @@ const en = {
       description: 'How Revelation Media Resources collects and uses personal data.',
       intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. This policy explains what we collect, why, and the choices you have.',
       sections: [
-        { heading: 'What we collect', text: 'When you request the kit we collect your name, email, country, church or organization, and any optional details you choose to share.' },
-        { heading: 'Why we collect it', text: 'We use your details to give you access to the library and to send updates about the kit.' },
+        { heading: 'What we collect', text: 'Downloading the kit needs no personal data. If you sign up for One Voice 27 updates, we collect your email and, if you choose to share it, your first name.' },
+        { heading: 'Why we collect it', text: 'We use your email only to send One Voice 27 updates: new resources, translations, and announcements. You can unsubscribe at any time.' },
         { heading: 'Cookies and analytics', text: 'With your consent we use Google Analytics to understand how the site is used. You can change your choice at any time using "Cookie settings" in the footer.' },
-        { heading: 'Spam protection', text: 'The form is protected by Cloudflare Turnstile, which processes technical data to tell people from bots.' },
+        { heading: 'Spam protection', text: 'The updates signup form is protected by Cloudflare Turnstile, which processes technical data to tell people from bots.' },
         { heading: 'Your rights', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id ligula porta felis euismod semper, cras mattis consectetur purus sit amet fermentum.' },
         { heading: 'Contact', text: 'Questions about your data? Write to us at {email}.' },
       ],
@@ -345,51 +324,9 @@ const en = {
     heading: 'This page is *not here*',
     text: 'The page you are looking for may have moved or never existed.',
     cta: 'Back to home',
-    secondaryCta: 'Get the materials',
+    secondaryCta: 'Download the kit',
   },
 
-  // Download page (/download?t=...), opened from the link in the email
-  download: {
-    title: 'Download the kit',
-    eyebrow: 'Your kit',
-    heading: 'Your kit is *ready*',
-    // {name} is replaced with the first name from the form
-    greeting: 'Welcome, {name}.',
-    text: 'Here are all the files. Download what you need, whenever you need it: this link keeps working.',
-    loading: 'Checking your link...',
-    filesTitle: 'Files',
-    downloadLabel: 'Download',
-    invalidTitle: "This link doesn't work",
-    invalidText: 'It may have expired or been copied incompletely. Submit the form again with the same email and we will send you a fresh link.',
-    invalidCta: 'Request a new link',
-    testNote: 'Test mode: these files are placeholders until the real kit is uploaded.',
-    help: 'Questions? Write to {support}.',
-  },
-
-  // Automatic email sent after the form (see functions/_lib/email.ts)
-  email: {
-    subject: 'Your Revelation Media Resources download link',
-    preheader: 'Your free evangelistic series kit is ready to download.',
-    greeting: 'Hi {name},',
-    thanks: 'Thank you for your interest in Revelation Media Resources. Your free kit is ready to download.',
-    cta: 'Download the kit',
-    personal: 'This link is personal, so please do not forward it.',
-    // {days} is replaced with the number of days
-    expiry: 'It stays active for {days} days. You can always request a new one from the website.',
-    fallback: "If the button doesn't work, copy this link into your browser:",
-    // Draft: replace with the client's short terms
-    termsTitle: 'Terms of use, in short',
-    terms: [
-      'The materials are free for use in your church and ministry.',
-      'You may edit and adapt them for your programs.',
-      'Please do not sell them or share the kit files outside your ministry.',
-    ],
-    termsLink: 'Full Terms of Use',
-    questions: 'Questions? Write to us at {support}.',
-    signoff: 'Blessings,',
-    team: 'The Revelation Media Resources team',
-    footer: 'You received this email because this address was used to request the kit at {site}.',
-  },
 } as const;
 
 export default en;

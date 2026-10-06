@@ -7,9 +7,10 @@ const str = (v: string | undefined) => (v ?? '').trim();
 const TURNSTILE_TEST_KEY = '1x00000000000000000000AA';
 
 export const config = {
-  apiUrl: str(env.PUBLIC_API_URL),
-  /** empty = library link hidden */
-  libraryUrl: str(env.PUBLIC_LIBRARY_URL),
+  /** One Voice 27 updates signup endpoint (POST JSON). Empty = mock success (preview). */
+  subscribeUrl: str(env.PUBLIC_SUBSCRIBE_URL),
+  /** folder the kit ZIPs are served from ("<url>/<file id>.zip"). Empty = "Available soon". */
+  kitUrl: str(env.PUBLIC_KIT_URL).replace(/\/$/, ''),
   turnstileSiteKey: str(env.PUBLIC_TURNSTILE_SITE_KEY) || TURNSTILE_TEST_KEY,
   ga4Id: str(env.PUBLIC_GA4_ID),
   demoUrl: str(env.PUBLIC_DEMO_URL) || '#',
@@ -17,7 +18,7 @@ export const config = {
   /** self-hosted trailer file, used when no YouTube id is set */
   trailerVideoSrc: str(env.PUBLIC_TRAILER_VIDEO_SRC) || '/media/trailer.mp4',
   contactEmail: str(env.PUBLIC_CONTACT_EMAIL) || 'hello@revelationresource.org',
-  translateEmail: str(env.PUBLIC_TRANSLATE_EMAIL) || 'translate@revelationresource.org',
+  translateEmail: str(env.PUBLIC_TRANSLATE_EMAIL) || 'ministerialassociation@gc.adventist.org',
   supportEmail: str(env.PUBLIC_SUPPORT_EMAIL) || 'support@revelationresource.org',
   showPlaceholderTags: str(env.PUBLIC_SHOW_PLACEHOLDER_TAGS) === 'true',
   /** client preview build: noindex everywhere */

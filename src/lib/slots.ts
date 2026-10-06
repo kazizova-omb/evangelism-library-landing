@@ -16,6 +16,7 @@ export type SlotName =
   | 'demo-slide'
   | 'demo-image'
   | 'team'
+  | 'about'
   | 'og';
 // plus 'logo' (svg allowed), see logoUrl below
 

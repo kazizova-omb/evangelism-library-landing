@@ -20,7 +20,7 @@ const a = (href: string) => anchor(href, home, lang);
     <div class="footer__brand">
       <a href={home ? '#top' : localePath(lang, '/')} class="brand">
         <BrandMark />
-        <span>{site.brand}</span>
+        <span class="brand__name"><span class="brand__series">{site.brandSeries}<span class="visually-hidden">:</span></span> <span class="brand__title">{site.brand}</span></span>
       </a>
       <p>{site.footer.tagline}</p>
     </div>
@@ -55,7 +55,7 @@ const a = (href: string) => anchor(href, home, lang);
   </div>
 
   <div class="footer__bottom">
-    <span>{site.footer.copyright}</span>
+    <span>{site.footer.copyright} · <a href={site.license.url} target="_blank" rel="license noopener" class="footer__license">{site.license.footer}</a></span>
     <LangSwitch variant="inline" />
   </div>
 </footer>
@@ -73,6 +73,8 @@ const a = (href: string) => anchor(href, home, lang);
   .footer__cols a, .footer__cols button { font: inherit; font-size: 14.5px; color: var(--ink-2); text-align: left; transition: color .2s }
   .footer__cols a:hover, .footer__cols button:hover { color: var(--gold-hi) }
 
+  .footer__license { text-decoration: underline; text-underline-offset: 3px }
+  .footer__license:hover { color: var(--gold-hi) }
   .footer__bottom { max-width: 1200px; margin: 56px auto 0; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted-solid) }
 
   /* keep the language links clear of the floating back-to-top button */

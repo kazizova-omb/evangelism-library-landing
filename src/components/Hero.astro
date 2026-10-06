@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import Motto from './Motto.astro';
 import SlotImage from './SlotImage.astro';
 import { useT } from '../i18n';
 import { config } from '../config';
@@ -48,13 +49,14 @@ const image = slot('hero', theme);
       <p class="lead rise d2" set:html={rich(h.lead)} />
       <div class="ctas rise d3">
         <a href="#get" class="btn btn--gold" data-track="cta_click" data-track-location="hero">{h.primaryCta}</a>
-        <a href="#demo" class="btn btn--ghost" data-track="cta_click" data-track-location="hero_demo">
-          <Icon name="download" />
+        <button type="button" class="btn btn--ghost" data-open-video aria-haspopup="dialog" aria-controls="videoModal" data-track="cta_click" data-track-location="hero_trailer">
+          <Icon name="play" />
           {h.secondaryCta}
-        </a>
+        </button>
       </div>
-      <p class="trust rise d4">
-        {h.trust.map((t, i) => <Fragment>{i > 0 && <i aria-hidden="true"></i>} {t} </Fragment>)}
+      <p class="license rise d4">
+        <a href={site.license.url} target="_blank" rel="license noopener" class="license__badge" aria-label={site.license.label}>{site.license.badge}</a>
+        <Motto />
       </p>
     </div>
   </div>
@@ -102,8 +104,9 @@ const image = slot('hero', theme);
   .lead { font-size: clamp(17px, 1.35vw, 19.5px); line-height: 1.6; color: var(--ink-2); max-width: 540px }
   .lead :global(strong) { color: var(--ink); font-weight: 500 }
   .ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 40px }
-  .trust { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 34px; font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-solid) }
-  .trust i { width: 3px; height: 3px; border-radius: 50%; background: var(--gold); opacity: .7 }
+  .license { display: flex; align-items: flex-start; gap: 14px; margin-top: 28px }
+  .license__badge { flex: none; padding: 5px 10px; line-height: 16px; border-radius: 4px; font-size: 12px; font-weight: 700; letter-spacing: .1em; color: #fff; background: var(--navy, #1F2160); transition: background .2s }
+  .license__badge:hover { background: var(--gold) }
 
   .cue { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted-solid); opacity: 0; animation: fadein 1s .9s var(--ease) forwards }
   .cue__line { width: 1px; height: 38px; background: linear-gradient(var(--gold), transparent); transform-origin: top; animation: cue 2.4s var(--ease) infinite }
@@ -124,7 +127,6 @@ const image = slot('hero', theme);
     .lead { font-size: 16.5px }
     .ctas { flex-direction: column; margin-top: 30px }
     .ctas .btn { width: 100% }
-    .trust { font-size: 11px; letter-spacing: .12em; margin-top: 26px }
     .cue { display: none }
   }
 </style>
