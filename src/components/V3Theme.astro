@@ -175,6 +175,11 @@ import '@fontsource/anton/400.css';
   :root.v3:not(#v1):not(#v2) .about__lead { color: rgba(255, 255, 255, .9) }
   :root.v3:not(#v1):not(#v2) .about__text { color: rgba(255, 255, 255, .8) }
   :root.v3:not(#v1):not(#v2) .about__photo .slot-img img { filter: none; object-position: 50% 30% }
+  /* demo heading: "See the quality" / "for yourself" as two deliberate lines, sized to the
+     text column (balance was leaving "See" alone on the first line) */
+  :root.v3:not(#v1):not(#v2) .demo > div:first-child { container-type: inline-size }
+  :root.v3:not(#v1):not(#v2) #demo-title { font-size: clamp(34px, 12.5cqi, 68px) }
+  :root.v3:not(#v1):not(#v2) #demo-title em { display: block }
   :root.v3:not(#v1):not(#v2) .about__motto { color: #fff; border-color: rgba(255, 255, 255, .2) }
   :root.v3:not(#v1):not(#v2) .about__motto { --navy: #fff; --motto-dot: var(--cyan-light) }
   :root.v3:not(#v1):not(#v2) .about__badge { background: var(--cyan-light); color: var(--indigo) }
