@@ -11,6 +11,8 @@ export const config = {
   subscribeUrl: str(env.PUBLIC_SUBSCRIBE_URL),
   /** folder the kit ZIPs are served from ("<url>/<file id>.zip"). Empty = "Available soon". */
   kitUrl: str(env.PUBLIC_KIT_URL).replace(/\/$/, ''),
+  /** until the kit is hosted, the main CTAs point to the Daniel 2 demo instead of the (empty) download block */
+  get kitReady() { return this.kitUrl !== '' },
   turnstileSiteKey: str(env.PUBLIC_TURNSTILE_SITE_KEY) || TURNSTILE_TEST_KEY,
   ga4Id: str(env.PUBLIC_GA4_ID),
   demoUrl: str(env.PUBLIC_DEMO_URL) || '#',

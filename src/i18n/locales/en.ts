@@ -63,6 +63,9 @@ const en = {
     languageLabel: 'Language',
     cta: 'Download',
     mobileCta: 'Download the kit',
+    // used while the kit is not hosted yet (PUBLIC_KIT_URL empty): CTAs go to the Daniel 2 demo
+    ctaPreview: 'Preview',
+    mobileCtaPreview: 'Preview Daniel 2',
     openMenu: 'Open menu',
     closeMenu: 'Close menu',
   },
@@ -80,6 +83,7 @@ const en = {
     title: 'Revelation Media *Resources*',
     lead: 'Everything you need to lead a prophecy series: presentations, images, videos, and promotional materials. Ready to use, fully editable, and **free for pastors and ministry leaders.**',
     primaryCta: 'Download the kit',
+    primaryCtaPreview: 'Preview Daniel 2',
     secondaryCta: 'Watch the trailer',
     trust: ['PowerPoint', 'Keynote', 'Google Slides', 'English now, more languages soon'],
     cue: 'Watch the trailer',
@@ -143,6 +147,7 @@ const en = {
     title: 'Made with care, *ready* for your church',
     sub: 'Every file is designed to look beautiful on screen and work without extra effort.',
     cta: 'Download the kit',
+    ctaPreview: 'Preview Daniel 2',
     // icon: image | book | screen | pen | doc | globe
     features: [
     // badge: small label next to the title (e.g. a feature that is not available yet)

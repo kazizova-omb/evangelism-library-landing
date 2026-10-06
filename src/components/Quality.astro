@@ -2,6 +2,7 @@
 import Brush from './Brush.astro';
 import Icon, { type IconName } from './Icon.astro';
 import { useT } from '../i18n';
+import { config } from '../config';
 import { rich } from '../lib/rich';
 
 const site = useT(Astro);
@@ -15,7 +16,7 @@ const q = site.quality;
       <p class="eyebrow">{q.eyebrow}</p>
       <h2 class="h2" id="why-title" set:html={rich(q.title)} />
       <p class="sub">{q.sub}</p>
-      <a href="#get" class="btn btn--gold" data-track="cta_click" data-track-location="quality">{q.cta}</a>
+      <a href={config.kitReady ? '#get' : '#demo'} class="btn btn--gold" data-track="cta_click" data-track-location="quality">{config.kitReady ? q.cta : q.ctaPreview}</a>
     </div>
     <div class="features">
       {q.features.map((f) => (
