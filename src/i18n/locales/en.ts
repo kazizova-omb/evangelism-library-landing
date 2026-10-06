@@ -83,7 +83,6 @@ const en = {
     title: 'Revelation Media *Resources*',
     lead: 'Everything you need to lead a prophecy series: presentations, images, videos, and promotional materials. Ready to use, fully editable, and **free for pastors and ministry leaders.**',
     primaryCta: 'Download the kit',
-    primaryCtaPreview: 'Preview Daniel 2',
     secondaryCta: 'Watch the trailer',
     trust: ['PowerPoint', 'Keynote', 'Google Slides', 'English now, more languages soon'],
     cue: 'Watch the trailer',

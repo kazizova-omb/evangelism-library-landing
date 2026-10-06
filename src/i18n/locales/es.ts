@@ -71,7 +71,6 @@ const es: Site = {
     title: 'Revelation Media *Resources*',
     lead: 'Todo lo que necesita para dirigir una serie sobre profecía: presentaciones, imágenes, videos y materiales promocionales. Listos para usar, totalmente editables y **gratuitos para pastores y líderes de ministerio.**',
     primaryCta: 'Descargar el kit',
-    primaryCtaPreview: 'Ver Daniel 2',
     secondaryCta: 'Ver el tráiler',
     trust: ['PowerPoint', 'Keynote', 'Google Slides', 'Inglés ya, más idiomas pronto'],
     cue: 'Ver el tráiler',

@@ -48,7 +48,7 @@ const image = slot('hero', theme);
       </h1>
       <p class="lead rise d2" set:html={rich(h.lead)} />
       <div class="ctas rise d3">
-        <a href={config.kitReady ? '#get' : '#demo'} class="btn btn--gold" data-track="cta_click" data-track-location="hero">{config.kitReady ? h.primaryCta : h.primaryCtaPreview}</a>
+        <a href={config.kitReady ? '#get' : '#demo'} class="btn btn--gold" data-track="cta_click" data-track-location="hero">{h.primaryCta}</a>
         <button type="button" class="btn btn--ghost" data-open-video aria-haspopup="dialog" aria-controls="videoModal" data-track="cta_click" data-track-location="hero_trailer">
           <Icon name="play" />
           {h.secondaryCta}
