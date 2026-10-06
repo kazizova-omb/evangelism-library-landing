@@ -141,10 +141,11 @@ const es: Site = {
   demo: {
     eyebrow: 'Demo gratuita',
     title: 'Compruebe la calidad *usted mismo*',
-    sub: 'Descargue una muestra breve para comprobar la calidad.',
-    checklist: ['Una presentación completa', 'Una selección de imágenes', 'Ejemplos de materiales promocionales'],
+    sub: 'Descargue la presentación completa de Daniel 2 junto con sus materiales promocionales.',
+    checklist: ['La presentación completa de Daniel 2', 'Sus materiales promocionales', 'Descarga directa, sin registro'],
     cta: 'Descargar demo',
-    meta: 'ZIP · 120 MB',
+    meta: 'Daniel 2 · ZIP',
+    soon: 'Disponible pronto',
     slideTitle: 'La profecía se revela',
   },
 

@@ -157,10 +157,12 @@ const en = {
   demo: {
     eyebrow: 'Free demo',
     title: 'See the quality *for yourself*',
-    sub: 'Download a short sample to see the quality first.',
-    checklist: ['One complete presentation', 'A selection of images', 'Examples of promotional materials'],
+    // The demo is Daniel 2: the full presentation plus its promo materials (PUBLIC_DEMO_URL).
+    sub: 'Download the complete Daniel 2 presentation together with its promotional materials.',
+    checklist: ['The full Daniel 2 presentation', 'Its promotional materials', 'Direct download, no sign-up'],
     cta: 'Download demo',
-    meta: 'ZIP · 120 MB',
+    meta: 'Daniel 2 · ZIP',
+    soon: 'Available soon',
     slideTitle: 'The prophecy unfolds',
   },
 

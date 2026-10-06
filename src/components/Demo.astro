@@ -27,10 +27,14 @@ const isFile = config.demoUrl !== '#';
           {d.checklist.map((item) => <li><Icon name="check" />{item}</li>)}
         </ul>
         <div class="demo__row">
-          <a href={config.demoUrl} class="btn btn--gold" data-track="demo_download" download={isFile ? '' : undefined}>
-            <Icon name="download" />
-            {d.cta}
-          </a>
+          {isFile ? (
+            <a href={config.demoUrl} class="btn btn--gold" data-track="demo_download" download>
+              <Icon name="download" />
+              {d.cta}
+            </a>
+          ) : (
+            <span class="btn btn--gold demo__soon" aria-disabled="true">{d.soon}</span>
+          )}
           <span class="demo__meta">{d.meta}</span>
         </div>
       </div>
@@ -55,6 +59,8 @@ const isFile = config.demoUrl !== '#';
   .checklist li { display: flex; gap: 14px; align-items: center; color: var(--ink-2) }
   .checklist :global(svg) { flex: none; width: 22px; height: 22px; color: var(--gold) }
   .demo__row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px }
+  /* until PUBLIC_DEMO_URL is set (Daniel 2 is being finished) */
+  .demo__soon { opacity: .55; cursor: default; pointer-events: none; box-shadow: none }
   .demo__meta { font-size: 13px; letter-spacing: .06em; color: var(--muted-solid) }
   .demo__collage { position: relative; aspect-ratio: 1068 / 720; margin: -4% -8% -4% -4%;
     /* soft edges, so the picture's own background melts into the card */
