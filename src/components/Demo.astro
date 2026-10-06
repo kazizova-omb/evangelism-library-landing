@@ -14,7 +14,8 @@ const d = site.demo;
 // one ready-made composition for the whole visual; otherwise three separate cards
 const collage = slot('demo', theme);
 const img = { flyer: slot('demo-flyer', theme), slide: slot('demo-slide', theme), image: slot('demo-image', theme) };
-const isFile = config.demoUrl !== '#';
+const hasLink = config.demoUrl !== '#';
+const slides = config.demoIsSlides;
 ---
 <section class="section" id="demo" aria-labelledby="demo-title">
   <div class="wrap">
@@ -22,20 +23,24 @@ const isFile = config.demoUrl !== '#';
       <div>
         <p class="eyebrow">{d.eyebrow}</p>
         <h2 class="h2" id="demo-title" set:html={rich(d.title)} />
-        <p class="sub">{d.sub}</p>
+        <p class="sub">{slides ? d.subSlides : d.sub}</p>
         <ul class="checklist">
-          {d.checklist.map((item) => <li><Icon name="check" />{item}</li>)}
+          {(slides ? d.checklistSlides : d.checklist).map((item) => <li><Icon name="check" />{item}</li>)}
         </ul>
         <div class="demo__row">
-          {isFile ? (
+          {!hasLink ? (
+            <span class="btn btn--gold demo__soon" aria-disabled="true">{d.soon}</span>
+          ) : slides ? (
+            <a href={config.demoUrl} class="btn btn--gold" target="_blank" rel="noopener" data-track="demo_open">
+              {d.open}
+            </a>
+          ) : (
             <a href={config.demoUrl} class="btn btn--gold" data-track="demo_download" download>
               <Icon name="download" />
               {d.cta}
             </a>
-          ) : (
-            <span class="btn btn--gold demo__soon" aria-disabled="true">{d.soon}</span>
           )}
-          <span class="demo__meta">{d.meta}</span>
+          <span class="demo__meta">{slides ? d.metaSlides : d.meta}</span>
         </div>
       </div>
       {collage && (

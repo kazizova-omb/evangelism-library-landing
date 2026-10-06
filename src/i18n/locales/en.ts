@@ -162,6 +162,12 @@ const en = {
     checklist: ['The full Daniel 2 presentation', 'Its promotional materials', 'Direct download, no sign-up'],
     cta: 'Download demo',
     meta: 'Daniel 2 · ZIP',
+    // while PUBLIC_DEMO_URL is a Google Slides link (the ZIP is not ready yet)
+    // copy for the Google Slides period: the deck opens, nothing downloads yet
+    subSlides: 'Preview the complete Daniel 2 presentation. The full download with its promotional materials is coming soon.',
+    checklistSlides: ['The full Daniel 2 presentation', 'Promotional materials coming soon', 'Open instantly, no sign-up'],
+    open: 'Open the presentation',
+    metaSlides: 'Daniel 2 · Google Slides',
     soon: 'Available soon',
     slideTitle: 'The prophecy unfolds',
   },

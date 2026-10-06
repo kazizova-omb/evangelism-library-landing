@@ -29,7 +29,7 @@ so redeploy after changing one.
 | `PUBLIC_KIT_URL` | Folder with the kit ZIPs (`<url>/<id>.zip`) | Buttons show "Available soon" |
 | `PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key | Cloudflare test key (always passes) |
 | `PUBLIC_GA4_ID` | Google Analytics 4 measurement ID | No GA, no cookie banner |
-| `PUBLIC_DEMO_URL` | Direct link to the demo ZIP (Daniel 2 presentation + promo materials); empty shows "Available soon" | `#` |
+| `PUBLIC_DEMO_URL` | Demo (Daniel 2). A Google Slides link opens the deck; any other URL downloads as a file (the ZIP with promo materials); empty shows "Available soon" | `#` |
 | `PUBLIC_TRAILER_YOUTUBE_ID` | YouTube ID of the trailer | Modal shows placeholder text |
 | `PUBLIC_CONTACT_EMAIL` | Contact links, legal pages, JSON-LD | `hello@revelationresource.org` |
 | `PUBLIC_TRANSLATE_EMAIL` | "Volunteer as a translator" button and the address shown under it | `ministerialassociation@gc.adventist.org` |

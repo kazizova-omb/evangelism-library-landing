@@ -14,6 +14,8 @@ export const config = {
   turnstileSiteKey: str(env.PUBLIC_TURNSTILE_SITE_KEY) || TURNSTILE_TEST_KEY,
   ga4Id: str(env.PUBLIC_GA4_ID),
   demoUrl: str(env.PUBLIC_DEMO_URL) || '#',
+  /** the demo link is a Google Slides deck to open (until the ZIP is ready), not a file to download */
+  demoIsSlides: /docs\.google\.com\/presentation/.test(str(env.PUBLIC_DEMO_URL)),
   trailerYoutubeId: str(env.PUBLIC_TRAILER_YOUTUBE_ID),
   /** self-hosted trailer file, used when no YouTube id is set */
   trailerVideoSrc: str(env.PUBLIC_TRAILER_VIDEO_SRC) || '/media/trailer.mp4',
