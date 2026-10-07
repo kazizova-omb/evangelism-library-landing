@@ -1,0 +1,56 @@
+# Builds the site on every push and publishes it to Cloudflare Pages.
+#   main           -> https://revelation-media-resources.pages.dev (the client preview)
+#   any other branch -> https://<branch>.revelation-media-resources.pages.dev (drafts shown)
+# Needs the repository secret CLOUDFLARE_API_TOKEN (Cloudflare Pages: Edit), see README.
+name: Deploy preview
+
+on:
+  push:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      HAS_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run check
+
+      - name: Build
+        run: npx astro build
+        env:
+          PUBLIC_PREVIEW: 'true'
+          PUBLIC_SHOW_PLACEHOLDER_TAGS: 'false'
+          PUBLIC_SITE_URL: https://revelation-media-resources.pages.dev
+          PUBLIC_SHOW_DRAFTS: ${{ github.ref_name != 'main' }}
+          PUBLIC_DEMO_URL: ${{ vars.PUBLIC_DEMO_URL }}
+          PUBLIC_KIT_URL: ${{ vars.PUBLIC_KIT_URL }}
+          PUBLIC_SUBSCRIBE_URL: ${{ vars.PUBLIC_SUBSCRIBE_URL }}
+          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
+          PUBLIC_GA4_ID: ${{ vars.PUBLIC_GA4_ID }}
+
+      # skipped (build still checked) until the CLOUDFLARE_API_TOKEN secret is added
+      - name: Publish to Cloudflare Pages
+        if: env.HAS_TOKEN == 'true'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: f2ef002d47029b28ebca675e00cd74bf
+          command: pages deploy dist --project-name revelation-media-resources --branch ${{ github.ref_name }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
