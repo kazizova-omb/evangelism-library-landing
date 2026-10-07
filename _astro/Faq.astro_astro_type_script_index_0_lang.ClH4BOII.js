@@ -1,0 +1,1 @@
+import{r as e}from"./analytics.EdXkkVsb.js";document.querySelectorAll(`#faq details`).forEach(t=>{let n=t.querySelector(`summary`);n.addEventListener(`click`,()=>{t.open||e(`faq_open`,{question:n.textContent?.trim()??``})})});
