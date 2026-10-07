@@ -1,0 +1,59 @@
+# Backup copy of the site on GitHub Pages, rebuilt on every push to main:
+#   https://kazizova-omb.github.io/evangelism-library-landing/
+# Same content as the Cloudflare preview, served from a sub-folder (PUBLIC_BASE_PATH), not indexed.
+name: GitHub Pages backup
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npx astro build
+        env:
+          PUBLIC_BASE_PATH: /evangelism-library-landing
+          PUBLIC_SITE_URL: https://kazizova-omb.github.io
+          PUBLIC_PREVIEW: 'true'
+          PUBLIC_SHOW_PLACEHOLDER_TAGS: 'false'
+          PUBLIC_SHOW_DRAFTS: 'false'
+          PUBLIC_DEMO_URL: ${{ vars.PUBLIC_DEMO_URL }}
+          PUBLIC_KIT_URL: ${{ vars.PUBLIC_KIT_URL }}
+          PUBLIC_SUBSCRIBE_URL: ${{ vars.PUBLIC_SUBSCRIBE_URL }}
+          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
+          PUBLIC_GA4_ID: ${{ vars.PUBLIC_GA4_ID }}
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
