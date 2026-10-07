@@ -1,0 +1,76 @@
+---
+// The nine presentations of the series. Presentation 1 (Daniel 2) downloads directly
+// from PUBLIC_DEMO_URL once it is set; the rest carry a "Coming November 2026" badge.
+import Icon from './Icon.astro';
+import { useT } from '../i18n';
+import { config } from '../config';
+import { rich } from '../lib/rich';
+
+const site = useT(Astro);
+const s = site.series;
+const firstUrl = config.demoUrl !== '#' ? config.demoUrl : undefined;
+---
+<section class="section" id="series" aria-labelledby="series-title">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">{s.eyebrow}</p>
+      <h2 class="h2" id="series-title" set:html={rich(s.title)} />
+      <p class="sub">{s.sub}</p>
+    </div>
+    <ol class="series" role="list">
+      {s.items.map((p, i) => (
+        <li class:list={['pres reveal', { 'pres--ready': i === 0 }]}>
+          <p class="pres__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
+          <p class="pres__label">
+            {s.label} {i + 1}{p.ref && <Fragment> <span class="pres__ref">· {p.ref}</span></Fragment>}
+          </p>
+          <h3 class="pres__title">{p.title}</h3>
+          <p class="pres__text">{p.text}</p>
+          <div class="pres__foot">
+            {i === 0 && firstUrl ? (
+              config.demoIsSlides ? (
+                <a href={firstUrl} class="btn btn--gold btn--sm" target="_blank" rel="noopener" data-track="series_open" data-track-location="presentation_1">{s.open}</a>
+              ) : (
+                <a href={firstUrl} class="btn btn--gold btn--sm" download data-track="series_download" data-track-location="presentation_1">
+                  <Icon name="download" />
+                  {s.download}
+                </a>
+              )
+            ) : (
+              <span class="pres__badge">{i === 0 ? s.soon : s.coming}</span>
+            )}
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .series { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px }
+  .pres { display: flex; flex-direction: column; padding: 28px 28px 26px; border-radius: 6px; background: #FBFAF7; box-shadow: 0 0 0 1px var(--line) inset }
+  .pres__num { font-family: var(--poster, var(--display)); font-size: 56px; line-height: .9; color: var(--teal, var(--gold)); opacity: .35 }
+  .pres--ready .pres__num { opacity: 1 }
+  .pres__label { margin-top: 18px; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--muted-solid) }
+  .pres__ref { color: var(--teal-text, var(--gold)) }
+  .pres__title { margin-top: 8px; font-family: var(--poster, var(--display)); font-weight: 400; font-size: 26px; line-height: 1.05; letter-spacing: .01em; text-transform: uppercase; color: var(--navy, var(--ink)) }
+  .pres__text { margin-top: 10px; font-size: 15px; line-height: 1.6; color: var(--ink-2) }
+  /* pinned to the bottom so the buttons and badges line up across a row */
+  .pres__foot { margin-top: auto; padding-top: 22px }
+  .pres__badge { display: inline-block; padding: 6px 12px; border-radius: 4px; font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--navy, var(--ink)); background: var(--lavender, rgba(255, 255, 255, .08)) }
+
+  @media (max-width: 1020px) { .series { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
+  /* phone: number in a narrow left column, so nine cards stay compact */
+  @media (max-width: 640px) {
+    .series { grid-template-columns: 1fr; gap: 10px }
+    .pres { display: grid; grid-template-columns: 44px minmax(0, 1fr); column-gap: 14px; padding: 18px 18px 18px 16px }
+    .pres > :not(.pres__num) { grid-column: 2 }
+    .pres__num { grid-row: 1 / span 4; font-size: 34px }
+    .pres__label { margin-top: 2px; font-size: 11px }
+    .pres__title { margin-top: 6px; font-size: 22px }
+    .pres__text { margin-top: 6px; font-size: 14.5px }
+    .pres__foot { padding-top: 12px }
+    .pres__badge { font-size: 10.5px; letter-spacing: .06em; white-space: nowrap }
+  }
+  @media (max-width: 359px) { .pres__badge { white-space: normal } }
+</style>

@@ -126,6 +126,30 @@ const en = {
     },
   },
 
+  series: {
+    eyebrow: 'The series',
+    title: 'Nine presentations, *one complete series*',
+    sub: 'See the full scope of the series. Each presentation comes ready to use, with its own images and promotional materials.',
+    label: 'Presentation',
+    download: 'Download',
+    open: 'Open',
+    soon: 'Available soon',
+    coming: 'Coming November 2026',
+    // Presentation 1 downloads from PUBLIC_DEMO_URL (Daniel 2); 2 to 9 show the "coming" badge.
+    // TODO: titles and descriptions for 2 to 9 from the client's master plan.
+    items: [
+      { ref: 'Daniel 2', title: 'History Written in Advance', text: 'Short description from the master plan.' },
+      { ref: '', title: 'Presentation 2', text: 'Short description from the master plan.' },
+      { ref: '', title: 'Presentation 3', text: 'Short description from the master plan.' },
+      { ref: '', title: 'Presentation 4', text: 'Short description from the master plan.' },
+      { ref: '', title: 'Presentation 5', text: 'Short description from the master plan.' },
+      { ref: '', title: 'Presentation 6', text: 'Short description from the master plan.' },
+      { ref: '', title: 'Presentation 7', text: 'Short description from the master plan.' },
+      { ref: '', title: 'Presentation 8', text: 'Short description from the master plan.' },
+      { ref: '', title: 'Presentation 9', text: 'Short description from the master plan.' },
+    ],
+  },
+
   journey: {
     eyebrow: 'The full program',
     title: 'From the first invitation to the *final certificate*',

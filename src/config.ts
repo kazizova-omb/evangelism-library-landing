@@ -6,6 +6,9 @@ const str = (v: string | undefined) => (v ?? '').trim();
 /** Cloudflare's public test key: always passes, shows a visible widget. */
 const TURNSTILE_TEST_KEY = '1x00000000000000000000AA';
 
+/** Daniel 2 deck (view link), used until the demo ZIP is hosted */
+const DEMO_URL = 'https://docs.google.com/presentation/d/1qQWVP-OLH7YOuxll7rzfQVDOEtVoTCZ8DqUacyVn7uY/edit?usp=sharing';
+
 export const config = {
   /** One Voice 27 updates signup endpoint (POST JSON). Empty = mock success (preview). */
   subscribeUrl: str(env.PUBLIC_SUBSCRIBE_URL),
@@ -15,9 +18,13 @@ export const config = {
   get kitReady() { return this.kitUrl !== '' },
   turnstileSiteKey: str(env.PUBLIC_TURNSTILE_SITE_KEY) || TURNSTILE_TEST_KEY,
   ga4Id: str(env.PUBLIC_GA4_ID),
-  demoUrl: str(env.PUBLIC_DEMO_URL) || '#',
+  /** Daniel 2 demo. Google Slides for now; switch to the ZIP URL once it is ready (env overrides). */
+  demoUrl: str(env.PUBLIC_DEMO_URL) || DEMO_URL,
   /** the demo link is a Google Slides deck to open (until the ZIP is ready), not a file to download */
-  demoIsSlides: /docs\.google\.com\/presentation/.test(str(env.PUBLIC_DEMO_URL)),
+  get demoIsSlides() { return /docs\.google\.com\/presentation/.test(this.demoUrl) },
+  /** sections still waiting for client copy (the nine-presentation list). Off on the main preview,
+      on for branch previews and local dev with PUBLIC_SHOW_DRAFTS=true */
+  showDrafts: str(env.PUBLIC_SHOW_DRAFTS) === 'true',
   trailerYoutubeId: str(env.PUBLIC_TRAILER_YOUTUBE_ID),
   /** self-hosted trailer file, used when no YouTube id is set */
   trailerVideoSrc: str(env.PUBLIC_TRAILER_VIDEO_SRC) || '/media/trailer.mp4',

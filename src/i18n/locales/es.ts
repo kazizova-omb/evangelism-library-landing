@@ -112,6 +112,28 @@ const es: Site = {
     },
   },
 
+  series: {
+    eyebrow: 'La serie',
+    title: 'Nueve presentaciones, *una serie completa*',
+    sub: 'Vea el alcance completo de la serie. Cada presentación está lista para usar, con sus propias imágenes y materiales promocionales.',
+    label: 'Presentación',
+    download: 'Descargar',
+    open: 'Abrir',
+    soon: 'Disponible pronto',
+    coming: 'Disponible en noviembre de 2026',
+    items: [
+      { ref: 'Daniel 2', title: 'La historia escrita de antemano', text: 'Breve descripción del plan maestro.' },
+      { ref: '', title: 'Presentación 2', text: 'Breve descripción del plan maestro.' },
+      { ref: '', title: 'Presentación 3', text: 'Breve descripción del plan maestro.' },
+      { ref: '', title: 'Presentación 4', text: 'Breve descripción del plan maestro.' },
+      { ref: '', title: 'Presentación 5', text: 'Breve descripción del plan maestro.' },
+      { ref: '', title: 'Presentación 6', text: 'Breve descripción del plan maestro.' },
+      { ref: '', title: 'Presentación 7', text: 'Breve descripción del plan maestro.' },
+      { ref: '', title: 'Presentación 8', text: 'Breve descripción del plan maestro.' },
+      { ref: '', title: 'Presentación 9', text: 'Breve descripción del plan maestro.' },
+    ],
+  },
+
   journey: {
     eyebrow: 'El programa completo',
     title: 'De la primera invitación al *certificado final*',

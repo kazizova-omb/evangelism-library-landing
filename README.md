@@ -1,4 +1,4 @@
-# Evangelistic Series Library: landing page
+# Revelation Media Resources: landing page
 
 Production build of the approved prototype (`prototype/index.html`, kept untouched as the visual reference).
 Static site on [Astro](https://astro.build), no UI framework, plain CSS, a few small vanilla scripts.
@@ -29,6 +29,7 @@ so redeploy after changing one.
 | `PUBLIC_KIT_URL` | Folder with the kit ZIPs (`<url>/<id>.zip`) | Buttons show "Available soon" |
 | `PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key | Cloudflare test key (always passes) |
 | `PUBLIC_GA4_ID` | Google Analytics 4 measurement ID | No GA, no cookie banner |
+| `PUBLIC_SHOW_DRAFTS` | Show sections still waiting for client copy (the nine-presentation list). On for branch previews | `false` |
 | `PUBLIC_DEMO_URL` | Demo (Daniel 2). A Google Slides link opens the deck; any other URL downloads as a file (the ZIP with promo materials); empty shows "Available soon" | `#` |
 | `PUBLIC_TRAILER_YOUTUBE_ID` | YouTube ID of the trailer | Modal shows placeholder text |
 | `PUBLIC_CONTACT_EMAIL` | Contact links, legal pages, JSON-LD | `hello@revelationresource.org` |
@@ -187,11 +188,33 @@ Add `data-track="event_name"` (and optionally `data-track-location`) to any link
 Live preview for the client (not indexed):
 **https://revelation-media-resources.pages.dev** (Spanish under `/es`).
 
-Update it after changes (needs `npx wrangler login` once on this machine):
+It updates itself from GitHub (`.github/workflows/deploy.yml`):
+
+| Push to | Published at |
+|---|---|
+| `main` | https://revelation-media-resources.pages.dev, the link the client sees |
+| any other branch | `https://<branch>.revelation-media-resources.pages.dev`, with draft sections shown |
+
+The link of each run is also listed in the repository under **Deployments** and in the run log (Actions tab).
+
+One-time setup: Cloudflare dashboard → My Profile → API Tokens → Create token → template *Edit Cloudflare Workers*
+(or a custom token with **Account · Cloudflare Pages · Edit**), then add it to the repository:
+GitHub → Settings → Secrets and variables → Actions → New repository secret `CLOUDFLARE_API_TOKEN`.
+Until it is there, the workflow still builds and checks every push but skips publishing.
+Optional values (`PUBLIC_KIT_URL`, `PUBLIC_SUBSCRIBE_URL`, `PUBLIC_DEMO_URL`, …) go under the **Variables** tab of the same page.
+
+Manual publish from a machine (needs `npx wrangler login` once):
 
 ```sh
 npm run deploy:preview
 ```
+
+### Working as a team
+
+1. The repository owner adds the teammate under GitHub → Settings → Collaborators (role *Write*).
+2. Clone, `npm install`, `cp .env.example .env`, `npm run dev`. Defaults (including the Daniel 2 demo link) live in
+   `src/config.ts`, so no private values are needed to build the same site.
+3. Work in a branch and open a pull request: the branch gets its own preview link; merging to `main` updates the client preview.
 
 ## Deploying to Cloudflare Pages
 
