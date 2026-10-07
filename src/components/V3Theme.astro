@@ -124,7 +124,8 @@ import '@fontsource/anton/400.css';
   :root.v3:not(#v1):not(#v2) .tile { border-radius: 6px; box-shadow: none; background: var(--paper-2) }
   /* gallery shows the real materials, so these photos stay in colour; crops per tile */
   :root.v3:not(#v1):not(#v2) .tile .slot-img img { filter: none }
-  :root.v3:not(#v1):not(#v2) .t-slide .slot-img img { object-position: 50% 30% }
+  /* keep the projected title ("All Things New / Hope starts here.") in frame when the tile is cropped narrower */
+  :root.v3:not(#v1):not(#v2) .t-slide .slot-img img { object-position: 63% 50% }
   :root.v3:not(#v1):not(#v2) .t-flyer .slot-img img { object-position: 50% 50% }
   :root.v3:not(#v1):not(#v2) .t-art .slot-img img { object-position: 50% 50% }
   :root.v3:not(#v1):not(#v2) .t-video .slot-img img { object-position: 50% 50% }
