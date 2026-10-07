@@ -29,6 +29,7 @@ so redeploy after changing one.
 | `PUBLIC_KIT_URL` | Folder with the kit ZIPs (`<url>/<id>.zip`) | Buttons show "Available soon" |
 | `PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key | Cloudflare test key (always passes) |
 | `PUBLIC_GA4_ID` | Google Analytics 4 measurement ID | No GA, no cookie banner |
+| `PUBLIC_BASE_PATH` | Serve the site from a sub-folder, e.g. `/evangelism-library-landing` on GitHub Pages | empty |
 | `PUBLIC_SHOW_DRAFTS` | Show sections still waiting for client copy (the nine-presentation list). On for branch previews | `false` |
 | `PUBLIC_DEMO_URL` | Demo (Daniel 2). A Google Slides link opens the deck; any other URL downloads as a file (the ZIP with promo materials); empty shows "Available soon" | `#` |
 | `PUBLIC_TRAILER_YOUTUBE_ID` | YouTube ID of the trailer | Modal shows placeholder text |
@@ -202,6 +203,10 @@ One-time setup: Cloudflare dashboard → My Profile → API Tokens → Create to
 GitHub → Settings → Secrets and variables → Actions → New repository secret `CLOUDFLARE_API_TOKEN`.
 Until it is there, the workflow still builds and checks every push but skips publishing.
 Optional values (`PUBLIC_KIT_URL`, `PUBLIC_SUBSCRIBE_URL`, `PUBLIC_DEMO_URL`, …) go under the **Variables** tab of the same page.
+
+**Backup on GitHub Pages:** https://kazizova-omb.github.io/evangelism-library-landing/ is rebuilt from `main`
+by `.github/workflows/pages.yml` (same site, served from a sub-folder via `PUBLIC_BASE_PATH`, not indexed).
+It needs the repository to be public, or a paid GitHub plan for private Pages.
 
 Manual publish from a machine (needs `npx wrangler login` once):
 

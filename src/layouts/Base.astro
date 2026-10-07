@@ -23,7 +23,7 @@ import ConsentBanner from '../components/ConsentBanner.astro';
 import BackToTop from '../components/BackToTop.astro';
 import V2Theme from '../components/V2Theme.astro';
 import V3Theme from '../components/V3Theme.astro';
-import { useT, getLang, locales, localeCodes, switchPath, defaultLocale, localePath } from '../i18n';
+import { useT, getLang, locales, localeCodes, switchPath, defaultLocale, localePath, withBase } from '../i18n';
 import { baseGraph, homeGraph } from '../lib/schema';
 import { config } from '../config';
 import { slot, logo } from '../lib/slots';
@@ -67,11 +67,11 @@ const ogImage = ogSrc
 
 const ctx = {
   site,
-  siteUrl: new URL('/', Astro.site).href,
+  siteUrl: new URL(withBase('/'), Astro.site).href,
   pageUrl: canonical,
   homeUrl: new URL(localePath(lang, '/'), Astro.site).href,
   lang: site.locale.htmlLang,
-  logoUrl: new URL(logo?.url ?? '/apple-touch-icon.png', Astro.site).href,
+  logoUrl: new URL(logo?.url ?? withBase('/apple-touch-icon.png'), Astro.site).href,
   contactEmail: config.contactEmail,
   langs: localeCodes.map((c) => locales[c].locale.htmlLang),
 };
@@ -97,10 +97,10 @@ const jsonLd = noindex && !breadcrumb ? null : {
   <meta name="theme-color" content={theme === 'v1' ? '#0A0806' : theme === 'v3' ? '#F5F3EE' : '#FFFFFF'} />
   <meta name="color-scheme" content={theme === 'v1' ? 'dark' : 'light'} />
   <!-- tab icon: church symbol on a tile in each design option's colours; ICO/PNG for older browsers -->
-  <link rel="icon" href="/favicon.ico" sizes="32x32" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="sitemap" href="/sitemap-index.xml" />
+  <link rel="icon" href={withBase('/favicon.ico')} sizes="32x32" />
+  <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+  <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
+  <link rel="sitemap" href={withBase('/sitemap-index.xml')} />
 
   <meta property="og:type" content="website" />
   <meta property="og:locale" content={site.locale.ogLocale} />

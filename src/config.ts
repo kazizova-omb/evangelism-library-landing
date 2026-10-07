@@ -27,7 +27,7 @@ export const config = {
   showDrafts: str(env.PUBLIC_SHOW_DRAFTS) === 'true',
   trailerYoutubeId: str(env.PUBLIC_TRAILER_YOUTUBE_ID),
   /** self-hosted trailer file, used when no YouTube id is set */
-  trailerVideoSrc: str(env.PUBLIC_TRAILER_VIDEO_SRC) || '/media/trailer.mp4',
+  trailerVideoSrc: str(env.PUBLIC_TRAILER_VIDEO_SRC) || `${import.meta.env.BASE_URL.replace(/\/$/, '')}/media/trailer.mp4`,
   contactEmail: str(env.PUBLIC_CONTACT_EMAIL) || 'hello@revelationresource.org',
   translateEmail: str(env.PUBLIC_TRANSLATE_EMAIL) || 'ministerialassociation@gc.adventist.org',
   supportEmail: str(env.PUBLIC_SUPPORT_EMAIL) || 'support@revelationresource.org',

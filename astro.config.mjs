@@ -8,6 +8,8 @@ const env = loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), '');
 
 export default defineConfig({
   site: env.PUBLIC_SITE_URL || 'https://revelationresource.org',
+  // sub-folder hosting, e.g. GitHub Pages: /evangelism-library-landing (empty = site root)
+  base: env.PUBLIC_BASE_PATH || undefined,
   output: 'static',
   trailingSlash: 'never',
   build: { format: 'file', inlineStylesheets: 'always' },

@@ -30,15 +30,21 @@ export function useT(astro: AstroLike): Site {
   return locales[getLang(astro)];
 }
 
-/** "/terms" -> "/es/terms" for non-default languages. */
+/** Site base path without a trailing slash ("" at the root, "/evangelism-library-landing" on GitHub Pages). */
+export const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/** "/favicon.svg" -> "<base>/favicon.svg" for files in public/. */
+export const withBase = (path: string) => `${BASE}${path}`;
+
+/** "/terms" -> "/es/terms" for non-default languages (plus the base path). */
 export function localePath(lang: string, path = '/'): string {
-  if (lang === defaultLocale) return path;
-  return path === '/' ? `/${lang}` : `/${lang}${path}`;
+  if (lang !== defaultLocale) path = path === '/' ? `/${lang}` : `/${lang}${path}`;
+  return path === '/' ? `${BASE}/` : withBase(path);
 }
 
 /** Same page in another language. */
 export function switchPath(pathname: string, from: string, to: string): string {
-  let rest = pathname.replace(/\.html$/, '').replace(/\/index$/, '');
+  let rest = pathname.slice(pathname.startsWith(BASE) ? BASE.length : 0).replace(/\.html$/, '').replace(/\/index$/, '');
   if (from !== defaultLocale) rest = rest.replace(new RegExp(`^/${from}(?=/|$)`), '') || '/';
   return localePath(to, rest || '/');
 }
