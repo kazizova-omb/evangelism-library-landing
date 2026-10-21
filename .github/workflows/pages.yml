@@ -39,9 +39,6 @@ jobs:
           PUBLIC_SHOW_PLACEHOLDER_TAGS: 'false'
           PUBLIC_SHOW_DRAFTS: 'false'
           PUBLIC_DEMO_URL: ${{ vars.PUBLIC_DEMO_URL }}
-          PUBLIC_KIT_URL: ${{ vars.PUBLIC_KIT_URL }}
-          PUBLIC_SUBSCRIBE_URL: ${{ vars.PUBLIC_SUBSCRIBE_URL }}
-          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
           PUBLIC_GA4_ID: ${{ vars.PUBLIC_GA4_ID }}
 
       - uses: actions/upload-pages-artifact@v3
