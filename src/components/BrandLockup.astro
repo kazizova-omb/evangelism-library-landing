@@ -1,0 +1,35 @@
+---
+// Header/footer lockup: the official All Things New wordmark ("Hope starts here.") | Revelation Media Resources.
+// The Adventist symbol was removed at the client's request (Oct 2026).
+// Wordmark: src/assets/brand/all-things-new(-white).svg, traced from the brand guide page.
+import wordmark from '../assets/brand/all-things-new.svg?url';
+import wordmarkWhite from '../assets/brand/all-things-new-white.svg?url';
+import { useT } from '../i18n';
+
+interface Props { href: string; dark?: boolean }
+const { href, dark = false } = Astro.props;
+const site = useT(Astro);
+---
+<a href={href} class:list={['brand', { 'brand--dark': dark }]}>
+  <img src={dark ? wordmarkWhite : wordmark} alt={`${site.brandSeries}: Hope starts here.`} class="brand__wordmark" width="544" height="100" />
+  <span class="brand__rule" aria-hidden="true"></span>
+  <span class="brand__title">{site.brand}</span>
+</a>
+
+<style>
+  .brand { display: inline-flex; align-items: center; gap: 14px; white-space: nowrap; color: var(--navy, var(--ink)) }
+  .brand__wordmark { display: block; width: 184px; height: auto }
+  .brand__rule { flex: none; width: 1.5px; height: 34px; background: currentColor; opacity: .35 }
+  /* the site's name, two short lines in the poster face */
+  .brand__title { font-family: var(--poster, var(--display)); font-weight: 400; font-size: 15px; line-height: 1.05; letter-spacing: .03em; text-transform: uppercase; white-space: normal; max-width: 9.5em }
+  .brand--dark { color: #fff }
+  @media (max-width: 760px) {
+    .brand { gap: 10px }
+    .brand__wordmark { width: 132px }
+    .brand__rule { height: 28px }
+    .brand__title { font-size: 12.5px }
+  }
+  @media (max-width: 359px) {
+    .brand__rule, .brand__title { display: none }
+  }
+</style>

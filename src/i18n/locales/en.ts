@@ -21,10 +21,12 @@ const en = {
   meta: {
     // Brand, used as the suffix of every page title
     title: 'Revelation Media Resources',
-    // Home page <title>: lead with what people search for (keep under ~65 characters)
-    homeTitle: 'Free Prophecy Series Kit for Pastors | Revelation Media Resources',
+    // Home page <title> (browser tab, bookmarks): the brand only, as the client asked
+    homeTitle: 'Revelation Media Resources',
+    // Title in link previews (Open Graph / social cards)
+    shareTitle: 'All Things New | Prophecy Seminar Series Kit for Pastors',
     description:
-      'Free evangelistic series kit for pastors: prophecy seminar presentations, images, videos and promo materials, editable in PowerPoint, Keynote and Google Slides.',
+      'All Things New: a Daniel and Revelation prophecy seminar series kit for pastors. Nine presentations with images, videos and promo materials, editable in PowerPoint, Keynote and Google Slides.',
     // Structured data (search engines and AI answers)
     kitName: 'Revelation Media Resources evangelistic series kit',
     audience: 'Pastors, church leaders and ministry organizations',
@@ -38,12 +40,14 @@ const en = {
 
   // Licence of the original resources (shown on the first screen, in the FAQ, footer and email)
   license: {
-    badge: 'CC0 1.0',
-    motto: 'Free to Use. Free to Adapt. Free to Share.',
+    // TODO confirm with Justin: licence version (4.0) and the attribution line
+    badge: 'CC BY-NC 4.0',
+    motto: 'Use it. Adapt it. Share it.',
     // link text / screen-reader label for the badge
-    label: 'Original resources released under CC0 1.0 (public domain dedication)',
-    url: 'https://creativecommons.org/publicdomain/zero/1.0/',
-    footer: 'Original resources released under CC0 1.0',
+    label: 'Original resources licensed under CC BY‑NC 4.0: credit required, non-commercial use',
+    url: 'https://creativecommons.org/licenses/by-nc/4.0/',
+    attribution: 'Ministerial Association, General Conference of Seventh-day Adventists',
+    footer: 'Original resources licensed under CC BY‑NC 4.0. Credit: Ministerial Association, General Conference of Seventh-day Adventists.',
   },
 
   // Series brand shown above the name in the header and footer
@@ -54,6 +58,7 @@ const en = {
 
   nav: [
     { label: "What's inside", href: '#inside' },
+    { label: 'Series', href: '#series' },
     { label: 'Demo', href: '#demo' },
     { label: 'About', href: '#about' },
     { label: 'Translate', href: '#translate' },
@@ -63,9 +68,6 @@ const en = {
     languageLabel: 'Language',
     cta: 'Download',
     mobileCta: 'Download the kit',
-    // used while the kit is not hosted yet (PUBLIC_KIT_URL empty): CTAs go to the Daniel 2 demo
-    ctaPreview: 'Preview',
-    mobileCtaPreview: 'Preview Daniel 2',
     openMenu: 'Open menu',
     closeMenu: 'Close menu',
   },
@@ -81,7 +83,7 @@ const en = {
   hero: {
     eyebrow: 'Evangelistic Series Library',
     title: 'Revelation Media *Resources*',
-    lead: 'Everything you need to lead a prophecy series: presentations, images, videos, and promotional materials. Ready to use, fully editable, and **free for pastors and ministry leaders.**',
+    lead: 'Everything you need to lead a prophecy series: presentations, images, videos, and promotional materials. Ready to use, fully editable, and **made for pastors and ministry leaders.**',
     primaryCta: 'Download the kit',
     secondaryCta: 'Watch the trailer',
     trust: ['PowerPoint', 'Keynote', 'Google Slides', 'English now, more languages soon'],
@@ -127,26 +129,26 @@ const en = {
   },
 
   series: {
-    eyebrow: 'The series',
-    title: 'Nine presentations, *one complete series*',
-    sub: 'See the full scope of the series. Each presentation comes ready to use, with its own images and promotional materials.',
+    // Client copy (Justin, Oct 2026): the nine presentations of the seminar
+    eyebrow: 'All Things New. Hope Starts Here.',
+    title: 'Daniel & Revelation *Bible Prophecy Seminar*',
+    sub: 'Nine evenings in the books of Daniel and Revelation, read in plain language from the Bible itself. We will see that God told history in advance, that He has a plan to end evil, suffering, and death, and that Jesus is coming to make all things new. Every evening asks what that hope means for your life now.',
     label: 'Presentation',
     download: 'Download',
-    open: 'Open',
-    soon: 'Available soon',
+    // shown under a download button whose file is not ready yet
     coming: 'Coming November 2026',
-    // Presentation 1 downloads from PUBLIC_DEMO_URL (Daniel 2); 2 to 9 show the "coming" badge.
-    // TODO: titles and descriptions for 2 to 9 from the client's master plan.
+    // Download links: PUBLIC_PRESENTATION_URLS (comma separated, in order); presentation 1 falls back
+    // to the Daniel 2 deck (PowerPoint export of the Google Slides demo), see src/config.ts
     items: [
-      { ref: 'Daniel 2', title: 'History Written in Advance', text: 'Short description from the master plan.' },
-      { ref: '', title: 'Presentation 2', text: 'Short description from the master plan.' },
-      { ref: '', title: 'Presentation 3', text: 'Short description from the master plan.' },
-      { ref: '', title: 'Presentation 4', text: 'Short description from the master plan.' },
-      { ref: '', title: 'Presentation 5', text: 'Short description from the master plan.' },
-      { ref: '', title: 'Presentation 6', text: 'Short description from the master plan.' },
-      { ref: '', title: 'Presentation 7', text: 'Short description from the master plan.' },
-      { ref: '', title: 'Presentation 8', text: 'Short description from the master plan.' },
-      { ref: '', title: 'Presentation 9', text: 'Short description from the master plan.' },
+      { ref: 'Daniel 2', title: 'History Written in Advance', text: 'A king\'s forgotten dream told the rise and fall of the world\'s empires centuries before they happened, and history has followed it line by line. If God knew the end from the beginning, He can be trusted with your tomorrow.' },
+      { ref: 'The Great Controversy', title: 'The War Behind the World', text: 'Why is there so much pain in a world made by a God of love? The Bible traces evil to its beginning, shows how the cross settled the war, and promises that evil\'s days are numbered.' },
+      { ref: 'Daniel 8–9 and the Sanctuary', title: 'The Longest Prophecy and Our High Priest', text: 'The longest time prophecy in the Bible named the year the Messiah would come, and He came on time. The same prophecy shows what Jesus is doing for us right now in heaven, as the High Priest who forgives the moment we come to Him.' },
+      { ref: 'The Sabbath', title: 'The Sign He Never Changed', text: 'From Eden to the new earth, the seventh day is the Creator\'s sign of rest and belonging, kept by Jesus and never changed by God. It is a weekly gift, a day to stop and rest in what Christ has finished.' },
+      { ref: 'Daniel 7 and Revelation 13–14', title: 'The Final Choice', text: 'Daniel 7 and Revelation 13 describe the last conflict of history, and it is about worship. God tells the story in advance so that no one is deceived, and so that everyone can choose Him freely.' },
+      { ref: 'The Three Angels', title: 'Heaven\'s Last Message', text: 'Before Jesus returns, God sends one last message to every nation, tribe, tongue, and people. It is the everlasting gospel, a call to worship the Creator, and a loving appeal to come out of confusion and into His arms.' },
+      { ref: 'Hell', title: 'The End of Evil', text: 'God will not torment anyone forever. The Bible shows how He will end sin, Satan, suffering, and death completely, and then make everything new, so that you can face the future without fear.' },
+      { ref: 'The Four Horsemen and the Remnant', title: 'The Church God Is Looking For', text: 'Through persecution and compromise, God has always had a people. Revelation shows how to recognize them in the last days and invites you to find a home among them.' },
+      { ref: 'The Second Coming and the New Earth', title: 'Every Eye Will See Him', text: 'Jesus is coming again, in person, and every eye will see Him. The dead in Christ will rise, the signs are labor pains with an end and a purpose, and a new earth is waiting where God Himself will wipe away every tear. Hope starts here, and it ends in His presence.' },
     ],
   },
 
@@ -170,7 +172,6 @@ const en = {
     title: 'Made with care, *ready* for your church',
     sub: 'Every file is designed to look beautiful on screen and work without extra effort.',
     cta: 'Download the kit',
-    ctaPreview: 'Preview Daniel 2',
     // icon: image | book | screen | pen | doc | globe
     features: [
     // badge: small label next to the title (e.g. a feature that is not available yet)
@@ -183,7 +184,7 @@ const en = {
   },
 
   demo: {
-    eyebrow: 'Free demo',
+    eyebrow: 'Demo',
     title: 'See the quality *for yourself*',
     // The demo is Daniel 2: the full presentation plus its promo materials (PUBLIC_DEMO_URL).
     sub: 'Download the complete Daniel 2 presentation together with its promotional materials.',
@@ -207,7 +208,7 @@ const en = {
     lead: 'All Things New: Revelation Media Resources is a global initiative of the Ministerial Association of the General Conference of Seventh-day Adventists, created to equip pastors, evangelists, and churches with high-quality, Bible-centered resources for presenting the prophetic messages of Daniel and Revelation.',
     paragraphs: [
       'Our vision is to make biblical truth more visual, accessible, adaptable, and useful across cultures and languages. The collection includes presentation slides, original images, videos, and promotional resources designed for practical ministry use.',
-      'These original resources are provided under CC0 1.0, allowing them to be freely used, adapted, translated, and shared for gospel ministry.',
+      'These original resources are licensed under CC BY‑NC 4.0: you may use, adapt, translate, and share them for gospel ministry, with credit and for non-commercial purposes.',
     ],
     imageAlt: 'A pastor presenting a Daniel and Revelation seminar to a church audience',
   },
@@ -218,56 +219,13 @@ const en = {
     title: 'Before you *ask*',
     // Also published as FAQPage structured data. Start answers with the direct answer.
     items: [
-      { q: 'What is Revelation Media Resources?', a: 'Revelation Media Resources is a free library of ready-made materials for running an evangelistic prophecy series: presentations, slides, images, videos, and promotional materials for pastors, churches, and ministry organizations.', open: true },
-      { q: 'Is it really free?', a: 'Yes. The full kit is free for pastors, churches, and ministry organizations: everything downloads directly, with no registration. The original resources are released under CC0 1.0, a public domain dedication, so you may freely use, adapt, translate, and share them for your ministry, without asking permission or giving credit.' },
+      { q: 'What is Revelation Media Resources?', a: 'Revelation Media Resources is a library of ready-made materials for running an evangelistic prophecy series: presentations, slides, images, videos, and promotional materials for pastors, churches, and ministry organizations.', open: true },
+      { q: 'Do I need to pay or register?', a: 'No. There is no cost and no registration: everything downloads directly. The original resources are licensed under CC BY‑NC 4.0, so you may use, adapt, translate, and share them for your ministry, as long as you give credit and do not use them commercially.' },
       { q: 'Who can use these materials?', a: 'Pastors, church leaders, and ministry organizations who want to run an evangelistic series. No design skills are needed: the files are ready to present and easy to adapt to your church.' },
       { q: 'What formats are included?', a: 'Presentations come in PowerPoint, Keynote, and Google Slides. Images and videos are provided in standard formats that work on any device.' },
       { q: 'Can I edit the materials?', a: "Yes. You can change text, reorder slides, and add your church's details to fit your program." },
       { q: 'Which languages are available?', a: "The kit is available in English today. More languages are coming soon and will be added progressively; see the list in the translation section below. Fluent in another language? You can help us translate it." },
     ],
-  },
-
-  // "Get the full kit": direct downloads (no registration) + One Voice 27 updates signup.
-  // File links: PUBLIC_KIT_URL + "/<id>.zip" (see README). Until it is set, buttons say "Available soon".
-  getKit: {
-    eyebrow: 'Download',
-    title: 'Download the *full kit*',
-    sub: 'Every resource is free to download. No registration and no sign-in: the original resources are released under CC0 1.0.',
-    files: [
-      { id: 'presentations', label: 'Presentations', detail: 'PowerPoint, Keynote, Google Slides' },
-      { id: 'images', label: 'Images', detail: 'Original artwork for slides and print' },
-      { id: 'videos', label: 'Videos', detail: 'Clips for the key moments of the series' },
-      { id: 'promo', label: 'Promotional materials', detail: 'Posters, social posts, invitations' },
-      { id: 'print', label: 'Handouts and certificates', detail: 'Study sheets, handouts, certificates' },
-    ],
-    downloadLabel: 'Download',
-    soon: 'Available soon',
-    // One Voice 27 keeps a single list for all its projects; this form only subscribes to updates
-    subscribe: {
-      title: 'Get *One Voice 27* updates',
-      text: 'Sign up to hear about new resources, translations, and announcements.',
-      fields: {
-        name: { label: 'First name', placeholder: 'John' },
-        email: { label: 'Email', placeholder: 'you@church.org', error: 'Please enter a valid email.', suggest: 'Did you mean {email}?' },
-      },
-      optional: '(optional)',
-      consent: {
-        // {privacy} is replaced with a link
-        text: 'I agree to receive One Voice 27 updates by email. I can unsubscribe at any time. See the {privacy}.',
-        error: 'Please confirm to subscribe.',
-      },
-      turnstileError: 'Please complete the spam check.',
-      submit: 'Subscribe',
-      sending: 'Subscribing',
-      note: 'One list for all One Voice 27 updates. No spam.',
-      networkError: 'Something went wrong. Please try again in a moment.',
-      success: {
-        title: "You're subscribed",
-        // {email} is replaced with the submitted address
-        text: "We'll send One Voice 27 updates to {email}.",
-        change: 'Use a different email',
-      },
-    },
   },
 
   translate: {
@@ -297,11 +255,12 @@ const en = {
   },
 
   footer: {
-    tagline: 'A modern visual library of materials for evangelistic series. Free for pastors and ministry leaders.',
+    tagline: 'A modern visual library of materials for evangelistic series, made for pastors and ministry leaders.',
     columns: { explore: 'Explore', help: 'Help', legal: 'Legal' },
     links: {
       faq: 'Questions',
       inside: "What's inside",
+      series: 'Series',
       support: 'Support',
       demo: 'Demo',
       contact: 'Contact us',
@@ -331,7 +290,7 @@ const en = {
       description: 'Terms of Use for Revelation Media Resources.',
       intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. These terms explain how you may use the library and its materials.',
       sections: [
-        { heading: 'Who we are', text: 'The Ministerial Association of the General Conference of Seventh-day Adventists provides Revelation Media Resources free of charge to pastors, churches, and ministry organizations.' },
+        { heading: 'Who we are', text: 'The Ministerial Association of the General Conference of Seventh-day Adventists provides Revelation Media Resources to pastors, churches, and ministry organizations.' },
         { heading: 'Using the materials', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam.' },
         { heading: 'What is not allowed', text: 'Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.' },
         { heading: 'Accounts and access', text: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
@@ -344,10 +303,8 @@ const en = {
       description: 'How Revelation Media Resources collects and uses personal data.',
       intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. This policy explains what we collect, why, and the choices you have.',
       sections: [
-        { heading: 'What we collect', text: 'Downloading the kit needs no personal data. If you sign up for One Voice 27 updates, we collect your email and, if you choose to share it, your first name.' },
-        { heading: 'Why we collect it', text: 'We use your email only to send One Voice 27 updates: new resources, translations, and announcements. You can unsubscribe at any time.' },
+        { heading: 'What we collect', text: 'Downloading the kit needs no personal data: there is no registration and no signup form.' },
         { heading: 'Cookies and analytics', text: 'With your consent we use Google Analytics to understand how the site is used. You can change your choice at any time using "Cookie settings" in the footer.' },
-        { heading: 'Spam protection', text: 'The updates signup form is protected by Cloudflare Turnstile, which processes technical data to tell people from bots.' },
         { heading: 'Your rights', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id ligula porta felis euismod semper, cras mattis consectetur purus sit amet fermentum.' },
         { heading: 'Contact', text: 'Questions about your data? Write to us at {email}.' },
       ],

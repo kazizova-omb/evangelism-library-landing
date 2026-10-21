@@ -61,7 +61,7 @@ import '@fontsource/inter/600.css';
   :root.v2:not(#v1) .tag, :root.v2:not(#v1) .ph-tag { color: var(--muted-solid); border-color: rgba(11, 20, 70, .25); background: rgba(255, 255, 255, .8) }
 
   /* section rhythm: white and soft grey bands */
-  :root.v2:not(#v1) :is(#journey, #about, #get) { background: var(--bg-2) }
+  :root.v2:not(#v1) :is(#journey, #about) { background: var(--bg-2) }
 
   /* ---------- header, menu, language ---------- */
   :root.v2:not(#v1) .header.is-scrolled { background: rgba(255, 255, 255, .9); border-color: var(--line) }
@@ -174,7 +174,7 @@ import '@fontsource/inter/600.css';
     :root.v2:not(#v1) .features { grid-template-columns: 1fr }
   }
   /* two-column headings: DM Serif runs wide, so a notch smaller than section titles */
-  :root.v2:not(#v1) :is(.get__head, .demo) .h2 { font-size: clamp(34px, 3.4vw, 48px) }
+  :root.v2:not(#v1) .demo .h2 { font-size: clamp(34px, 3.4vw, 48px) }
   :root.v2:not(#v1) .feature { background: #fff; border-radius: 18px; box-shadow: 0 0 0 1px var(--line) inset }
   :root.v2:not(#v1) .feature:hover { box-shadow: 0 0 0 1px rgba(10, 156, 182, .5) inset, 0 20px 40px -26px rgba(11, 20, 70, .35) }
   :root.v2:not(#v1) .feature h3 { font-size: 24px; color: var(--navy) }
@@ -204,25 +204,7 @@ import '@fontsource/inter/600.css';
 
   /* ---------- form ---------- */
   :root.v2:not(#v1) .next li, :root.v2:not(#v1) .next { border-color: rgba(11, 20, 70, .12) }
-  :root.v2:not(#v1) .consent a { color: var(--cyan-text); text-decoration-color: currentColor }
-  :root.v2:not(#v1) .formcard { background: #fff; border-radius: 24px; box-shadow: 0 0 0 1px var(--line) inset, 0 40px 80px -48px rgba(11, 20, 70, .45) }
-  :root.v2:not(#v1) .field label { color: var(--navy) }
-  :root.v2:not(#v1) .field :is(input:not([type="checkbox"]), select, textarea) { background: #F7F8FC; border-color: rgba(11, 20, 70, .12); color: var(--navy) }
-  :root.v2:not(#v1) .field :is(input:not([type="checkbox"]), select, textarea):hover { border-color: rgba(11, 20, 70, .25) }
-  :root.v2:not(#v1) .field :is(input:not([type="checkbox"]), select, textarea):focus { background: #fff; border-color: var(--cyan-lg); box-shadow: 0 0 0 3px rgba(22, 195, 222, .2) }
-  :root.v2:not(#v1) .field ::placeholder { color: #8A91AB }
-  :root.v2:not(#v1) .field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%230B1446' stroke-width='1.6'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E") }
-  :root.v2:not(#v1) .field select option { background: #fff; color: var(--navy) }
-  :root.v2:not(#v1) .consent { color: var(--ink-2) }
-  :root.v2:not(#v1) .consent input { border-color: rgba(11, 20, 70, .3); background: #fff }
-  :root.v2:not(#v1) .consent input:checked { background: var(--navy); border-color: var(--navy) }
-  :root.v2:not(#v1) .consent input:checked::after { border-color: #fff }
-  :root.v2:not(#v1) .err { color: #C0392B }
-  :root.v2:not(#v1) .is-invalid :is(input, select) { border-color: #D65A4A !important }
-  :root.v2:not(#v1) .form-err { background: #FDEDEB; color: #A93226 }
   :root.v2:not(#v1) .success__ic { background: var(--navy); color: #fff; box-shadow: 0 0 0 8px var(--lavender) }
-  :root.v2:not(#v1) .success h3 { color: var(--navy) }
-  :root.v2:not(#v1) .success p { color: var(--ink-2) }
 
   /* ---------- translate ---------- */
   :root.v2:not(#v1) .langs .lang { border-color: rgba(11, 20, 70, .22); color: var(--navy); background: #fff }

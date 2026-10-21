@@ -83,14 +83,14 @@ import '@fontsource/anton/400.css';
   :root.v3:not(#v1):not(#v2) .hero__copy { max-width: min(640px, 52%) }
 
   /* ---------- indigo blocks: trailer, about, request form ---------- */
-  :root.v3:not(#v1):not(#v2) :is(#trailer, #about, #get) {
+  :root.v3:not(#v1):not(#v2) :is(#trailer, #about) {
     --ink: #FFFFFF; --ink-2: rgba(255, 255, 255, .84); --muted-solid: rgba(255, 255, 255, .66); --line: rgba(255, 255, 255, .18);
     --teal: var(--cyan-light); --gold: var(--cyan-light); --gold-hi: var(--cyan-light); --cyan: var(--cyan-light);
     background: var(--indigo); color: #fff }
-  :root.v3:not(#v1):not(#v2) :is(#trailer, #about, #get) :is(.h2, .eyebrow) { color: #fff }
-  :root.v3:not(#v1):not(#v2) :is(#trailer, #about, #get) .eyebrow { color: rgba(255, 255, 255, .8) }
-  :root.v3:not(#v1):not(#v2) :is(#trailer, #about, #get) .h2 em { color: var(--cyan-light) }
-  :root.v3:not(#v1):not(#v2) :is(#trailer, #about, #get) .sub { color: rgba(255, 255, 255, .84) }
+  :root.v3:not(#v1):not(#v2) :is(#trailer, #about) :is(.h2, .eyebrow) { color: #fff }
+  :root.v3:not(#v1):not(#v2) :is(#trailer, #about) .eyebrow { color: rgba(255, 255, 255, .8) }
+  :root.v3:not(#v1):not(#v2) :is(#trailer, #about) .h2 em { color: var(--cyan-light) }
+  :root.v3:not(#v1):not(#v2) :is(#trailer, #about) .sub { color: rgba(255, 255, 255, .84) }
 
   /* trailer: poster-style head, right-aligned like the reference */
   :root.v3:not(#v1):not(#v2) .trailer .section-head { max-width: 1040px; text-align: left; display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); column-gap: 48px; align-items: end }
@@ -137,7 +137,6 @@ import '@fontsource/anton/400.css';
   :root.v3:not(#v1):not(#v2) .about__copy .h2 { font-size: clamp(40px, 4.2vw, 62px) }
   /* longer accent phrases (Spanish) may wrap here instead of running into the next column */
   :root.v3:not(#v1):not(#v2) .about__copy .h2 em { white-space: normal }
-  :root.v3:not(#v1):not(#v2) .get__head .h2 { font-size: clamp(38px, 3.6vw, 52px) } /* "to the complete library" on one line */
   /* accent phrases never split, at any width (sizes below keep them inside the column) */
   :root.v3:not(#v1):not(#v2) :is(.h1, .h2) em { white-space: nowrap }
 
@@ -193,21 +192,6 @@ import '@fontsource/anton/400.css';
   :root.v3:not(#v1):not(#v2) .faq details[open] summary i { background: var(--teal) }
 
   /* ---------- request form (indigo block, white card) ---------- */
-  :root.v3:not(#v1):not(#v2) #get .files, :root.v3:not(#v1):not(#v2) #get .files li { border-color: rgba(255, 255, 255, .2) }
-  :root.v3:not(#v1):not(#v2) #get .files b { color: #fff }
-  :root.v3:not(#v1):not(#v2) #get .files .btn--gold { background: var(--cyan-light); color: var(--indigo) }
-  :root.v3:not(#v1):not(#v2) #get .files__soon { color: rgba(255, 255, 255, .7); box-shadow: 0 0 0 1px rgba(255, 255, 255, .3) inset }
-  :root.v3:not(#v1):not(#v2) .subscribe__title { font-family: var(--poster); text-transform: uppercase; font-weight: 400; color: var(--navy) }
-  :root.v3:not(#v1):not(#v2) .subscribe__title em { color: var(--teal) }
-  :root.v3:not(#v1):not(#v2) .formcard {
-    --ink: var(--navy); --ink-2: #3F4170; --muted-solid: #5E607F; --line: rgba(31, 33, 96, .14);
-    --teal: #0E8FA2; --gold: #0E8FA2; --gold-hi: #0A7383; --cyan: #3CC0CF;
-    border-radius: 8px; background: #FBFAF7; color: var(--navy); box-shadow: 0 40px 80px -40px rgba(0, 0, 0, .55) }
-  :root.v3:not(#v1):not(#v2) .formcard .btn--gold { background: var(--indigo) }
-  :root.v3:not(#v1):not(#v2) .field :is(input:not([type="checkbox"]), select, textarea) { border-radius: 6px; background: #fff }
-  :root.v3:not(#v1):not(#v2) .consent a { color: var(--teal-text) }
-  :root.v3:not(#v1):not(#v2) .success__ic { border-radius: 8px; background: var(--indigo); box-shadow: none }
-  :root.v3:not(#v1):not(#v2) .success h3 { font-family: var(--poster); text-transform: uppercase; font-weight: 400; color: var(--navy) }
 
   /* ---------- translate ---------- */
   :root.v3:not(#v1):not(#v2) .translate { max-width: 1040px }
@@ -242,7 +226,7 @@ import '@fontsource/anton/400.css';
     :root.v3:not(#v1):not(#v2) .hero__copy { max-width: none }
     :root.v3:not(#v1):not(#v2) .h1 { font-size: clamp(56px, 17vw, 76px) }
     :root.v3:not(#v1):not(#v2) .h2 { font-size: clamp(34px, 9.6vw, 46px) }
-    :root.v3:not(#v1):not(#v2) :is(.get__head, .about__copy) .h2 { font-size: clamp(30px, 8.6vw, 38px) }
+    :root.v3:not(#v1):not(#v2) .about__copy .h2 { font-size: clamp(30px, 8.6vw, 38px) }
     /* phones: 2 + 2 + 1; cells that start a row sit on the text edge; the last, full-width
        cell keeps the same number size as the others */
     :root.v3:not(#v1):not(#v2) .stat { padding: 22px 0 20px 20px }

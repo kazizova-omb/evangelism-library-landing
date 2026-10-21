@@ -1,5 +1,5 @@
 ---
-import BrandMark from './BrandMark.astro';
+import BrandLockup from './BrandLockup.astro';
 import LangSwitch from './LangSwitch.astro';
 import { useT, getLang, localePath } from '../i18n';
 import { anchor } from '../lib/links';
@@ -14,16 +14,13 @@ const { home } = Astro.props;
 <div class="scroll-sentinel" id="scrollSentinel" aria-hidden="true"></div>
 <header class="header" id="header">
   <div class="header__in">
-    <a href={home ? '#top' : localePath(lang, '/')} class="brand">
-      <BrandMark />
-      <span class="brand__name"><span class="brand__series">{site.brandSeries}<span class="visually-hidden">:</span></span> <span class="brand__title">{site.brand}</span></span>
-    </a>
+    <BrandLockup href={home ? '#top' : localePath(lang, '/')} />
     <nav class="nav" aria-label="Main">
       {site.nav.map((l) => <a href={anchor(l.href, home, lang)}>{l.label}</a>)}
     </nav>
     <div class="header__actions">
       <LangSwitch class="header__lang" />
-      <a href={anchor(config.kitReady ? '#get' : '#demo', home, lang)} class="btn btn--gold btn--sm" data-track="cta_click" data-track-location="header">{config.kitReady ? site.header.cta : site.header.ctaPreview}</a>
+      <a href={anchor('#series', home, lang)} class="btn btn--gold btn--sm" data-track="cta_click" data-track-location="header">{site.header.cta}</a>
       <button class="burger" id="burger" type="button" aria-controls="menu" aria-expanded="false"
         aria-label={site.header.openMenu} data-open-label={site.header.openMenu} data-close-label={site.header.closeMenu}><span></span></button>
     </div>

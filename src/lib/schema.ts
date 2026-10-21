@@ -89,10 +89,11 @@ export function homeGraph(c: Ctx, ogImage: string) {
       inLanguage: c.langs,
       isAccessibleForFree: true,
       license: s.license.url,
+      creditText: s.license.attribution,
       audience: { '@type': 'Audience', audienceType: s.meta.audience },
       publisher: { '@id': org },
       hasPart: s.inside.stats.map((st) => ({ '@type': 'CreativeWork', name: `${st.value} ${st.label}` })),
-      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: `${c.homeUrl}#get` },
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: `${c.homeUrl}#series` },
     },
     {
       '@type': 'FAQPage',

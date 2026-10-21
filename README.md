@@ -25,12 +25,10 @@ so redeploy after changing one.
 | Variable | Purpose | When empty |
 | --- | --- | --- |
 | `PUBLIC_SITE_URL` | Canonical URL, Open Graph URLs, sitemap, robots.txt | `https://revelationresource.org` |
-| `PUBLIC_SUBSCRIBE_URL` | One Voice 27 updates signup endpoint (POST JSON) | Form mocks success after 900 ms |
-| `PUBLIC_KIT_URL` | Folder with the kit ZIPs (`<url>/<id>.zip`) | Buttons show "Available soon" |
-| `PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key | Cloudflare test key (always passes) |
 | `PUBLIC_GA4_ID` | Google Analytics 4 measurement ID | No GA, no cookie banner |
 | `PUBLIC_BASE_PATH` | Serve the site from a sub-folder, e.g. `/evangelism-library-landing` on GitHub Pages | empty |
 | `PUBLIC_SHOW_DRAFTS` | Show sections still waiting for client copy (the nine-presentation list). On for branch previews | `false` |
+| `PUBLIC_PRESENTATION_URLS` | Download links of the nine presentations, comma separated, in order (empty = "Coming November 2026") | presentation 1: Daniel 2 deck |
 | `PUBLIC_DEMO_URL` | Demo (Daniel 2). A Google Slides link opens the deck; any other URL downloads as a file (the ZIP with promo materials); empty shows "Available soon" | `#` |
 | `PUBLIC_TRAILER_YOUTUBE_ID` | YouTube ID of the trailer | Modal shows placeholder text |
 | `PUBLIC_CONTACT_EMAIL` | Contact links, legal pages, JSON-LD | `hello@revelationresource.org` |
@@ -68,10 +66,6 @@ To add a language (example: Portuguese):
 2. Add `'pt'` to the list in `src/i18n/config.mjs`.
 3. Rebuild. The pages appear under `/pt`; the language switcher, `hreflang` tags and sitemap pick it up.
 
-Country names are generated per language from the built-in list (`Intl.DisplayNames`);
-a locale can override single names in `getKit.countryNames`. The form always sends the English division
-name, whatever the page language.
-
 ## Replacing content
 
 Edit the locale files and rebuild; no markup changes are needed.
@@ -102,46 +96,6 @@ below the fold and loads the hero with high priority. The matching placeholder t
 Recommended sizes are in [`src/assets/slots/README.md`](src/assets/slots/README.md); alt texts are in the locale files.
 Without an `og` image, `src/assets/og/og-en.jpg` (rendered from the hero) is used for link previews.
 
-## Updates signup form
-
-The One Voice 27 updates form posts JSON to `PUBLIC_SUBSCRIBE_URL` (see "Downloads and updates signup"):
-
-```json
-{ "email": "", "name": "", "consent": true, "turnstileToken": "", "list": "one-voice-27",
-  "source": "revelation-media-resources", "lang": "en",
-  "utm_source": "", "utm_medium": "", "utm_campaign": "", "utm_content": "", "utm_term": "" }
-```
-
-- Any 2xx response counts as success (an email that is already subscribed should also return 2xx).
-  Anything else, a network error or a 15 s timeout shows the error message above the fields.
-- UTM parameters are read from the page URL on load. Nothing is stored on the client.
-- The endpoint must allow CORS from the site origin (`POST`, `Content-Type: application/json`).
-- Turnstile loads only when the form comes close to the viewport.
-
-### Spam protection
-
-Three layers on the page, one on the server:
-
-1. **Cloudflare Turnstile** (invisible to most people, a checkbox when in doubt). Its token is sent as `turnstileToken`.
-2. **Honeypot:** a hidden `website` field people never see. If it is filled, the form shows the normal
-   success screen and sends nothing, so bots get no signal.
-3. **Timing:** a submit less than 3 seconds after the page loaded is treated the same way.
-4. **Server (backend TODO):** verify the Turnstile token and rate-limit by IP and email.
-
-The email field is checked on blur and on submit (format, length, domain), and common typos get a
-one-click fix ("gmial.con" becomes "Did you mean ...@gmail.com?"). See `src/lib/email.ts`.
-
-> The receiving One Voice 27 endpoint should verify `turnstileToken` with Cloudflare's siteverify API.
-
-### Testing against a local stub
-
-```sh
-npm run stub                         # http://localhost:8787, logs each request, answers 200
-STUB_STATUS=500 npm run stub         # simulate a server error
-STUB_DELAY=3000 npm run stub         # slow response to see the loading state
-PUBLIC_SUBSCRIBE_URL=http://localhost:8787/subscribe npm run dev
-```
-
 ## SEO and answer engines
 
 - **Titles and descriptions:** the home page uses `meta.homeTitle` / `meta.description` from the locale
@@ -161,17 +115,14 @@ PUBLIC_SUBSCRIBE_URL=http://localhost:8787/subscribe npm run dev
 After launch: verify the domain in Google Search Console and Bing Webmaster Tools, submit
 `/sitemap-index.xml`, and check the page in Google's Rich Results Test.
 
-## Downloads and updates signup
+## Downloads
 
 There is no registration and no database for this project.
 
-- **Downloads:** the "Download the full kit" section lists the kit files (`getKit.files` in the locale
-  files). Each button links to `PUBLIC_KIT_URL/<id>.zip` (`presentations`, `images`, `videos`, `promo`,
-  `print`). Until `PUBLIC_KIT_URL` is set, the buttons read "Available soon".
-- **Updates signup:** the form next to it only subscribes to One Voice 27 updates (one list for all
-  One Voice 27 projects). It POSTs JSON to `PUBLIC_SUBSCRIBE_URL`:
-  `{ email, name, consent: true, turnstileToken, list: "one-voice-27", source: "revelation-media-resources", lang, utm_* }`.
-  Any 2xx is a success. Empty URL = mock success. The receiving end should verify the Turnstile token.
+- **Downloads:** the "Series" section lists the nine presentations (`series.items` in the locale files),
+  each with its own Download button. Links come from `PUBLIC_PRESENTATION_URLS` (comma separated, in order).
+  An empty slot shows the button greyed out with "Coming November 2026". Presentation 1 falls back to the
+  Daniel 2 demo deck, downloaded as PowerPoint from Google Slides.
 
 ## Analytics and consent
 
@@ -202,7 +153,7 @@ One-time setup: Cloudflare dashboard → My Profile → API Tokens → Create to
 (or a custom token with **Account · Cloudflare Pages · Edit**), then add it to the repository:
 GitHub → Settings → Secrets and variables → Actions → New repository secret `CLOUDFLARE_API_TOKEN`.
 Until it is there, the workflow still builds and checks every push but skips publishing.
-Optional values (`PUBLIC_KIT_URL`, `PUBLIC_SUBSCRIBE_URL`, `PUBLIC_DEMO_URL`, …) go under the **Variables** tab of the same page.
+Optional values (`PUBLIC_PRESENTATION_URLS`, `PUBLIC_DEMO_URL`, …) go under the **Variables** tab of the same page.
 
 **Backup on GitHub Pages:** https://kazizova-omb.github.io/evangelism-library-landing/ is rebuilt from `main`
 by `.github/workflows/pages.yml` (same site, served from a sub-folder via `PUBLIC_BASE_PATH`, not indexed).
@@ -238,7 +189,6 @@ automatically for unknown paths (Cloudflare Pages picks the closest one).
 prototype/            approved single-file prototype (reference, do not edit)
 screenshots/          screenshots of the approved state
 public/               favicon, default OG image, Cloudflare _headers
-scripts/stub-server.mjs  local form endpoint for testing
 src/config.ts         env vars
 src/i18n/locales/     copy per language (en.ts, es.ts)
 src/i18n/config.mjs   list of languages

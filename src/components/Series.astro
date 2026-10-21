@@ -1,6 +1,6 @@
 ---
-// The nine presentations of the series. Presentation 1 (Daniel 2) downloads directly
-// from PUBLIC_DEMO_URL once it is set; the rest carry a "Coming November 2026" badge.
+// The nine presentations of the seminar, each with its own download button. A presentation
+// without a file yet shows the button disabled with "Coming November 2026" (see config.presentationUrls).
 import Icon from './Icon.astro';
 import { useT } from '../i18n';
 import { config } from '../config';
@@ -8,7 +8,7 @@ import { rich } from '../lib/rich';
 
 const site = useT(Astro);
 const s = site.series;
-const firstUrl = config.demoUrl !== '#' ? config.demoUrl : undefined;
+const urls = config.presentationUrls;
 ---
 <section class="section" id="series" aria-labelledby="series-title">
   <div class="wrap">
@@ -19,7 +19,7 @@ const firstUrl = config.demoUrl !== '#' ? config.demoUrl : undefined;
     </div>
     <ol class="series" role="list">
       {s.items.map((p, i) => (
-        <li class:list={['pres reveal', { 'pres--ready': i === 0 }]}>
+        <li class:list={['pres reveal', { 'pres--ready': urls[i] }]}>
           <p class="pres__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
           <p class="pres__label">
             {s.label} {i + 1}{p.ref && <Fragment> <span class="pres__ref">· {p.ref}</span></Fragment>}
@@ -27,17 +27,16 @@ const firstUrl = config.demoUrl !== '#' ? config.demoUrl : undefined;
           <h3 class="pres__title">{p.title}</h3>
           <p class="pres__text">{p.text}</p>
           <div class="pres__foot">
-            {i === 0 && firstUrl ? (
-              config.demoIsSlides ? (
-                <a href={firstUrl} class="btn btn--gold btn--sm" target="_blank" rel="noopener" data-track="series_open" data-track-location="presentation_1">{s.open}</a>
-              ) : (
-                <a href={firstUrl} class="btn btn--gold btn--sm" download data-track="series_download" data-track-location="presentation_1">
-                  <Icon name="download" />
-                  {s.download}
-                </a>
-              )
+            {urls[i] ? (
+              <a href={urls[i]} class="btn btn--gold btn--sm" download data-track="series_download" data-track-location={`presentation_${i + 1}`}>
+                <Icon name="download" />
+                {s.download}
+              </a>
             ) : (
-              <span class="pres__badge">{i === 0 ? s.soon : s.coming}</span>
+              <Fragment>
+                <span class="btn btn--sm pres__off" aria-disabled="true"><Icon name="download" />{s.download}</span>
+                <span class="pres__coming">{s.coming}</span>
+              </Fragment>
             )}
           </div>
         </li>
@@ -56,8 +55,11 @@ const firstUrl = config.demoUrl !== '#' ? config.demoUrl : undefined;
   .pres__title { margin-top: 8px; font-family: var(--poster, var(--display)); font-weight: 400; font-size: 26px; line-height: 1.05; letter-spacing: .01em; text-transform: uppercase; color: var(--navy, var(--ink)) }
   .pres__text { margin-top: 10px; font-size: 15px; line-height: 1.6; color: var(--ink-2) }
   /* pinned to the bottom so the buttons and badges line up across a row */
-  .pres__foot { margin-top: auto; padding-top: 22px }
-  .pres__badge { display: inline-block; padding: 6px 12px; border-radius: 4px; font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--navy, var(--ink)); background: var(--lavender, rgba(255, 255, 255, .08)) }
+  .pres__foot { margin-top: auto; padding-top: 22px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px }
+  /* same shape as the live button, greyed out until the file is ready */
+  .pres__off { cursor: default; color: var(--muted-solid); background: transparent; box-shadow: 0 0 0 1px var(--line) inset }
+  .pres__off :global(svg) { opacity: .6 }
+  .pres__coming { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--teal-text, var(--muted-solid)) }
 
   @media (max-width: 1020px) { .series { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
   /* phone: number in a narrow left column, so nine cards stay compact */
@@ -70,7 +72,5 @@ const firstUrl = config.demoUrl !== '#' ? config.demoUrl : undefined;
     .pres__title { margin-top: 6px; font-size: 22px }
     .pres__text { margin-top: 6px; font-size: 14.5px }
     .pres__foot { padding-top: 12px }
-    .pres__badge { font-size: 10.5px; letter-spacing: .06em; white-space: nowrap }
-  }
-  @media (max-width: 359px) { .pres__badge { white-space: normal } }
+    }
 </style>

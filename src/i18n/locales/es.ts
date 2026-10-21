@@ -14,9 +14,10 @@ const es: Site = {
 
   meta: {
     title: 'Revelation Media Resources',
-    homeTitle: 'Kit gratuito para series de profecía | Revelation Media Resources',
+    homeTitle: 'Revelation Media Resources',
+    shareTitle: 'All Things New | Kit de seminario de profecía para pastores',
     description:
-      'Kit gratuito para pastores: presentaciones para seminarios de profecía, imágenes, videos y materiales promocionales, editables en PowerPoint, Keynote y Google Slides.',
+      'All Things New: kit de seminario de profecía de Daniel y Apocalipsis para pastores. Nueve presentaciones con imágenes, videos y materiales promocionales, editables en PowerPoint, Keynote y Google Slides.',
     kitName: 'Kit de series evangelísticas de Revelation Media Resources',
     audience: 'Pastores, líderes de iglesia y organizaciones ministeriales',
     ogImageAlt: 'Revelation Media Resources: todo lo que necesita para dirigir una serie sobre profecía',
@@ -29,11 +30,12 @@ const es: Site = {
 
   // Series brand shown above the name in the header and footer
   license: {
-    badge: 'CC0 1.0',
-    motto: 'Libre para usar. Libre para adaptar. Libre para compartir.',
-    label: 'Recursos originales publicados bajo CC0 1.0 (dedicación al dominio público)',
-    url: 'https://creativecommons.org/publicdomain/zero/1.0/deed.es',
-    footer: 'Recursos originales publicados bajo CC0 1.0',
+    badge: 'CC BY-NC 4.0',
+    motto: 'Úselo. Adáptelo. Compártalo.',
+    label: 'Recursos originales con licencia CC BY‑NC 4.0: con atribución y sin fines comerciales',
+    url: 'https://creativecommons.org/licenses/by-nc/4.0/deed.es',
+    attribution: 'Asociación Ministerial, Asociación General de los Adventistas del Séptimo Día',
+    footer: 'Recursos originales con licencia CC BY‑NC 4.0. Crédito: Asociación Ministerial, Asociación General de los Adventistas del Séptimo Día.',
   },
 
   brandSeries: 'All Things New',
@@ -43,6 +45,7 @@ const es: Site = {
 
   nav: [
     { label: 'Qué incluye', href: '#inside' },
+    { label: 'Serie', href: '#series' },
     { label: 'Demo', href: '#demo' },
     { label: 'Nosotros', href: '#about' },
     { label: 'Traducir', href: '#translate' },
@@ -52,8 +55,6 @@ const es: Site = {
     languageLabel: 'Idioma',
     cta: 'Descargar',
     mobileCta: 'Descargar el kit',
-    ctaPreview: 'Ver demo',
-    mobileCtaPreview: 'Ver Daniel 2',
     openMenu: 'Abrir menú',
     closeMenu: 'Cerrar menú',
   },
@@ -69,7 +70,7 @@ const es: Site = {
   hero: {
     eyebrow: 'Biblioteca de series evangelísticas',
     title: 'Revelation Media *Resources*',
-    lead: 'Todo lo que necesita para dirigir una serie sobre profecía: presentaciones, imágenes, videos y materiales promocionales. Listos para usar, totalmente editables y **gratuitos para pastores y líderes de ministerio.**',
+    lead: 'Todo lo que necesita para dirigir una serie sobre profecía: presentaciones, imágenes, videos y materiales promocionales. Listos para usar, totalmente editables y **pensados para pastores y líderes de ministerio.**',
     primaryCta: 'Descargar el kit',
     secondaryCta: 'Ver el tráiler',
     trust: ['PowerPoint', 'Keynote', 'Google Slides', 'Inglés ya, más idiomas pronto'],
@@ -113,24 +114,22 @@ const es: Site = {
   },
 
   series: {
-    eyebrow: 'La serie',
-    title: 'Nueve presentaciones, *una serie completa*',
-    sub: 'Vea el alcance completo de la serie. Cada presentación está lista para usar, con sus propias imágenes y materiales promocionales.',
+    eyebrow: 'All Things New. La esperanza comienza aquí.',
+    title: 'Seminario de profecía *de Daniel y Apocalipsis*',
+    sub: 'Nueve noches en los libros de Daniel y Apocalipsis, leídos en lenguaje sencillo desde la Biblia misma. Veremos que Dios contó la historia de antemano, que tiene un plan para acabar con el mal, el sufrimiento y la muerte, y que Jesús viene para hacer nuevas todas las cosas. Cada noche pregunta qué significa esa esperanza para su vida hoy.',
     label: 'Presentación',
     download: 'Descargar',
-    open: 'Abrir',
-    soon: 'Disponible pronto',
     coming: 'Disponible en noviembre de 2026',
     items: [
-      { ref: 'Daniel 2', title: 'La historia escrita de antemano', text: 'Breve descripción del plan maestro.' },
-      { ref: '', title: 'Presentación 2', text: 'Breve descripción del plan maestro.' },
-      { ref: '', title: 'Presentación 3', text: 'Breve descripción del plan maestro.' },
-      { ref: '', title: 'Presentación 4', text: 'Breve descripción del plan maestro.' },
-      { ref: '', title: 'Presentación 5', text: 'Breve descripción del plan maestro.' },
-      { ref: '', title: 'Presentación 6', text: 'Breve descripción del plan maestro.' },
-      { ref: '', title: 'Presentación 7', text: 'Breve descripción del plan maestro.' },
-      { ref: '', title: 'Presentación 8', text: 'Breve descripción del plan maestro.' },
-      { ref: '', title: 'Presentación 9', text: 'Breve descripción del plan maestro.' },
+      { ref: 'Daniel 2', title: 'La historia escrita de antemano', text: 'El sueño olvidado de un rey anunció el ascenso y la caída de los imperios del mundo siglos antes de que ocurrieran, y la historia lo ha seguido línea por línea. Si Dios conoció el final desde el principio, puede confiarle su mañana.' },
+      { ref: 'El gran conflicto', title: 'La guerra detrás del mundo', text: '¿Por qué hay tanto dolor en un mundo creado por un Dios de amor? La Biblia muestra el origen del mal, cómo la cruz decidió la guerra y promete que los días del mal están contados.' },
+      { ref: 'Daniel 8–9 y el santuario', title: 'La profecía más larga y nuestro Sumo Sacerdote', text: 'La profecía de tiempo más larga de la Biblia señaló el año en que vendría el Mesías, y Él llegó a tiempo. La misma profecía muestra lo que Jesús hace hoy por nosotros en el cielo, como el Sumo Sacerdote que perdona en cuanto acudimos a Él.' },
+      { ref: 'El sábado', title: 'La señal que Él nunca cambió', text: 'Desde el Edén hasta la tierra nueva, el séptimo día es la señal del Creador de descanso y pertenencia, guardado por Jesús y nunca cambiado por Dios. Es un regalo semanal, un día para detenerse y descansar en la obra terminada de Cristo.' },
+      { ref: 'Daniel 7 y Apocalipsis 13–14', title: 'La decisión final', text: 'Daniel 7 y Apocalipsis 13 describen el último conflicto de la historia, y se trata de la adoración. Dios cuenta la historia de antemano para que nadie sea engañado y para que todos puedan elegirlo en libertad.' },
+      { ref: 'Los tres ángeles', title: 'El último mensaje del cielo', text: 'Antes de que Jesús regrese, Dios envía un último mensaje a toda nación, tribu, lengua y pueblo. Es el evangelio eterno, un llamado a adorar al Creador y una invitación amorosa a salir de la confusión y venir a sus brazos.' },
+      { ref: 'El infierno', title: 'El fin del mal', text: 'Dios no atormentará a nadie para siempre. La Biblia muestra cómo pondrá fin por completo al pecado, a Satanás, al sufrimiento y a la muerte, y luego hará nuevas todas las cosas, para que usted pueda mirar el futuro sin temor.' },
+      { ref: 'Los cuatro jinetes y el remanente', title: 'La iglesia que Dios busca', text: 'A través de la persecución y el compromiso, Dios siempre ha tenido un pueblo. Apocalipsis muestra cómo reconocerlo en los últimos días y lo invita a encontrar un hogar en él.' },
+      { ref: 'La segunda venida y la tierra nueva', title: 'Todo ojo lo verá', text: 'Jesús viene otra vez, en persona, y todo ojo lo verá. Los muertos en Cristo resucitarán, las señales son dolores de parto con un fin y un propósito, y nos espera una tierra nueva donde Dios mismo enjugará toda lágrima. La esperanza comienza aquí y termina en su presencia.' },
     ],
   },
 
@@ -153,7 +152,6 @@ const es: Site = {
     title: 'Hecho con esmero, *listo* para su iglesia',
     sub: 'Cada archivo está diseñado para verse bien en pantalla y funcionar sin esfuerzo adicional.',
     cta: 'Descargar el kit',
-    ctaPreview: 'Ver Daniel 2',
     features: [
       { icon: 'image', title: 'Visuales modernos', text: 'Imágenes cinematográficas que conectan con el público de hoy.' },
       { icon: 'book', title: 'Revisado teológicamente', text: 'Contenido revisado con cuidado para asegurar su fidelidad bíblica.' },
@@ -164,7 +162,7 @@ const es: Site = {
   },
 
   demo: {
-    eyebrow: 'Demo gratuita',
+    eyebrow: 'Demo',
     title: 'Compruebe la calidad *usted mismo*',
     sub: 'Descargue la presentación completa de Daniel 2 junto con sus materiales promocionales.',
     checklist: ['La presentación completa de Daniel 2', 'Sus materiales promocionales', 'Descarga directa, sin registro'],
@@ -184,7 +182,7 @@ const es: Site = {
     lead: 'All Things New: Revelation Media Resources es una iniciativa global de la Asociación Ministerial de la Asociación General de los Adventistas del Séptimo Día, creada para equipar a pastores, evangelistas e iglesias con recursos de alta calidad, centrados en la Biblia, para presentar los mensajes proféticos de Daniel y Apocalipsis.',
     paragraphs: [
       'Nuestra visión es hacer que la verdad bíblica sea más visual, accesible, adaptable y útil en distintas culturas e idiomas. La colección incluye diapositivas, imágenes originales, videos y recursos promocionales pensados para el uso práctico en el ministerio.',
-      'Estos recursos originales se ofrecen bajo CC0 1.0, lo que permite usarlos, adaptarlos, traducirlos y compartirlos libremente para el ministerio del evangelio.',
+      'Estos recursos originales tienen licencia CC BY‑NC 4.0: puede usarlos, adaptarlos, traducirlos y compartirlos para el ministerio del evangelio, dando crédito y sin fines comerciales.',
     ],
     imageAlt: 'Un pastor presenta un seminario sobre Daniel y Apocalipsis ante la congregación',
   },
@@ -194,51 +192,13 @@ const es: Site = {
     eyebrow: 'Preguntas',
     title: 'Antes de que *pregunte*',
     items: [
-      { q: '¿Qué es Revelation Media Resources?', a: 'Revelation Media Resources es una biblioteca gratuita de materiales listos para dirigir una serie evangelística sobre profecía: presentaciones, diapositivas, imágenes, videos y materiales promocionales para pastores, iglesias y organizaciones ministeriales.', open: true },
-      { q: '¿Es realmente gratuito?', a: 'Sí. El kit completo es gratuito para pastores, iglesias y organizaciones ministeriales: todo se descarga directamente, sin registro. Los recursos originales se publican bajo CC0 1.0, una dedicación al dominio público, por lo que puede usarlos, adaptarlos, traducirlos y compartirlos libremente en su ministerio, sin pedir permiso ni dar crédito.' },
+      { q: '¿Qué es Revelation Media Resources?', a: 'Revelation Media Resources es una biblioteca de materiales listos para dirigir una serie evangelística sobre profecía: presentaciones, diapositivas, imágenes, videos y materiales promocionales para pastores, iglesias y organizaciones ministeriales.', open: true },
+      { q: '¿Tengo que pagar o registrarme?', a: 'No. No tiene costo ni requiere registro: todo se descarga directamente. Los recursos originales tienen licencia CC BY‑NC 4.0, por lo que puede usarlos, adaptarlos, traducirlos y compartirlos en su ministerio, siempre que dé crédito y no los use con fines comerciales.' },
       { q: '¿Quién puede usar estos materiales?', a: 'Pastores, líderes de iglesia y organizaciones ministeriales que quieran dirigir una serie evangelística. No necesita saber de diseño: los archivos están listos para presentar y son fáciles de adaptar a su iglesia.' },
       { q: '¿Qué formatos incluye?', a: 'Las presentaciones vienen en PowerPoint, Keynote y Google Slides. Las imágenes y los videos se entregan en formatos estándar que funcionan en cualquier dispositivo.' },
       { q: '¿Puedo editar los materiales?', a: 'Sí. Puede cambiar textos, reordenar diapositivas y agregar los datos de su iglesia para adaptarlos a su programa.' },
       { q: '¿Qué idiomas están disponibles?', a: 'Hoy el kit está disponible en inglés. Pronto llegarán más idiomas, que se irán agregando progresivamente; vea la lista en la sección de traducción más abajo. ¿Domina otro idioma? Puede ayudarnos a traducirlo.' },
     ],
-  },
-
-  getKit: {
-    eyebrow: 'Descarga',
-    title: 'Descargue el *kit completo*',
-    sub: 'Todos los recursos se descargan gratis. Sin registro ni inicio de sesión: los recursos originales se publican bajo CC0 1.0.',
-    files: [
-      { id: 'presentations', label: 'Presentaciones', detail: 'PowerPoint, Keynote, Google Slides' },
-      { id: 'images', label: 'Imágenes', detail: 'Arte original para diapositivas e impresión' },
-      { id: 'videos', label: 'Videos', detail: 'Clips para los momentos clave de la serie' },
-      { id: 'promo', label: 'Materiales promocionales', detail: 'Carteles, redes sociales, invitaciones' },
-      { id: 'print', label: 'Folletos y certificados', detail: 'Guías de estudio, folletos, certificados' },
-    ],
-    downloadLabel: 'Descargar',
-    soon: 'Disponible pronto',
-    subscribe: {
-      title: 'Reciba novedades de *One Voice 27*',
-      text: 'Suscríbase para enterarse de nuevos recursos, traducciones y anuncios.',
-      fields: {
-        name: { label: 'Nombre', placeholder: 'Juan' },
-        email: { label: 'Correo electrónico', placeholder: 'usted@iglesia.org', error: 'Escriba un correo electrónico válido.', suggest: '¿Quiso decir {email}?' },
-      },
-      optional: '(opcional)',
-      consent: {
-        text: 'Acepto recibir novedades de One Voice 27 por correo. Puedo darme de baja en cualquier momento. Consulte la {privacy}.',
-        error: 'Confirme para suscribirse.',
-      },
-      turnstileError: 'Complete la verificación antispam.',
-      submit: 'Suscribirse',
-      sending: 'Suscribiendo',
-      note: 'Una sola lista para todas las novedades de One Voice 27. Sin spam.',
-      networkError: 'Algo salió mal. Inténtelo de nuevo en un momento.',
-      success: {
-        title: 'Ya está suscrito',
-        text: 'Enviaremos las novedades de One Voice 27 a {email}.',
-        change: 'Usar otro correo',
-      },
-    },
   },
 
   translate: {
@@ -266,11 +226,12 @@ const es: Site = {
   },
 
   footer: {
-    tagline: 'Una biblioteca visual moderna de materiales para series evangelísticas. Gratuita para pastores y líderes de ministerio.',
+    tagline: 'Una biblioteca visual moderna de materiales para series evangelísticas, pensada para pastores y líderes de ministerio.',
     columns: { explore: 'Explorar', help: 'Ayuda', legal: 'Legal' },
     links: {
       faq: 'Preguntas',
       inside: 'Qué incluye',
+      series: 'Serie',
       support: 'Soporte',
       demo: 'Demo',
       contact: 'Contacto',
@@ -299,7 +260,7 @@ const es: Site = {
       description: 'Términos de uso de Revelation Media Resources.',
       intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Estos términos explican cómo puede usar la biblioteca y sus materiales.',
       sections: [
-        { heading: 'Quiénes somos', text: 'La Asociación Ministerial de la Asociación General de los Adventistas del Séptimo Día ofrece Revelation Media Resources de forma gratuita a pastores, iglesias y organizaciones ministeriales.' },
+        { heading: 'Quiénes somos', text: 'La Asociación Ministerial de la Asociación General de los Adventistas del Séptimo Día ofrece Revelation Media Resources a pastores, iglesias y organizaciones ministeriales.' },
         { heading: 'Uso de los materiales', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam.' },
         { heading: 'Lo que no está permitido', text: 'Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.' },
         { heading: 'Cuentas y acceso', text: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
@@ -312,10 +273,8 @@ const es: Site = {
       description: 'Cómo Revelation Media Resources recopila y usa los datos personales.',
       intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Esta política explica qué datos recopilamos, por qué y qué opciones tiene.',
       sections: [
-        { heading: 'Qué recopilamos', text: 'Descargar el kit no requiere datos personales. Si se suscribe a las novedades de One Voice 27, recopilamos su correo y, si decide compartirlo, su nombre.' },
-        { heading: 'Para qué lo usamos', text: 'Usamos su correo solo para enviarle novedades de One Voice 27: nuevos recursos, traducciones y anuncios. Puede darse de baja en cualquier momento.' },
+        { heading: 'Qué recopilamos', text: 'Descargar el kit no requiere datos personales: no hay registro ni formulario de suscripción.' },
         { heading: 'Cookies y analítica', text: 'Con su consentimiento usamos Google Analytics para entender cómo se usa el sitio. Puede cambiar su elección en cualquier momento desde "Configuración de cookies" en el pie de página.' },
-        { heading: 'Protección contra spam', text: 'El formulario de suscripción está protegido por Cloudflare Turnstile, que procesa datos técnicos para distinguir personas de bots.' },
         { heading: 'Sus derechos', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id ligula porta felis euismod semper, cras mattis consectetur purus sit amet fermentum.' },
         { heading: 'Contacto', text: '¿Preguntas sobre sus datos? Escríbanos a {email}.' },
       ],

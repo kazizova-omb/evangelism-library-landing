@@ -1,6 +1,6 @@
 ---
 import Brush from './Brush.astro';
-import BrandMark from './BrandMark.astro';
+import BrandLockup from './BrandLockup.astro';
 import LangSwitch from './LangSwitch.astro';
 import { useT, getLang, localePath } from '../i18n';
 import { config } from '../config';
@@ -18,10 +18,7 @@ const a = (href: string) => anchor(href, home, lang);
   <Brush w={756} h={379} at="left:50%;top:0;margin-left:-378px" box={993.557} x={-80} y={-118} size={863.943} rotate={-170.59} opacity={0.07} tone="teal" />
   <div class="footer__top">
     <div class="footer__brand">
-      <a href={home ? '#top' : localePath(lang, '/')} class="brand">
-        <BrandMark />
-        <span class="brand__name"><span class="brand__series">{site.brandSeries}<span class="visually-hidden">:</span></span> <span class="brand__title">{site.brand}</span></span>
-      </a>
+      <BrandLockup href={home ? '#top' : localePath(lang, '/')} dark />
       <p>{site.footer.tagline}</p>
     </div>
 
@@ -30,6 +27,7 @@ const a = (href: string) => anchor(href, home, lang);
         <p class="footer__h" id="fc-explore">{c.explore}</p>
         <ul aria-labelledby="fc-explore">
           <li><a href={a('#inside')}>{l.inside}</a></li>
+          <li><a href={a('#series')}>{l.series}</a></li>
           <li><a href={a('#demo')}>{l.demo}</a></li>
           <li><a href={a('#about')}>{l.about}</a></li>
           <li><a href={a('#translate')}>{l.translate}</a></li>

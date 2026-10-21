@@ -49,6 +49,8 @@ const { title, description = site.meta.description, home = false, noindex: noind
 // a client preview is never indexed
 const noindex = noindexProp || config.preview;
 const pageTitle = title ? `${title} | ${site.meta.title}` : home ? site.meta.homeTitle : site.meta.title;
+// link previews of the home page carry the series name ("All Things New | ..."); the tab stays the brand
+const shareTitle = home ? site.meta.shareTitle : pageTitle;
 const canonical = new URL(Astro.url.pathname.replace(/\.html$/, ''), Astro.site).href;
 const alternates = localeCodes.map((code) => ({
   hreflang: locales[code].locale.htmlLang,
@@ -106,7 +108,7 @@ const jsonLd = noindex && !breadcrumb ? null : {
   <meta property="og:locale" content={site.locale.ogLocale} />
   {localeCodes.filter((c) => c !== lang).map((c) => <meta property="og:locale:alternate" content={locales[c].locale.ogLocale} />)}
   <meta property="og:site_name" content={site.meta.title} />
-  <meta property="og:title" content={pageTitle} />
+  <meta property="og:title" content={shareTitle} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
   <meta property="og:image" content={ogImage} />
@@ -115,7 +117,7 @@ const jsonLd = noindex && !breadcrumb ? null : {
   <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:alt" content={site.meta.ogImageAlt} />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content={pageTitle} />
+  <meta name="twitter:title" content={shareTitle} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={ogImage} />
 

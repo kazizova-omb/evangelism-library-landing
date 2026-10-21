@@ -7,12 +7,10 @@ import VideoModal from '../../components/VideoModal.astro';
 import Inside from '../../components/Inside.astro';
 import Journey from '../../components/Journey.astro';
 import Series from '../../components/Series.astro';
-import { config } from '../../config';
 import Quality from '../../components/Quality.astro';
 import Demo from '../../components/Demo.astro';
 import About from '../../components/About.astro';
 import Faq from '../../components/Faq.astro';
-import GetKit from '../../components/GetKit.astro';
 import Translate from '../../components/Translate.astro';
 
 export const getStaticPaths = langPaths;
@@ -21,13 +19,12 @@ export const getStaticPaths = langPaths;
   <Hero />
   <Trailer />
   <Inside />
-  {config.showDrafts && <Series />}
+  <Series />
   <Journey />
   <Quality />
   <Demo />
   <About />
   <Faq />
-  <GetKit />
   <Translate />
   <VideoModal />
 </Base>
