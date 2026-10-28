@@ -1,6 +1,6 @@
 // Spanish copy. Same shape as en.ts (TypeScript reports anything missing).
 // Formatting: *text* = gold italic accent, **text** = bold. No em dashes in copy.
-// Tone: "usted", addressed to pastors and ministry leaders.
+// Tone: "usted", addressed to pastors and church leaders.
 import type { Site } from '../types';
 
 const es: Site = {
@@ -15,9 +15,9 @@ const es: Site = {
   meta: {
     title: 'Revelation Media Resources',
     homeTitle: 'Revelation Media Resources',
-    shareTitle: 'All Things New | Kit de seminario de profecía para pastores',
+    shareTitle: 'All Things New | Kit de seminario de profecía para líderes de iglesia',
     description:
-      'All Things New: kit de seminario de profecía de Daniel y Apocalipsis para pastores. Nueve presentaciones con imágenes, videos y materiales promocionales, editables en PowerPoint, Keynote y Google Slides.',
+      'All Things New: kit de seminario de profecía de Daniel y Apocalipsis para líderes de iglesia. Nueve presentaciones con imágenes, videos y materiales promocionales, editables en PowerPoint, Keynote y Google Slides.',
     kitName: 'Kit de series evangelísticas de Revelation Media Resources',
     audience: 'Pastores, líderes de iglesia y organizaciones ministeriales',
     ogImageAlt: 'Revelation Media Resources: todo lo que necesita para dirigir una serie sobre profecía',
@@ -70,7 +70,7 @@ const es: Site = {
   hero: {
     eyebrow: 'Biblioteca de series evangelísticas',
     title: 'Revelation Media *Resources*',
-    lead: 'Todo lo que necesita para dirigir una serie sobre profecía: presentaciones, imágenes, videos y materiales promocionales. Listos para usar, totalmente editables y **pensados para pastores y líderes de ministerio.**',
+    lead: 'Todo lo que necesita para dirigir una serie sobre profecía: presentaciones, imágenes, videos y materiales promocionales. Listos para usar, totalmente editables y **pensados para pastores y líderes de iglesia.**',
     primaryCta: 'Descargar el kit',
     secondaryCta: 'Ver el tráiler',
     trust: ['PowerPoint', 'Keynote', 'Google Slides', 'Inglés ya, más idiomas pronto'],
@@ -127,9 +127,9 @@ const es: Site = {
       { ref: 'El sábado', title: 'La señal que Él nunca cambió', text: 'Desde el Edén hasta la tierra nueva, el séptimo día es la señal del Creador de descanso y pertenencia, guardado por Jesús y nunca cambiado por Dios. Es un regalo semanal, un día para detenerse y descansar en la obra terminada de Cristo.' },
       { ref: 'Daniel 7 y Apocalipsis 13–14', title: 'La decisión final', text: 'Daniel 7 y Apocalipsis 13 describen el último conflicto de la historia, y se trata de la adoración. Dios cuenta la historia de antemano para que nadie sea engañado y para que todos puedan elegirlo en libertad.' },
       { ref: 'Los tres ángeles', title: 'El último mensaje del cielo', text: 'Antes de que Jesús regrese, Dios envía un último mensaje a toda nación, tribu, lengua y pueblo. Es el evangelio eterno, un llamado a adorar al Creador y una invitación amorosa a salir de la confusión y venir a sus brazos.' },
-      { ref: 'El infierno', title: 'El fin del mal', text: 'Dios no atormentará a nadie para siempre. La Biblia muestra cómo pondrá fin por completo al pecado, a Satanás, al sufrimiento y a la muerte, y luego hará nuevas todas las cosas, para que usted pueda mirar el futuro sin temor.' },
       { ref: 'Los cuatro jinetes y el remanente', title: 'La iglesia que Dios busca', text: 'A través de la persecución y el compromiso, Dios siempre ha tenido un pueblo. Apocalipsis muestra cómo reconocerlo en los últimos días y lo invita a encontrar un hogar en él.' },
-      { ref: 'La segunda venida y la tierra nueva', title: 'Todo ojo lo verá', text: 'Jesús viene otra vez, en persona, y todo ojo lo verá. Los muertos en Cristo resucitarán, las señales son dolores de parto con un fin y un propósito, y nos espera una tierra nueva donde Dios mismo enjugará toda lágrima. La esperanza comienza aquí y termina en su presencia.' },
+      { ref: 'El infierno', title: 'El fin del mal', text: 'Dios no atormentará a nadie para siempre. La Biblia muestra cómo pondrá fin por completo al pecado, a Satanás, al sufrimiento y a la muerte, y luego hará nuevas todas las cosas, para que usted pueda mirar el futuro sin temor.' },
+      { ref: 'La segunda venida y la tierra nueva', title: 'All Things New: La esperanza comienza aquí', text: 'Jesús viene otra vez, en persona, y todo ojo lo verá. Los muertos en Cristo resucitarán, las señales son dolores de parto con un fin y un propósito, y nos espera una tierra nueva donde Dios mismo enjugará toda lágrima. La esperanza comienza aquí y termina en su presencia.' },
     ],
   },
 
@@ -178,7 +178,7 @@ const es: Site = {
 
   about: {
     eyebrow: 'Acerca de',
-    title: 'Una iniciativa global para *equipar a los pastores*',
+    title: 'Una iniciativa global para *equipar a los líderes de iglesia*',
     lead: 'All Things New: Revelation Media Resources es una iniciativa global de la Asociación Ministerial de la Asociación General de los Adventistas del Séptimo Día, creada para equipar a pastores, evangelistas e iglesias con recursos de alta calidad, centrados en la Biblia, para presentar los mensajes proféticos de Daniel y Apocalipsis.',
     paragraphs: [
       'Nuestra visión es hacer que la verdad bíblica sea más visual, accesible, adaptable y útil en distintas culturas e idiomas. La colección incluye diapositivas, imágenes originales, videos y recursos promocionales pensados para el uso práctico en el ministerio.',
@@ -192,7 +192,7 @@ const es: Site = {
     eyebrow: 'Preguntas',
     title: 'Antes de que *pregunte*',
     items: [
-      { q: '¿Qué es Revelation Media Resources?', a: 'Revelation Media Resources es una biblioteca de materiales listos para dirigir una serie evangelística sobre profecía: presentaciones, diapositivas, imágenes, videos y materiales promocionales para pastores, iglesias y organizaciones ministeriales.', open: true },
+      { q: '¿Qué es Revelation Media Resources?', a: 'Revelation Media Resources es una biblioteca de materiales listos para dirigir una serie evangelística sobre profecía: presentaciones, diapositivas, imágenes, videos y materiales promocionales para pastores, líderes de iglesia y organizaciones ministeriales.', open: true },
       { q: '¿Tengo que pagar o registrarme?', a: 'No. No tiene costo ni requiere registro: todo se descarga directamente. Los recursos originales tienen licencia CC BY‑NC 4.0, por lo que puede usarlos, adaptarlos, traducirlos y compartirlos en su ministerio, siempre que dé crédito y no los use con fines comerciales.' },
       { q: '¿Quién puede usar estos materiales?', a: 'Pastores, líderes de iglesia y organizaciones ministeriales que quieran dirigir una serie evangelística. No necesita saber de diseño: los archivos están listos para presentar y son fáciles de adaptar a su iglesia.' },
       { q: '¿Qué formatos incluye?', a: 'Las presentaciones vienen en PowerPoint, Keynote y Google Slides. Las imágenes y los videos se entregan en formatos estándar que funcionan en cualquier dispositivo.' },
@@ -219,14 +219,14 @@ const es: Site = {
     ],
     legendAvailable: 'Disponible',
     legendInProgress: 'Próximamente',
-    sub: '¿Domina otro idioma? Únase a nuestros traductores voluntarios y ayude a pastores de todo el mundo a compartir este mensaje.',
+    sub: '¿Domina otro idioma? Únase a nuestros traductores voluntarios y ayude a líderes de iglesia de todo el mundo a compartir este mensaje.',
     cta: 'Ser traductor voluntario',
     orWrite: 'O escriba a {email}',
     mailSubject: 'Traductor voluntario',
   },
 
   footer: {
-    tagline: 'Una biblioteca visual moderna de materiales para series evangelísticas, pensada para pastores y líderes de ministerio.',
+    tagline: 'Una biblioteca visual moderna de materiales para series evangelísticas, pensada para pastores y líderes de iglesia.',
     columns: { explore: 'Explorar', help: 'Ayuda', legal: 'Legal' },
     links: {
       faq: 'Preguntas',
@@ -260,7 +260,7 @@ const es: Site = {
       description: 'Términos de uso de Revelation Media Resources.',
       intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Estos términos explican cómo puede usar la biblioteca y sus materiales.',
       sections: [
-        { heading: 'Quiénes somos', text: 'La Asociación Ministerial de la Asociación General de los Adventistas del Séptimo Día ofrece Revelation Media Resources a pastores, iglesias y organizaciones ministeriales.' },
+        { heading: 'Quiénes somos', text: 'La Asociación Ministerial de la Asociación General de los Adventistas del Séptimo Día ofrece Revelation Media Resources a pastores, líderes de iglesia y organizaciones ministeriales.' },
         { heading: 'Uso de los materiales', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam.' },
         { heading: 'Lo que no está permitido', text: 'Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.' },
         { heading: 'Cuentas y acceso', text: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },

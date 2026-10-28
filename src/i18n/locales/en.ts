@@ -24,9 +24,9 @@ const en = {
     // Home page <title> (browser tab, bookmarks): the brand only, as the client asked
     homeTitle: 'Revelation Media Resources',
     // Title in link previews (Open Graph / social cards)
-    shareTitle: 'All Things New | Prophecy Seminar Series Kit for Pastors',
+    shareTitle: 'All Things New | Prophecy Seminar Series Kit for Church Leaders',
     description:
-      'All Things New: a Daniel and Revelation prophecy seminar series kit for pastors. Nine presentations with images, videos and promo materials, editable in PowerPoint, Keynote and Google Slides.',
+      'All Things New: a Daniel and Revelation prophecy seminar series kit for church leaders. Nine presentations with images, videos and promo materials, editable in PowerPoint, Keynote and Google Slides.',
     // Structured data (search engines and AI answers)
     kitName: 'Revelation Media Resources evangelistic series kit',
     audience: 'Pastors, church leaders and ministry organizations',
@@ -83,7 +83,7 @@ const en = {
   hero: {
     eyebrow: 'Evangelistic Series Library',
     title: 'Revelation Media *Resources*',
-    lead: 'Everything you need to lead a prophecy series: presentations, images, videos, and promotional materials. Ready to use, fully editable, and **made for pastors and ministry leaders.**',
+    lead: 'Everything you need to lead a prophecy series: presentations, images, videos, and promotional materials. Ready to use, fully editable, and **made for pastors and church leaders.**',
     primaryCta: 'Download the kit',
     secondaryCta: 'Watch the trailer',
     trust: ['PowerPoint', 'Keynote', 'Google Slides', 'English now, more languages soon'],
@@ -146,9 +146,9 @@ const en = {
       { ref: 'The Sabbath', title: 'The Sign He Never Changed', text: 'From Eden to the new earth, the seventh day is the Creator\'s sign of rest and belonging, kept by Jesus and never changed by God. It is a weekly gift, a day to stop and rest in what Christ has finished.' },
       { ref: 'Daniel 7 and Revelation 13–14', title: 'The Final Choice', text: 'Daniel 7 and Revelation 13 describe the last conflict of history, and it is about worship. God tells the story in advance so that no one is deceived, and so that everyone can choose Him freely.' },
       { ref: 'The Three Angels', title: 'Heaven\'s Last Message', text: 'Before Jesus returns, God sends one last message to every nation, tribe, tongue, and people. It is the everlasting gospel, a call to worship the Creator, and a loving appeal to come out of confusion and into His arms.' },
-      { ref: 'Hell', title: 'The End of Evil', text: 'God will not torment anyone forever. The Bible shows how He will end sin, Satan, suffering, and death completely, and then make everything new, so that you can face the future without fear.' },
       { ref: 'The Four Horsemen and the Remnant', title: 'The Church God Is Looking For', text: 'Through persecution and compromise, God has always had a people. Revelation shows how to recognize them in the last days and invites you to find a home among them.' },
-      { ref: 'The Second Coming and the New Earth', title: 'Every Eye Will See Him', text: 'Jesus is coming again, in person, and every eye will see Him. The dead in Christ will rise, the signs are labor pains with an end and a purpose, and a new earth is waiting where God Himself will wipe away every tear. Hope starts here, and it ends in His presence.' },
+      { ref: 'Hell', title: 'The End of Evil', text: 'God will not torment anyone forever. The Bible shows how He will end sin, Satan, suffering, and death completely, and then make everything new, so that you can face the future without fear.' },
+      { ref: 'The Second Coming and the New Earth', title: 'All Things New: Hope Starts Here', text: 'Jesus is coming again, in person, and every eye will see Him. The dead in Christ will rise, the signs are labor pains with an end and a purpose, and a new earth is waiting where God Himself will wipe away every tear. Hope starts here, and it ends in His presence.' },
     ],
   },
 
@@ -204,11 +204,11 @@ const en = {
   about: {
     // About the initiative (client copy). The motto under it comes from license.motto.
     eyebrow: 'About',
-    title: 'A global initiative to *equip pastors*',
+    title: 'A global initiative to *equip church leaders*',
     lead: 'All Things New: Revelation Media Resources is a global initiative of the Ministerial Association of the General Conference of Seventh-day Adventists, created to equip pastors, evangelists, and churches with high-quality, Bible-centered resources for presenting the prophetic messages of Daniel and Revelation.',
     paragraphs: [
       'Our vision is to make biblical truth more visual, accessible, adaptable, and useful across cultures and languages. The collection includes presentation slides, original images, videos, and promotional resources designed for practical ministry use.',
-      'These original resources are licensed under CC BY‑NC 4.0: you may use, adapt, translate, and share them for gospel ministry, with credit and for non-commercial purposes.',
+      'These original resources are licensed under CC BY‑NC 4.0: you may use, adapt, translate, and share them for gospel ministry, with credit and for non‑commercial purposes.',
     ],
     imageAlt: 'A pastor presenting a Daniel and Revelation seminar to a church audience',
   },
@@ -219,7 +219,7 @@ const en = {
     title: 'Before you *ask*',
     // Also published as FAQPage structured data. Start answers with the direct answer.
     items: [
-      { q: 'What is Revelation Media Resources?', a: 'Revelation Media Resources is a library of ready-made materials for running an evangelistic prophecy series: presentations, slides, images, videos, and promotional materials for pastors, churches, and ministry organizations.', open: true },
+      { q: 'What is Revelation Media Resources?', a: 'Revelation Media Resources is a library of ready-made materials for running an evangelistic prophecy series: presentations, slides, images, videos, and promotional materials for pastors, church leaders, and ministry organizations.', open: true },
       { q: 'Do I need to pay or register?', a: 'No. There is no cost and no registration: everything downloads directly. The original resources are licensed under CC BY‑NC 4.0, so you may use, adapt, translate, and share them for your ministry, as long as you give credit and do not use them commercially.' },
       { q: 'Who can use these materials?', a: 'Pastors, church leaders, and ministry organizations who want to run an evangelistic series. No design skills are needed: the files are ready to present and easy to adapt to your church.' },
       { q: 'What formats are included?', a: 'Presentations come in PowerPoint, Keynote, and Google Slides. Images and videos are provided in standard formats that work on any device.' },
@@ -247,7 +247,7 @@ const en = {
     ],
     legendAvailable: 'Available',
     legendInProgress: 'Coming soon',
-    sub: 'Fluent in another language? Join our volunteer translators and help pastors around the world share this message.',
+    sub: 'Fluent in another language? Join our volunteer translators and help church leaders around the world share this message.',
     cta: 'Volunteer as a translator',
     // {email} is replaced with the translation email link
     orWrite: 'Or write to {email}',
@@ -255,7 +255,7 @@ const en = {
   },
 
   footer: {
-    tagline: 'A modern visual library of materials for evangelistic series, made for pastors and ministry leaders.',
+    tagline: 'A modern visual library of materials for evangelistic series, made for pastors and church leaders.',
     columns: { explore: 'Explore', help: 'Help', legal: 'Legal' },
     links: {
       faq: 'Questions',
@@ -290,7 +290,7 @@ const en = {
       description: 'Terms of Use for Revelation Media Resources.',
       intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. These terms explain how you may use the library and its materials.',
       sections: [
-        { heading: 'Who we are', text: 'The Ministerial Association of the General Conference of Seventh-day Adventists provides Revelation Media Resources to pastors, churches, and ministry organizations.' },
+        { heading: 'Who we are', text: 'The Ministerial Association of the General Conference of Seventh-day Adventists provides Revelation Media Resources to pastors, church leaders, and ministry organizations.' },
         { heading: 'Using the materials', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam.' },
         { heading: 'What is not allowed', text: 'Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.' },
         { heading: 'Accounts and access', text: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
