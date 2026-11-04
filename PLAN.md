@@ -32,7 +32,7 @@ the **Terms of Use** at registration. Emails through **Resend**.
 - [x] Preview block: images, a video to watch, slides, "Get access to download".
 - [x] FAQ, Privacy Policy, Terms of Use, llms.txt rewritten for registration.
 - [x] `/license` page: plain-language summary, credit line, links to the full CC license and the terms.
-- [ ] Preview block: 15 to 20 images from the table ("featured") once it exists.
+- [x] Preview block as a mosaic (decided over the three-row version).
 - Daniel 2 demo stays open without registration as a sample (decide if that should change).
 
 ## Stage 2. Download portal (Katya), done in test mode
@@ -43,6 +43,19 @@ the **Terms of Use** at registration. Emails through **Resend**.
 - [x] Locked state: content fades out under the sign-in card; email, then a 6-digit code; wrong or expired
       code, unknown email ("register first").
 - [x] Email templates: `emails/<lang>/registered.html`, `code.html`.
+
+## Katya: follow-ups to check later
+
+- [ ] **When Sergiy connects the backend** (`PUBLIC_API_URL` set): check the landing and the portal with real
+      data: long file titles, other image proportions, empty categories, error messages, real emails
+      (both languages, not in spam), sign-in after the session expires.
+- [ ] **When the image table exists:** put 15 to 20 real "featured" images (and a few video stills and slides)
+      into the landing mosaic (`src/components/Preview.astro`, TODO at the top).
+- [ ] **After the legal review:** replace the draft texts of the Terms of Use, Privacy Policy and License page
+      (locale files: `legal.terms`, `legal.privacy`, `licensePage`), remove the "Draft" notes, and set
+      `legalPagesReady = true` in `src/i18n/config.mjs`.
+- [ ] **After Justin confirms registration in writing:** merge the `portal` branch into `main` and publish the
+      main preview.
 
 ## Stage 3. Back end (Sergiy)
 

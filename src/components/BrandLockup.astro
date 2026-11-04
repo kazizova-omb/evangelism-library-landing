@@ -17,7 +17,8 @@ const site = useT(Astro);
 </a>
 
 <style>
-  .brand { display: inline-flex; align-items: center; gap: 14px; white-space: nowrap; color: var(--navy, var(--ink)) }
+  /* never squeezed by the menu: the name stays on its two lines */
+  .brand { flex: none; display: inline-flex; align-items: center; gap: 14px; white-space: nowrap; color: var(--navy, var(--ink)) }
   .brand__wordmark { display: block; width: 184px; height: auto }
   .brand__rule { flex: none; width: 1.5px; height: 34px; background: currentColor; opacity: .35 }
   /* the site's name, two short lines in the poster face */
