@@ -117,3 +117,39 @@ a.chip:hover { border-color: rgba(227, 178, 94, .5); color: var(--gold-hi) }
 /* brand lockup (series name above the title) */
 .brand__name { display: flex; flex-direction: column; line-height: 1.05 }
 .brand__series { font-size: .62em; opacity: .85 }
+
+/* ---------- Forms (registration on the landing, sign-in in the portal) ---------- */
+.formcard { position: relative; padding: clamp(24px, 3vw, 40px); border-radius: 18px; background: linear-gradient(180deg, #14100C, #0F0C09); box-shadow: 0 0 0 1px var(--line) inset, 0 30px 80px -40px rgba(0, 0, 0, .8) }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px }
+.field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px }
+.field label { font-size: 13.5px; font-weight: 500; color: var(--ink-2) }
+.field input:not([type="checkbox"]):not([type="radio"]) { width: 100%; font: inherit; font-size: 16px; color: var(--ink); background: rgba(243, 235, 221, .025); border: 1px solid rgba(243, 235, 221, .12); border-radius: 10px; height: 48px; padding: 0 14px; outline: none; transition: border-color .2s, box-shadow .2s, background .2s }
+.field input:not([type="checkbox"]):not([type="radio"]):hover { border-color: rgba(243, 235, 221, .22) }
+.field input:not([type="checkbox"]):not([type="radio"]):focus { border-color: rgba(227, 178, 94, .8); box-shadow: 0 0 0 3px rgba(227, 178, 94, .12) }
+.field ::placeholder { color: rgba(163, 150, 130, .6) }
+.email-suggest { font-size: 13px; color: var(--muted-solid) }
+.email-suggest button { font: inherit; color: var(--gold-hi); text-decoration: underline; text-underline-offset: 3px; cursor: pointer }
+.hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden }
+.err { display: none; font-size: 13px; color: var(--error) }
+.is-invalid input { border-color: var(--error-line) !important }
+.is-invalid .err { display: block }
+.consent { display: flex; gap: 12px; align-items: flex-start; font-size: 13.5px; line-height: 1.55; color: var(--muted-solid); margin: 6px 0 4px; cursor: pointer }
+.consent input { flex: none; appearance: none; -webkit-appearance: none; width: 18px; height: 18px; padding: 0; margin-top: 2px; border-radius: 5px; border: 1px solid rgba(243, 235, 221, .3); background: rgba(243, 235, 221, .04); cursor: pointer; display: grid; place-items: center; transition: background .2s, border-color .2s }
+.consent input:checked { background: var(--gold); border-color: var(--gold) }
+.consent input:checked::after { content: ""; width: 9px; height: 5px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: translateY(-1px) rotate(-45deg) }
+.consent input:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px }
+.is-invalid .consent input { border-color: var(--error-line) }
+.consent a { color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px }
+.consent-wrap { margin: 4px 0 20px }
+/* Turnstile: space is reserved so the widget does not shift the layout */
+.turnstile-wrap { margin-bottom: 20px; gap: 6px }
+.turnstile { width: 100%; max-width: 300px; min-height: 65px }
+@media (max-width: 387px) { .turnstile { min-height: 148px } }
+.btn.is-loading { pointer-events: none; opacity: .85 }
+.btn.is-loading::after { content: ""; width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .35); border-top-color: #fff; animation: spin .8s linear infinite }
+.form-err { margin-bottom: 16px; padding: 12px 14px; border-radius: 10px; background: rgba(224, 120, 90, .1); color: var(--error); font-size: 14px }
+.link-btn { font: inherit; font-size: 14px; color: var(--muted-solid); text-decoration: underline; text-underline-offset: 3px; cursor: pointer }
+.link-btn:hover { color: var(--gold-hi) }
+/* test mode (no backend yet): a small note so nobody mistakes sample data for the real thing */
+.test-note { margin-top: 14px; padding: 8px 12px; border-radius: 6px; font-size: 12.5px; line-height: 1.5; color: #7A5A00; background: #FFF3C4 }
+@media (max-width: 760px) { .grid2 { grid-template-columns: 1fr } }

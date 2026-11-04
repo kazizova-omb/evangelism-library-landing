@@ -2,12 +2,13 @@
 import Brush from './Brush.astro';
 import Motto from './Motto.astro';
 import SlotImage from './SlotImage.astro';
-import { useT } from '../i18n';
+import { useT, getLang, localePath } from '../i18n';
 import { rich } from '../lib/rich';
 import { slot } from '../lib/slots';
 import { getTheme } from '../lib/theme';
 
 const site = useT(Astro);
+const lang = getLang(Astro);
 const a = site.about;
 // photo for the block: src/assets/slots/v3/about.* (any ratio; shown 4:5)
 const image = slot('about', getTheme(Astro));
@@ -24,7 +25,7 @@ const image = slot('about', getTheme(Astro));
       <p class="about__lead">{a.lead}</p>
       {a.paragraphs.map((p) => <p class="about__text">{p}</p>)}
       <p class="about__motto">
-        <a href={site.license.url} target="_blank" rel="license noopener" class="about__badge" aria-label={site.license.label}>{site.license.badge}</a>
+        <a href={localePath(lang, '/license')} rel="license" class="about__badge" aria-label={site.license.label}>{site.license.badge}</a>
         <Motto />
       </p>
     </div>

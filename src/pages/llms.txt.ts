@@ -18,7 +18,7 @@ export const GET: APIRoute = ({ site }) => {
     '## Key facts',
     '',
     `- Audience: ${s.meta.audience}`,
-    '- Price: no cost, no registration',
+    '- Price: no cost. Downloads need a short registration (name and email) in the download portal',
     `- Licence: ${s.license.badge} (${s.license.url}), credit: ${s.license.attribution}`,
     `- Formats: ${s.hero.trust.slice(0, 3).join(', ')}`,
     `- What is included: ${s.inside.stats.map((st) => `${st.value} ${st.label.toLowerCase()}`).join(', ')}`,

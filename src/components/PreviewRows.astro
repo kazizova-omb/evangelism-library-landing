@@ -1,0 +1,88 @@
+---
+// A short look inside the library on the landing: some images, a video to watch and a few slides.
+// Nothing downloads here; the button leads to registration. The full catalog lives in the download portal.
+// TODO: once the image table exists, take the items marked "featured" there (15 to 20 images) instead of
+// the slot images listed below.
+import Icon from './Icon.astro';
+import SlotImage from './SlotImage.astro';
+import { useT } from '../i18n';
+import { rich } from '../lib/rich';
+import { slot, type SlotName } from '../lib/slots';
+import { getTheme } from '../lib/theme';
+
+const site = useT(Astro);
+const theme = getTheme(Astro);
+const p = site.preview;
+
+const images: SlotName[] = ['hero', 'gallery-art', 'about', 'gallery-flyer', 'gallery-social', 'gallery-video'];
+const videos: { img: SlotName; trailer?: boolean }[] = [{ img: 'trailer', trailer: true }];
+const slides: SlotName[] = ['gallery-slide', 'demo'];
+const pick = (names: SlotName[]) => names.map((n) => slot(n, theme)).filter(Boolean);
+---
+<section class="section" id="preview" aria-labelledby="preview-title">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow">{p.eyebrow}</p>
+      <h2 class="h2" id="preview-title" set:html={rich(p.title)} />
+      <p class="sub">{p.sub}</p>
+    </div>
+
+    <div class="pv reveal">
+      <h3 class="pv__label">{p.groups.images}</h3>
+      <ul class="pv__grid pv__grid--images" role="list">
+        {pick(images).map((img) => <li class="pv__item"><SlotImage src={img!} alt="" sizes="(max-width: 760px) 50vw, 240px" widths={[240, 480]} /></li>)}
+      </ul>
+    </div>
+
+    <div class="pv__row">
+      <div class="pv reveal">
+        <h3 class="pv__label">{p.groups.videos}</h3>
+        <ul class="pv__grid pv__grid--wide" role="list">
+          {videos.map((v) => {
+            const img = slot(v.img, theme);
+            return img && (
+              <li class="pv__item pv__item--video">
+                <SlotImage src={img} alt="" sizes="(max-width: 760px) 100vw, 420px" widths={[420, 840]} />
+                {v.trailer && <button type="button" class="pv__play" data-open-video aria-haspopup="dialog" aria-controls="videoModal" aria-label={p.play}><Icon name="play" /></button>}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div class="pv reveal">
+        <h3 class="pv__label">{p.groups.slides}</h3>
+        <ul class="pv__grid pv__grid--wide" role="list">
+          {pick(slides).map((img) => <li class="pv__item pv__item--wide"><SlotImage src={img!} alt="" sizes="(max-width: 760px) 100vw, 420px" widths={[420, 840]} /></li>)}
+        </ul>
+      </div>
+    </div>
+
+    <p class="pv__cta reveal"><a href="#access" class="btn btn--gold" data-track="cta_click" data-track-location="preview">{p.cta}</a></p>
+  </div>
+</section>
+
+<style>
+  .pv { margin-top: 28px }
+  .pv__label { margin-bottom: 12px; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--muted-solid) }
+  .pv__grid { list-style: none; display: grid; gap: 12px }
+  .pv__grid--images { grid-template-columns: repeat(6, minmax(0, 1fr)) }
+  .pv__grid--wide { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+  .pv__item { position: relative; aspect-ratio: 4 / 5; border-radius: 6px; overflow: hidden; background: var(--paper-2, #ECE9E1) }
+  .pv__item--video, .pv__item--wide { aspect-ratio: 16 / 9 }
+  .pv__item :global(.slot-img) { position: absolute; inset: 0 }
+  .pv__row { display: grid; grid-template-columns: 1fr 2fr; gap: 24px }
+  .pv__row .pv__grid--wide:has(> :only-child) { grid-template-columns: 1fr }
+  .pv__play { position: absolute; inset: 0; display: grid; place-items: center; color: #fff; background: linear-gradient(180deg, transparent 40%, rgba(15, 16, 48, .45)) }
+  .pv__play :global(svg) { width: 58px; height: 58px; padding: 18px; border-radius: 50%; background: var(--indigo, rgba(0, 0, 0, .6)); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .6); transition: transform .2s var(--ease) }
+  .pv__play:hover :global(svg) { transform: scale(1.08) }
+  .pv__cta { margin-top: 36px; text-align: center }
+  @media (max-width: 1020px) {
+    .pv__grid--images { grid-template-columns: repeat(3, minmax(0, 1fr)) }
+    .pv__row { grid-template-columns: 1fr }
+  }
+  @media (max-width: 560px) {
+    .pv__grid--images { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+    .pv__grid--wide { grid-template-columns: 1fr }
+    .pv__cta .btn { width: 100% }
+  }
+</style>

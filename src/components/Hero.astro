@@ -2,13 +2,14 @@
 import Icon from './Icon.astro';
 import Motto from './Motto.astro';
 import SlotImage from './SlotImage.astro';
-import { useT } from '../i18n';
+import { useT, getLang, localePath } from '../i18n';
 import { config } from '../config';
 import { rich } from '../lib/rich';
 import { slot } from '../lib/slots';
 import { getTheme } from '../lib/theme';
 
 const site = useT(Astro);
+const lang = getLang(Astro);
 const theme = getTheme(Astro);
 
 const h = site.hero;
@@ -48,14 +49,14 @@ const image = slot('hero', theme);
       </h1>
       <p class="lead rise d2" set:html={rich(h.lead)} />
       <div class="ctas rise d3">
-        <a href="#series" class="btn btn--gold" data-track="cta_click" data-track-location="hero">{h.primaryCta}</a>
+        <a href="#access" class="btn btn--gold" data-track="cta_click" data-track-location="hero">{h.primaryCta}</a>
         <button type="button" class="btn btn--ghost" data-open-video aria-haspopup="dialog" aria-controls="videoModal" data-track="cta_click" data-track-location="hero_trailer">
           <Icon name="play" />
           {h.secondaryCta}
         </button>
       </div>
       <p class="license rise d4">
-        <a href={site.license.url} target="_blank" rel="license noopener" class="license__badge" aria-label={site.license.label}>{site.license.badge}</a>
+        <a href={localePath(lang, '/license')} rel="license" class="license__badge" aria-label={site.license.label}>{site.license.badge}</a>
         <Motto />
       </p>
     </div>

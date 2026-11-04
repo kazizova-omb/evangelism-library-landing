@@ -31,6 +31,7 @@ const a = (href: string) => anchor(href, home, lang);
           <li><a href={a('#demo')}>{l.demo}</a></li>
           <li><a href={a('#about')}>{l.about}</a></li>
           <li><a href={a('#translate')}>{l.translate}</a></li>
+          <li><a href={localePath(lang, '/downloads')}>{l.portal}</a></li>
         </ul>
       </div>
       <div>
@@ -46,6 +47,7 @@ const a = (href: string) => anchor(href, home, lang);
         <ul aria-labelledby="fc-legal">
           <li><a href={localePath(lang, '/terms')}>{l.terms}</a></li>
           <li><a href={localePath(lang, '/privacy')}>{l.privacy}</a></li>
+          <li><a href={localePath(lang, '/license')}>{l.license}</a></li>
           {config.ga4Id && <li><button type="button" data-cookie-settings>{site.footer.cookieSettings}</button></li>}
         </ul>
       </div>
@@ -53,7 +55,7 @@ const a = (href: string) => anchor(href, home, lang);
   </div>
 
   <div class="footer__bottom">
-    <span>{site.footer.copyright} · <a href={site.license.url} target="_blank" rel="license noopener" class="footer__license">{site.license.footer}</a></span>
+    <span>{site.footer.copyright} · <a href={localePath(lang, '/license')} rel="license" class="footer__license">{site.license.footer}</a></span>
     <LangSwitch variant="inline" />
   </div>
 </footer>

@@ -1,0 +1,582 @@
+---
+// Download portal: four categories, a paginated grid of files, a "what will you use it for?" step before
+// each download, and a sign-in gate (email -> one-time code) when there is no session.
+// Data and sessions come from src/scripts/api.ts (test mode until the backend is connected).
+import Icon from './Icon.astro';
+import SlotImage from './SlotImage.astro';
+import { useT, getLang, localePath } from '../i18n';
+import { config } from '../config';
+import { rich } from '../lib/rich';
+import { slot, type SlotName } from '../lib/slots';
+import { sampleCatalog } from '../lib/sampleCatalog';
+
+const site = useT(Astro);
+const lang = getLang(Astro);
+const p = site.portal;
+const g = p.gate;
+const testMode = !config.apiUrl;
+const sample = testMode ? await sampleCatalog(site.series.items) : [];
+
+const CATS: { type: 'presentation' | 'image' | 'video' | 'marketing'; img: SlotName }[] = [
+  { type: 'presentation', img: 'gallery-slide' },
+  { type: 'image', img: 'gallery-art' },
+  { type: 'video', img: 'gallery-video' },
+  { type: 'marketing', img: 'gallery-flyer' },
+];
+const registerUrl = `${localePath(lang, '/')}#access`;
+---
+<section class="section portal" id="portal" data-lang={lang}
+  data-files={p.files} data-page-of={p.pageOf} data-signed-in={p.signedInAs} data-download={p.download}
+  data-code-text={g.codeText} data-open-label={p.viewer.open}
+  data-labels={JSON.stringify(Object.fromEntries(CATS.map((c) => [c.type, p.categories[c.type].label])))}>
+  <div class="wrap">
+    <header class="portal__head">
+      <p class="eyebrow">{p.eyebrow}</p>
+      <h1 class="h2" set:html={rich(p.heading)} />
+      <p class="sub">{p.sub}</p>
+      <p class="portal__user" id="portalUser" hidden>
+        <span id="userEmail"></span>
+        <button type="button" class="link-btn" id="signOut">{p.signOut}</button>
+      </p>
+      {testMode && <p class="test-note">{p.testNote}</p>}
+    </header>
+
+    <div class="portal__body" id="portalBody">
+      <!-- categories -->
+      <ul class="cats" id="cats" role="list">
+        {CATS.map((c) => {
+          const img = slot(c.img, 'v3');
+          return (
+            <li>
+              <a href={`?type=${c.type}`} class="cat" data-type={c.type}>
+                <span class="cat__img">{img && <SlotImage src={img} alt="" sizes="(max-width: 760px) 100vw, 300px" widths={[300, 600]} />}</span>
+                <span class="cat__name">{p.categories[c.type].label}</span>
+                <span class="cat__text">{p.categories[c.type].text}</span>
+                <span class="cat__count" data-count={c.type}>&nbsp;</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+
+      <!-- one category -->
+      <div class="list" id="list" hidden>
+        <div class="list__bar">
+          <a href="?" class="list__back" id="backLink">← {p.back}</a>
+          <h2 class="list__title" id="listTitle"></h2>
+          <span class="list__count" id="listCount"></span>
+        </div>
+        <ul class="tiles" id="tiles" role="list" aria-live="polite"></ul>
+        <p class="list__note" id="listEmpty" hidden>{p.empty}</p>
+        <p class="list__note" id="listErr" hidden>{p.loadError} <button type="button" class="link-btn" id="retry">{p.retry}</button></p>
+        <nav class="pager" id="pager" aria-label="Pages" hidden>
+          <button type="button" class="btn btn--ghost btn--sm" id="prevPage">{p.prev}</button>
+          <span id="pageInfo"></span>
+          <button type="button" class="btn btn--ghost btn--sm" id="nextPage">{p.next}</button>
+        </nav>
+      </div>
+
+      <!-- sign-in gate, shown over the faded content when there is no session -->
+      <div class="gate" id="gate" hidden>
+        <div class="formcard gate__card">
+          <form id="gateEmail" novalidate>
+            <h2 class="gate__title" id="gateTitle">{g.title}</h2>
+            <p class="gate__text">{g.text}</p>
+            <div class="form-err" id="gateErr" role="alert" hidden></div>
+            <div class="field">
+              <label for="g-email">{g.email.label}</label>
+              <input id="g-email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder={g.email.placeholder} />
+              <span class="err" id="g-email-err">{g.email.error}</span>
+              <p class="email-suggest" id="g-email-suggest" aria-live="polite" data-template={g.email.suggest} hidden></p>
+            </div>
+            <div class="field turnstile-wrap">
+              <div class="turnstile" id="g-turnstile"></div>
+              <span class="err" id="g-turnstile-err">{site.access.form.turnstileError}</span>
+            </div>
+            <button type="submit" class="btn btn--gold btn--block" id="sendCode" data-label={g.sendCode} data-sending={g.sendingCode}>{g.sendCode}</button>
+            <p class="form-note"><a href={registerUrl} class="link-btn">{g.register}</a></p>
+          </form>
+
+          <form id="gateCode" novalidate hidden>
+            <h2 class="gate__title">{g.codeTitle}</h2>
+            <p class="gate__text" id="codeText"></p>
+            <div class="form-err" id="codeErr" role="alert" hidden></div>
+            <div class="field">
+              <label for="g-code">{g.code.label}</label>
+              <input id="g-code" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required placeholder={g.code.placeholder} />
+              <span class="err" id="g-code-err">{g.code.error}</span>
+            </div>
+            <button type="submit" class="btn btn--gold btn--block" id="verifyCode" data-label={g.verify} data-sending={g.verifying}>{g.verify}</button>
+            <p class="gate__links">
+              <button type="button" class="link-btn" id="resend">{g.resend}</button>
+              <button type="button" class="link-btn" id="changeEmail">{g.changeEmail}</button>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<dialog class="purpose" id="purpose" aria-labelledby="purposeTitle">
+  <form method="dialog" class="formcard purpose__card" id="purposeForm" novalidate>
+    <h2 class="gate__title" id="purposeTitle">{p.purpose.title}</h2>
+    <p class="gate__text">{p.purpose.text}</p>
+    <fieldset class="field purpose__opts">
+      <legend class="visually-hidden">{p.purpose.title}</legend>
+      {p.purpose.options.map((o, i) => (
+        <label class="purpose__opt"><input type="radio" name="purpose" value={o} required={i === 0} /> <span>{o}</span></label>
+      ))}
+      <span class="err" id="purpose-err">{p.purpose.error}</span>
+    </fieldset>
+    <div class="form-err" id="purposeFail" role="alert" hidden>{p.purpose.failed}</div>
+    <div class="purpose__actions">
+      <button type="button" class="btn btn--ghost" id="purposeCancel">{p.purpose.cancel}</button>
+      <button type="submit" class="btn btn--gold" id="purposeGo" data-label={p.purpose.submit} data-sending={p.purpose.submit}><Icon name="download" />{p.purpose.submit}</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- full-screen preview: arrows (and swipe) move through the files of the current page -->
+<dialog class="viewer" id="viewer" aria-label={p.viewer.open} data-counter={p.viewer.counter}>
+  <div class="viewer__stage" id="viewerStage"></div>
+  <button type="button" class="viewer__nav viewer__nav--prev" id="viewerPrev" aria-label={p.viewer.prev}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+  </button>
+  <button type="button" class="viewer__nav viewer__nav--next" id="viewerNext" aria-label={p.viewer.next}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+  </button>
+  <div class="viewer__bar">
+    <div class="viewer__meta"><b id="viewerTitle"></b><span id="viewerInfo"></span></div>
+    <span class="viewer__count" id="viewerCount"></span>
+    <button type="button" class="btn btn--gold btn--sm viewer__dl" id="viewerDl"><Icon name="download" />{p.download}</button>
+  </div>
+  <button type="button" class="viewer__close" id="viewerClose" aria-label={p.viewer.close}><Icon name="close" /></button>
+</dialog>
+
+<template id="tileTpl">
+  <li class="tile">
+    <button type="button" class="tile__img tile__open"><img alt="" loading="lazy" decoding="async" /></button>
+    <span class="tile__meta"><b class="tile__title"></b><span class="tile__info"></span></span>
+    <button type="button" class="tile__dl"><Icon name="download" /></button>
+  </li>
+</template>
+
+{testMode && <script type="application/json" id="sample-catalog" set:html={JSON.stringify(sample)} />}
+
+<style>
+  .portal { padding-top: calc(76px + clamp(40px, 5vw, 72px)); min-height: 80vh }
+  .portal__head { max-width: 760px; margin-bottom: 40px }
+  .portal__head .h2 { margin-bottom: 14px }
+  .portal__user { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; margin-top: 18px; font-size: 14px; color: var(--muted-solid) }
+  .portal__body { position: relative }
+
+  /* categories */
+  .cats { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px }
+  .cat { display: flex; flex-direction: column; height: 100%; padding: 12px 12px 18px; border-radius: 8px; background: #FBFAF7; box-shadow: 0 0 0 1px var(--line) inset; transition: box-shadow .2s, transform .2s var(--ease) }
+  .cat:hover { transform: translateY(-3px); box-shadow: 0 0 0 1px var(--line) inset, 0 20px 40px -24px rgba(31, 33, 96, .45) }
+  .cat__img { position: relative; display: block; aspect-ratio: 4 / 3; border-radius: 5px; overflow: hidden; background: var(--paper-2, #ECE9E1) }
+  .cat__name { margin: 16px 6px 0; font-family: var(--poster, var(--display)); font-size: 24px; line-height: 1.05; text-transform: uppercase; color: var(--navy, var(--ink)) }
+  .cat__text { margin: 6px 6px 0; font-size: 14px; line-height: 1.5; color: var(--ink-2) }
+  .cat__count { margin: auto 6px 0; padding-top: 14px; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--teal-text, var(--gold)) }
+
+  /* one category */
+  .list__bar { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; margin-bottom: 24px }
+  .list__back { width: 100%; font-size: 14px; color: var(--muted-solid) }
+  .list__back:hover { color: var(--teal-text, var(--gold-hi)) }
+  .list__title { font-family: var(--poster, var(--display)); font-weight: 400; font-size: clamp(30px, 3.2vw, 44px); line-height: 1; text-transform: uppercase; color: var(--navy, var(--ink)) }
+  .list__count { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted-solid) }
+  .tiles { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px }
+  .tiles.is-loading { opacity: .5; transition: opacity .2s }
+  .tile { position: relative; display: flex; flex-direction: column; border-radius: 8px; background: #FBFAF7; box-shadow: 0 0 0 1px var(--line) inset; overflow: hidden }
+  .tile__img { position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; background: var(--paper-2, #ECE9E1) }
+  .tile[data-type="presentation"] .tile__img, .tile[data-type="video"] .tile__img { aspect-ratio: 16 / 9 }
+  .tile__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover }
+  .tile[data-type="video"] .tile__img::after { content: ""; position: absolute; left: 12px; bottom: 12px; width: 30px; height: 30px; border-radius: 50%; background: rgba(31, 33, 96, .8) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Cpath d='M9 7l9 5-9 5z'/%3E%3C/svg%3E") center/16px no-repeat }
+  .tile__meta { display: flex; flex-direction: column; gap: 3px; padding: 12px 54px 14px 14px; min-height: 64px }
+  .tile__title { font-size: 14.5px; font-weight: 600; line-height: 1.35; color: var(--navy, var(--ink)) }
+  .tile__info { font-size: 12.5px; color: var(--muted-solid) }
+  .tile__dl { position: absolute; right: 10px; bottom: 12px; width: 38px; height: 38px; border-radius: 6px; display: grid; place-items: center; color: #fff; background: var(--indigo, var(--gold)); transition: background .2s }
+  .tile__dl:hover { background: #34369A }
+  .tile__dl :global(svg) { width: 18px; height: 18px }
+  .list__note { margin-top: 24px; color: var(--ink-2) }
+  .pager { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 36px; font-size: 14px; color: var(--muted-solid) }
+  .pager button[disabled] { opacity: .4; pointer-events: none }
+
+  /* locked: the start of the previews stays visible and fades out; the sign-in card follows below */
+  .portal__body.is-locked :is(.cats, .list) { max-height: 340px; overflow: hidden; pointer-events: none; user-select: none;
+    -webkit-mask-image: linear-gradient(180deg, #000 35%, transparent 100%); mask-image: linear-gradient(180deg, #000 35%, transparent 100%) }
+  .gate { position: relative; z-index: 1; display: flex; justify-content: center; margin-top: 8px }
+  .gate__card { width: min(460px, 100%) }
+  .gate__title { font-family: var(--poster, var(--display)); font-weight: 400; font-size: 30px; line-height: 1.05; text-transform: uppercase; color: var(--navy, var(--ink)) }
+  .gate__text { margin: 10px 0 22px; font-size: 15px; line-height: 1.6; color: var(--ink-2) }
+  .gate__text :global(b) { color: var(--navy, var(--ink)); overflow-wrap: anywhere }
+  .gate__links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-top: 16px }
+  #g-code { font-size: 22px !important; letter-spacing: .4em; font-variant-numeric: tabular-nums }
+
+  .tile__open { cursor: zoom-in; padding: 0; border: 0; width: 100% }
+  .tile__open img { transition: transform .6s var(--ease) }
+  .tile__open:hover img { transform: scale(1.04) }
+  .tile__open:focus-visible { outline-offset: -3px }
+
+  /* full-screen viewer */
+  .viewer { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: #0E0F2E; color: #fff }
+  .viewer::backdrop { background: transparent }
+  .viewer[open] { display: grid; grid-template-rows: minmax(0, 1fr) auto }
+  .viewer__stage { position: relative; min-height: 0; margin: 64px 88px 8px }
+  /* the media fills the stage and keeps its proportions, whatever the screen */
+  .viewer__stage :global(:is(img, video)) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: center/contain no-repeat }
+  .viewer__bar { display: flex; align-items: center; gap: 14px 24px; flex-wrap: wrap; padding: 14px 88px 22px }
+  .viewer__meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; margin-right: auto }
+  .viewer__meta b { font-size: 16px; font-weight: 600 }
+  .viewer__meta span, .viewer__count { font-size: 13px; color: rgba(255, 255, 255, .65) }
+  .viewer__dl { background: #fff !important; color: var(--indigo, #2A2C7C) !important; box-shadow: none !important }
+  .viewer__close, .viewer__nav { position: absolute; display: grid; place-items: center; border-radius: 50%; color: #fff; background: rgba(255, 255, 255, .1); transition: background .2s }
+  .viewer__close:hover, .viewer__nav:hover { background: rgba(255, 255, 255, .22) }
+  .viewer__close { top: 16px; right: 16px; width: 44px; height: 44px }
+  .viewer__close :global(svg) { width: 18px; height: 18px }
+  .viewer__nav { top: calc(50% - 52px); width: 52px; height: 52px }
+  .viewer__nav svg { width: 24px; height: 24px }
+  .viewer__nav--prev { left: 20px }
+  .viewer__nav--next { right: 20px }
+  .viewer__nav[disabled] { opacity: .25; pointer-events: none }
+
+  /* purpose dialog */
+  .purpose { margin: auto; padding: 0; border: 0; background: transparent; width: min(480px, calc(100% - 32px)); max-height: calc(100% - 32px) }
+  .purpose::backdrop { background: rgba(15, 16, 48, .55); backdrop-filter: blur(3px) }
+  .purpose__opts { border: 0; gap: 8px; margin-bottom: 8px }
+  .purpose__opt { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 6px; font-size: 15px; color: var(--navy, var(--ink)); box-shadow: 0 0 0 1px var(--line) inset; cursor: pointer; transition: box-shadow .15s, background .15s }
+  .purpose__opt:hover { background: #fff }
+  .purpose__opt:has(input:checked) { background: #fff; box-shadow: 0 0 0 2px var(--teal, var(--gold)) inset }
+  .purpose__opt input { accent-color: var(--indigo, var(--gold)); width: 18px; height: 18px; margin: 0 }
+  .purpose__actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 18px }
+
+  @media (max-width: 1020px) {
+    .cats, .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+  }
+  @media (max-width: 560px) {
+    .cats { grid-template-columns: 1fr }
+    .tiles { gap: 10px }
+    .tile__meta { padding: 10px 46px 12px 10px }
+    .tile__title { font-size: 13.5px }
+    .tile__dl { width: 34px; height: 34px; right: 8px; bottom: 10px }
+    .portal__body.is-locked :is(.cats, .list) { max-height: 260px }
+    .purpose__actions .btn { flex: 1 }
+    .viewer__stage { margin: 64px 12px 8px }
+    .viewer__bar { padding: 12px 16px 20px }
+    .viewer__nav { top: auto; bottom: 86px; width: 44px; height: 44px; background: rgba(255, 255, 255, .14) }
+    .viewer__nav--prev { left: auto; right: 72px }
+    .viewer__nav--next { right: 16px }
+    .viewer__dl { flex: 1 1 100% }
+    .viewer__count { display: none } /* the arrows sit there on phones */
+  }
+</style>
+
+<script>
+  import * as api from '../scripts/api';
+  import { mountTurnstile } from '../scripts/turnstile';
+  import { validate, clearOnEdit, emailHelp, normalizeEmail, setInvalid, setLoading } from '../scripts/forms';
+  import { track } from '../scripts/analytics';
+
+  const root = document.getElementById('portal')!;
+  const lang = root.dataset.lang ?? 'en';
+  const labels = JSON.parse(root.dataset.labels ?? '{}') as Record<api.ItemType, string>;
+  const fill = (t: string, v: Record<string, string | number>) => t.replace(/\{(\w+)\}/g, (_, k) => String(v[k] ?? ''));
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const PER_PAGE = 24;
+  const gateText = JSON.parse(document.getElementById('gate-text')!.textContent ?? '{}') as Record<string, string>;
+
+  const body = $('portalBody');
+  const cats = $('cats');
+  const list = $('list');
+  const tiles = $('tiles');
+  const gate = $('gate');
+  let user: api.User | null = null;
+
+  /* ---------------- routing: ?type=image&page=2 ---------------- */
+  type View = { type: api.ItemType | null; page: number };
+  const readView = (): View => {
+    const q = new URLSearchParams(location.search);
+    const t = q.get('type') as api.ItemType | null;
+    return { type: t && api.ITEM_TYPES.includes(t) ? t : null, page: Math.max(1, Number(q.get('page')) || 1) };
+  };
+  const go = (v: View) => {
+    const q = new URLSearchParams();
+    if (v.type) q.set('type', v.type);
+    if (v.type && v.page > 1) q.set('page', String(v.page));
+    const qs = q.toString();
+    history.pushState(null, '', `${location.pathname}${qs ? `?${qs}` : ''}`);
+    render();
+    root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  window.addEventListener('popstate', render);
+
+  cats.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a[data-type]');
+    if (!a) return;
+    e.preventDefault();
+    go({ type: a.dataset.type as api.ItemType, page: 1 });
+  });
+  $('backLink').addEventListener('click', (e) => { e.preventDefault(); go({ type: null, page: 1 }); });
+
+  /* ---------------- rendering ---------------- */
+  async function loadCounts() {
+    try {
+      const counts = await api.counts(lang);
+      root.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => {
+        el.textContent = fill(root.dataset.files ?? '{n}', { n: counts[el.dataset.count as api.ItemType] ?? 0 });
+      });
+    } catch { /* counts are a nice-to-have */ }
+  }
+
+  let current: View = { type: null, page: 1 };
+  let shown: api.CatalogItem[] = [];
+
+  async function render() {
+    current = readView();
+    cats.hidden = current.type !== null;
+    list.hidden = current.type === null;
+    if (!current.type) return;
+    $('listTitle').textContent = labels[current.type];
+    tiles.classList.add('is-loading');
+    $('listErr').hidden = true;
+    try {
+      const res = await api.catalog(current.type, current.page, PER_PAGE, lang);
+      shown = res.items;
+      drawTiles(res.items);
+      const pages = Math.max(1, Math.ceil(res.total / res.perPage));
+      $('listCount').textContent = fill(root.dataset.files ?? '{n}', { n: res.total });
+      $('listEmpty').hidden = res.total > 0;
+      $('pager').hidden = pages < 2;
+      $('pageInfo').textContent = fill(root.dataset.pageOf ?? '', { n: res.page, total: pages });
+      $<HTMLButtonElement>('prevPage').disabled = res.page <= 1;
+      $<HTMLButtonElement>('nextPage').disabled = res.page >= pages;
+    } catch {
+      tiles.replaceChildren();
+      $('listErr').hidden = false;
+    } finally {
+      tiles.classList.remove('is-loading');
+    }
+  }
+  $('prevPage').addEventListener('click', () => go({ ...current, page: current.page - 1 }));
+  $('nextPage').addEventListener('click', () => go({ ...current, page: current.page + 1 }));
+  $('retry').addEventListener('click', render);
+
+  const tpl = $<HTMLTemplateElement>('tileTpl');
+  function drawTiles(items: api.CatalogItem[]) {
+    tiles.replaceChildren(...items.map((it) => {
+      const li = (tpl.content.firstElementChild as HTMLElement).cloneNode(true) as HTMLElement;
+      li.dataset.type = it.type;
+      const img = li.querySelector('img')!;
+      img.src = it.preview;
+      li.querySelector('.tile__title')!.textContent = it.title;
+      li.querySelector('.tile__info')!.textContent = [it.format, it.size].filter(Boolean).join(' · ');
+      const open = li.querySelector<HTMLButtonElement>('.tile__open')!;
+      open.dataset.id = it.id;
+      open.setAttribute('aria-label', `${root.dataset.openLabel}: ${it.title}`);
+      const btn = li.querySelector<HTMLButtonElement>('.tile__dl')!;
+      btn.dataset.id = it.id;
+      btn.setAttribute('aria-label', `${root.dataset.download}: ${it.title}`);
+      return li;
+    }));
+  }
+
+  /* ---------------- session ---------------- */
+  function setUser(u: api.User | null) {
+    user = u;
+    body.classList.toggle('is-locked', !u);
+    gate.hidden = !!u;
+    $('portalUser').hidden = !u;
+    if (u) $('userEmail').textContent = fill(root.dataset.signedIn ?? '{email}', { email: u.email });
+  }
+  $('signOut').addEventListener('click', async () => {
+    await api.logout().catch(() => {});
+    setUser(null);
+    showEmailStep();
+  });
+
+  /* ---------------- sign-in gate: email -> code ---------------- */
+  const emailForm = $<HTMLFormElement>('gateEmail');
+  const codeForm = $<HTMLFormElement>('gateCode');
+  const emailInput = $<HTMLInputElement>('g-email');
+  const codeInput = $<HTMLInputElement>('g-code');
+  const tsField = $('g-turnstile').closest<HTMLElement>('.field')!;
+  const ts = mountTurnstile($('g-turnstile'), () => setInvalid(tsField, null, false));
+  clearOnEdit(emailForm);
+  clearOnEdit(codeForm);
+  emailHelp(emailInput, $('g-email-suggest'));
+  emailForm.addEventListener('focusin', ts.load, { once: true });
+  let pendingEmail = '';
+
+  const showErr = (el: HTMLElement, html: string | null) => { el.hidden = !html; el.innerHTML = html ?? ''; };
+  function showEmailStep() {
+    codeForm.hidden = true;
+    emailForm.hidden = false;
+  }
+
+  emailForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    showErr($('gateErr'), null);
+    if (!validate(emailForm)) return;
+    const token = ts.token();
+    if (!token) { setInvalid(tsField, null, true); ts.load(); return; }
+    const btn = $<HTMLButtonElement>('sendCode');
+    setLoading(btn, true);
+    pendingEmail = normalizeEmail(emailInput.value);
+    try {
+      await api.requestCode(pendingEmail, lang, token);
+      $('codeText').innerHTML = fill(root.dataset.codeText ?? '', { email: `<b>${pendingEmail.replace(/</g, '&lt;')}</b>` });
+      emailForm.hidden = true;
+      codeForm.hidden = false;
+      codeInput.value = '';
+      codeInput.focus();
+    } catch (err) {
+      const reg = emailForm.querySelector<HTMLAnchorElement>('.form-note a')!;
+      showErr($('gateErr'), err instanceof api.ApiError && err.code === 'not_registered'
+        ? `{{notRegistered}} <a href="${reg.href}">{{register}}</a>`.replace('{{notRegistered}}', gateText.notRegistered).replace('{{register}}', gateText.register)
+        : gateText.networkError);
+    } finally {
+      setLoading(btn, false);
+      ts.reset();
+    }
+  });
+
+  codeForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    showErr($('codeErr'), null);
+    codeInput.value = codeInput.value.replace(/\D/g, '');
+    if (!validate(codeForm) || codeInput.value.length !== 6) { setInvalid(codeInput.closest('.field')!, codeInput, true); codeInput.focus(); return; }
+    const btn = $<HTMLButtonElement>('verifyCode');
+    setLoading(btn, true);
+    try {
+      setUser(await api.verifyCode(pendingEmail, codeInput.value));
+      track('portal_sign_in');
+    } catch (err) {
+      const code = err instanceof api.ApiError ? err.code : '';
+      showErr($('codeErr'), code === 'expired_code' ? gateText.expired : code === 'invalid_code' ? gateText.invalid : gateText.networkError);
+      codeInput.select();
+    } finally {
+      setLoading(btn, false);
+    }
+  });
+  // a new code needs a fresh spam check, so go back to the email step with the address kept
+  $('resend').addEventListener('click', () => { showEmailStep(); emailInput.value = pendingEmail; $<HTMLButtonElement>('sendCode').focus(); });
+  $('changeEmail').addEventListener('click', () => { showEmailStep(); emailInput.value = ''; emailInput.focus(); });
+
+
+  /* ---------------- download: purpose first ---------------- */
+  const dialog = $<HTMLDialogElement>('purpose');
+  const purposeForm = $<HTMLFormElement>('purposeForm');
+  const PURPOSE_KEY = 'rmr-purpose';
+  let pendingId = '';
+
+  tiles.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    const open = t.closest<HTMLElement>('.tile__open');
+    if (open) { openViewer(shown.findIndex((i) => i.id === open.dataset.id)); return; }
+    const btn = t.closest<HTMLButtonElement>('.tile__dl');
+    if (btn) askPurpose(btn.dataset.id ?? '');
+  });
+
+  function askPurpose(id: string) {
+    if (!user) { setUser(null); emailInput.focus(); return; }
+    pendingId = id;
+    $('purposeFail').hidden = true;
+    setInvalid(purposeForm.querySelector('.purpose__opts')!, null, false);
+    try { // preselect the last choice
+      const last = localStorage.getItem(PURPOSE_KEY);
+      purposeForm.querySelectorAll<HTMLInputElement>('input[name="purpose"]').forEach((r) => { r.checked = r.value === last; });
+    } catch { /* ignore */ }
+    dialog.showModal();
+  }
+
+  /* ---------------- full-screen viewer ---------------- */
+  const viewer = $<HTMLDialogElement>('viewer');
+  const stage = $('viewerStage');
+  let vIndex = -1;
+
+  function showItem(i: number) {
+    const it = shown[i];
+    if (!it) return;
+    vIndex = i;
+    const big = it.previewLarge || it.preview;
+    let media: HTMLElement;
+    if (it.type === 'video' && it.previewVideo) {
+      const v = Object.assign(document.createElement('video'), { src: it.previewVideo, poster: big, controls: true, autoplay: true, playsInline: true });
+      media = v;
+    } else {
+      // the small preview shows at once behind the large one while it loads
+      const img = Object.assign(document.createElement('img'), { src: big, alt: it.title, decoding: 'async' });
+      img.style.backgroundImage = `url("${it.preview}")`;
+      media = img;
+    }
+    stage.replaceChildren(media);
+    $('viewerTitle').textContent = it.title;
+    $('viewerInfo').textContent = [it.format, it.size].filter(Boolean).join(' · ');
+    $('viewerCount').textContent = fill(viewer.dataset.counter ?? '', { n: i + 1, total: shown.length });
+    $<HTMLButtonElement>('viewerPrev').disabled = i <= 0;
+    $<HTMLButtonElement>('viewerNext').disabled = i >= shown.length - 1;
+  }
+  function openViewer(i: number) {
+    if (i < 0) return;
+    showItem(i);
+    viewer.showModal();
+    document.body.style.overflow = 'hidden';
+    track('portal_preview', { type: shown[i]?.type ?? '' });
+  }
+  const closeViewer = () => viewer.close();
+  viewer.addEventListener('close', () => { stage.replaceChildren(); document.body.style.overflow = ''; }); // removing the video stops it
+  $('viewerClose').addEventListener('click', closeViewer);
+  $('viewerPrev').addEventListener('click', () => showItem(vIndex - 1));
+  $('viewerNext').addEventListener('click', () => showItem(vIndex + 1));
+  $('viewerDl').addEventListener('click', () => { const id = shown[vIndex]?.id ?? ''; closeViewer(); askPurpose(id); });
+  viewer.addEventListener('click', (e) => { if (e.target === viewer || e.target === stage) closeViewer(); });
+  viewer.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft' && vIndex > 0) showItem(vIndex - 1);
+    if (e.key === 'ArrowRight' && vIndex < shown.length - 1) showItem(vIndex + 1);
+  });
+  // swipe on touch screens
+  let touchX = 0;
+  stage.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+  stage.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) < 50) return;
+    if (dx < 0 && vIndex < shown.length - 1) showItem(vIndex + 1);
+    if (dx > 0 && vIndex > 0) showItem(vIndex - 1);
+  });
+  $('purposeCancel').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+
+  purposeForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const choice = purposeForm.querySelector<HTMLInputElement>('input[name="purpose"]:checked')?.value;
+    const opts = purposeForm.querySelector<HTMLElement>('.purpose__opts')!;
+    if (!choice) { setInvalid(opts, null, true); return; }
+    try { localStorage.setItem(PURPOSE_KEY, choice); } catch { /* ignore */ }
+    const btn = $<HTMLButtonElement>('purposeGo');
+    btn.classList.add('is-loading');
+    try {
+      const url = await api.download(pendingId, choice);
+      const item = shown.find((i) => i.id === pendingId);
+      const a = Object.assign(document.createElement('a'), { href: url, download: '', rel: 'noopener' });
+      document.body.appendChild(a); a.click(); a.remove();
+      track('portal_download', { type: item?.type ?? '', purpose: choice });
+      dialog.close();
+    } catch (err) {
+      if (err instanceof api.ApiError && err.status === 401) { dialog.close(); setUser(null); emailInput.focus(); return; }
+      $('purposeFail').hidden = false;
+    } finally {
+      btn.classList.remove('is-loading');
+    }
+  });
+
+  /* ---------------- start ---------------- */
+  (async () => {
+    render();
+    loadCounts();
+    try { setUser(await api.me()); } catch { setUser(null); }
+    if (!user && new URLSearchParams(location.search).has('signin')) emailInput.focus();
+  })();
+</script>
+
+<script type="application/json" id="gate-text" set:html={JSON.stringify({ notRegistered: g.notRegistered, register: g.register, invalid: g.invalid, expired: g.expired, networkError: g.networkError })} />

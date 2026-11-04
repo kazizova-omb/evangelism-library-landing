@@ -1,0 +1,123 @@
+---
+// A short look inside the library on the landing, as one mosaic: the trailer large (plays in the modal),
+// images and slides around it, and a closing tile with what the full library holds. Nothing downloads
+// here; the tile leads to registration. The previous three-row layout is kept in PreviewRows.astro.
+// TODO: once the image table exists, take the items marked "featured" there instead of the slot images.
+import Icon from './Icon.astro';
+import SlotImage from './SlotImage.astro';
+import { useT } from '../i18n';
+import { rich } from '../lib/rich';
+import { slot, type SlotName } from '../lib/slots';
+import { getTheme } from '../lib/theme';
+
+const site = useT(Astro);
+const theme = getTheme(Astro);
+const p = site.preview;
+
+type Kind = 'image' | 'video' | 'slide';
+// order = reading order; `area` places the tile in the mosaic (see the grid below)
+const tiles: { img: SlotName; kind: Kind; area: string; trailer?: boolean; sizes: string }[] = [
+  { img: 'trailer', kind: 'video', area: 'video', trailer: true, sizes: '(max-width: 760px) 100vw, 800px' },
+  { img: 'hero', kind: 'image', area: 'tall', sizes: '(max-width: 760px) 100vw, 400px' },
+  { img: 'gallery-slide', kind: 'slide', area: 'slide', sizes: '(max-width: 760px) 100vw, 600px' },
+  { img: 'about', kind: 'image', area: 'a', sizes: '(max-width: 760px) 50vw, 300px' },
+  { img: 'gallery-flyer', kind: 'image', area: 'b', sizes: '(max-width: 760px) 50vw, 300px' },
+  { img: 'gallery-art', kind: 'image', area: 'c', sizes: '(max-width: 760px) 50vw, 300px' },
+  { img: 'gallery-social', kind: 'image', area: 'd', sizes: '(max-width: 760px) 50vw, 300px' },
+  { img: 'gallery-video', kind: 'image', area: 'e', sizes: '(max-width: 760px) 50vw, 300px' },
+];
+// the four content types of the library, from the stats of "What's inside" (skip the slide count)
+const counts = site.inside.stats.filter((_, i) => i !== 1);
+---
+<section class="section" id="preview" aria-labelledby="preview-title">
+  <div class="wrap">
+    <div class="pv__head reveal">
+      <div>
+        <p class="eyebrow">{p.eyebrow}</p>
+        <h2 class="h2" id="preview-title" set:html={rich(p.title)} />
+      </div>
+      <p class="sub">{p.sub}</p>
+    </div>
+
+    <ul class="mosaic reveal" role="list">
+      {tiles.map((t) => {
+        const img = slot(t.img, theme);
+        return img && (
+          <li class:list={['mosaic__tile', `is-${t.area}`, `kind-${t.kind}`]}>
+            <SlotImage src={img} alt="" sizes={t.sizes} widths={[400, 800, 1200]} />
+            <span class="mosaic__tag">{p.tags[t.kind]}</span>
+            {t.trailer && (
+              <button type="button" class="mosaic__play" data-open-video aria-haspopup="dialog" aria-controls="videoModal" aria-label={p.play}>
+                <span class="mosaic__playbtn"><Icon name="play" /></span>
+              </button>
+            )}
+          </li>
+        );
+      })}
+      <li class="mosaic__tile is-more">
+        <p class="mosaic__more">{p.more}</p>
+        <ul class="mosaic__counts" role="list">
+          {counts.map((c) => <li><b>{c.value}</b> {c.label}</li>)}
+        </ul>
+        <a href="#access" class="btn btn--gold mosaic__cta" data-track="cta_click" data-track-location="preview">{p.cta}</a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .pv__head { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px 64px; align-items: end; margin-bottom: 40px }
+  .pv__head .h2 { margin-bottom: 0 }
+  .pv__head .sub { max-width: 460px; margin-bottom: 6px }
+
+  /* 12 columns; rows are short so tiles can take natural shapes (video and slides near 16:9) */
+  .mosaic { list-style: none; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-auto-rows: 92px; gap: 12px;
+    grid-template-areas:
+      "video video video video video video video video tall tall tall tall"
+      "video video video video video video video video tall tall tall tall"
+      "video video video video video video video video tall tall tall tall"
+      "video video video video video video video video tall tall tall tall"
+      "slide slide slide slide slide slide a a a b b b"
+      "slide slide slide slide slide slide a a a b b b"
+      "slide slide slide slide slide slide a a a b b b"
+      "c c c d d d e e e more more more"
+      "c c c d d d e e e more more more"
+      "c c c d d d e e e more more more" }
+  .mosaic__tile { position: relative; overflow: hidden; border-radius: 8px; background: var(--paper-2, #ECE9E1) }
+  .is-video { grid-area: video } .is-tall { grid-area: tall } .is-slide { grid-area: slide }
+  .is-a { grid-area: a } .is-b { grid-area: b } .is-c { grid-area: c } .is-d { grid-area: d } .is-e { grid-area: e } .is-more { grid-area: more }
+  .mosaic__tile :global(.slot-img) { position: absolute; inset: 0; transition: transform 1.2s var(--ease) }
+  .mosaic__tile:hover :global(.slot-img) { transform: scale(1.04) }
+  .mosaic__tag { position: absolute; left: 12px; top: 12px; padding: 4px 9px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--navy, #1F2160); background: rgba(255, 255, 255, .9) }
+
+  .mosaic__play { position: absolute; inset: 0; display: grid; place-items: center; background: linear-gradient(180deg, rgba(15, 16, 48, 0) 40%, rgba(15, 16, 48, .5)) }
+  .mosaic__playbtn { display: grid; place-items: center; width: 84px; height: 84px; border-radius: 50%; color: #fff; background: var(--indigo, rgba(0, 0, 0, .6)); box-shadow: 0 0 0 10px rgba(255, 255, 255, .18), 0 18px 40px -12px rgba(0, 0, 0, .6); transition: transform .25s var(--ease) }
+  .mosaic__playbtn :global(svg) { width: 30px; height: 30px; margin-left: 4px }
+  .mosaic__play:hover .mosaic__playbtn { transform: scale(1.08) }
+
+  .is-more { display: flex; flex-direction: column; padding: 22px 22px 20px; color: #fff; background: var(--indigo, #2A2C7C) }
+  .mosaic__more { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--cyan-light, #7FE0EC) }
+  .mosaic__counts { list-style: none; display: grid; gap: 4px; margin: 12px 0 16px; font-size: 15px; color: rgba(255, 255, 255, .85) }
+  .mosaic__counts b { font-family: var(--poster, var(--display)); font-weight: 400; font-size: 22px; letter-spacing: .01em; color: #fff }
+  .mosaic__cta { margin-top: auto; width: 100%; white-space: normal; text-align: center; height: auto; min-height: 44px; padding: 10px 14px; background: #fff !important; color: var(--indigo, #2A2C7C) !important; box-shadow: none !important }
+
+  @media (max-width: 1020px) {
+    .pv__head { grid-template-columns: 1fr }
+    .mosaic { grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: 80px;
+      grid-template-areas:
+        "video video video video video video" "video video video video video video" "video video video video video video" "video video video video video video"
+        "tall tall tall slide slide slide" "tall tall tall slide slide slide" "tall tall tall a a a" "tall tall tall a a a"
+        "b b c c d d" "b b c c d d"
+        "e e e more more more" "e e e more more more" "e e e more more more" "e e e more more more" }
+  }
+  @media (max-width: 560px) {
+    .mosaic { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: auto; grid-template-areas: none; gap: 10px }
+    .mosaic > .mosaic__tile { grid-area: auto; aspect-ratio: 1 }
+    .mosaic > :is(.is-video, .is-slide, .is-tall, .is-more) { grid-column: 1 / -1 }
+    .mosaic > :is(.is-video, .is-slide) { aspect-ratio: 16 / 9 }
+    .mosaic > .is-tall { aspect-ratio: 4 / 3 }
+    .mosaic > .is-more { aspect-ratio: auto }
+    .mosaic > .is-e { display: none } /* keeps the small images in even pairs */
+    .mosaic__playbtn { width: 64px; height: 64px }
+  }
+</style>

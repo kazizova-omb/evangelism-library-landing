@@ -28,6 +28,8 @@ so redeploy after changing one.
 | `PUBLIC_GA4_ID` | Google Analytics 4 measurement ID | No GA, no cookie banner |
 | `PUBLIC_BASE_PATH` | Serve the site from a sub-folder, e.g. `/evangelism-library-landing` on GitHub Pages | empty |
 | `PUBLIC_SHOW_DRAFTS` | Show sections still waiting for client copy (the nine-presentation list). On for branch previews | `false` |
+| `PUBLIC_API_URL` | Backend of the download portal (registration, sign-in, catalog, downloads). See "Download portal API" | empty = test mode |
+| `PUBLIC_TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key for the registration and sign-in forms | Cloudflare test key (always passes) |
 | `PUBLIC_PRESENTATION_URLS` | Download links of the nine presentations, comma separated, in order (empty = "Coming November 2026") | presentation 1: Daniel 2 deck |
 | `PUBLIC_DEMO_URL` | Demo (Daniel 2). A Google Slides link opens the deck; any other URL downloads as a file (the ZIP with promo materials); empty shows "Available soon" | `#` |
 | `PUBLIC_TRAILER_YOUTUBE_ID` | YouTube ID of the trailer | Modal shows placeholder text |
@@ -115,14 +117,51 @@ Without an `og` image, `src/assets/og/og-en.jpg` (rendered from the hero) is use
 After launch: verify the domain in Google Search Console and Bing Webmaster Tools, submit
 `/sitemap-index.xml`, and check the page in Google's Rich Results Test.
 
-## Downloads
+## Downloads: registration and download portal
 
-There is no registration and no database for this project.
+Downloads need a short registration: the visitor accepts the Terms of Use and the CC BY-NC 4.0 license with
+their name and email, so the license is agreed with a known person. The licence page is `/license`, the terms
+`/terms`.
 
-- **Downloads:** the "Series" section lists the nine presentations (`series.items` in the locale files),
-  each with its own Download button. Links come from `PUBLIC_PRESENTATION_URLS` (comma separated, in order).
-  An empty slot shows the button greyed out with "Coming November 2026". Presentation 1 falls back to the
-  Daniel 2 demo deck, downloaded as PowerPoint from Google Slides.
+- **Landing:** the "Get access" form (`src/components/Access.astro`) registers the visitor and signs them in
+  right away, with a button to the portal. "Already registered?" leads to the portal's sign-in. The Series
+  buttons and every Download button lead to the form, or to the portal once signed in. The landing only shows
+  a preview of the library (`src/components/Preview.astro`); nothing downloads there except the Daniel 2 demo.
+- **Portal** (`/downloads`, `src/components/Portal.astro`): four categories with counts, a paginated grid
+  (24 per page, no search), "What will you use it for?" before each download. Without a session the content
+  fades out under the sign-in card: email, then a 6-digit code sent by email.
+- **Emails:** `emails/<lang>/registered.html` and `code.html`, see `emails/README.md`.
+
+### Test mode
+
+Without `PUBLIC_API_URL` everything runs in the browser so the screens can be reviewed before the backend
+exists: a sample catalog built from the slot images (`src/lib/sampleCatalog.ts`), any registration succeeds,
+the sign-in code is **123456**, the session lives in `localStorage` for 30 days. A yellow note marks it on the
+page. Nothing is sent anywhere.
+
+### Download portal API (backend)
+
+All requests go to `PUBLIC_API_URL`, JSON in and out, with `credentials: 'include'`: the session is an
+httpOnly cookie set by the backend (allow CORS with credentials from the site origin). Errors return
+`{ "error": "<code>" }` with the status below. The client is `src/scripts/api.ts`.
+
+| Request | Body / query | Success | Errors |
+|---|---|---|---|
+| `POST /register` | `{ firstName, lastName, email, lang, consent: true, termsVersion, turnstileToken, source, utm }` | `200 { email, firstName }`, sets the session cookie, sends `registered.html` | `409 already_registered` (send a sign-in code instead), `400 invalid` |
+| `POST /login/code` | `{ email, lang, turnstileToken }` | `200`, sends `code.html` | `404 not_registered`, `429 too_many` |
+| `POST /login/verify` | `{ email, code }` | `200 { email, firstName }`, sets the session cookie | `400 invalid_code`, `410 expired_code`, `429 too_many` |
+| `GET /me` | | `200 { email, firstName }` | `401` |
+| `POST /logout` | `{}` | `200`, clears the cookie | |
+| `GET /catalog/counts?lang=` | | `200 { presentation, image, video, marketing }` | |
+| `GET /catalog?type=&page=&perPage=&lang=` | `type`: presentation, image, video, marketing | `200 { items: [{ id, type, title, preview, format, size, language, series? }], total, page, perPage }` | |
+| `POST /download` | `{ id, purpose }` | `200 { url }`: a short-lived signed link to the file; log who, what, purpose, when | `401` (session expired: the portal shows sign-in again) |
+
+Suggested limits: session 30 days, code valid 10 minutes, 5 wrong codes then a new code is needed. Verify the
+Turnstile token on the server (`/register`, `/login/code`). `termsVersion` (currently `2026-11`, in
+`Access.astro`) records which version of the terms was accepted.
+
+Catalog fields come from the image table; `preview` is a small public image, the file itself stays private
+in storage. `featured` items in the table are meant for the landing preview (15 to 20 images).
 
 ## Analytics and consent
 

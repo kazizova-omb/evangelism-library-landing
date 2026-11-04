@@ -62,6 +62,7 @@ const en = {
     { label: 'Demo', href: '#demo' },
     { label: 'About', href: '#about' },
     { label: 'Translate', href: '#translate' },
+    { label: 'Download portal', href: '/downloads' },
   ],
 
   header: {
@@ -135,6 +136,8 @@ const en = {
     sub: 'Nine evenings in the books of Daniel and Revelation, read in plain language from the Bible itself. We will see that God told history in advance, that He has a plan to end evil, suffering, and death, and that Jesus is coming to make all things new. Every evening asks what that hope means for your life now.',
     label: 'Presentation',
     download: 'Download',
+    // for visitors who are not signed in: the button leads to the registration form
+    access: 'Get access',
     // shown under a download button whose file is not ready yet
     coming: 'Coming November 2026',
     // Download links: PUBLIC_PRESENTATION_URLS (comma separated, in order); presentation 1 falls back
@@ -214,13 +217,65 @@ const en = {
   },
 
 
+  // Short look at the library on the landing; the full catalog lives in the download portal
+  preview: {
+    eyebrow: 'Preview',
+    title: 'A look *inside the library*',
+    sub: 'A few of the images, videos, and slides in the kit. Register once to download the whole library.',
+    groups: { images: 'Images', videos: 'Videos', slides: 'Presentation slides' },
+    // tile labels in the mosaic
+    tags: { image: 'Image', video: 'Video', slide: 'Slide' },
+    // closing tile: what else is in the full library (numbers come from inside.stats)
+    more: 'In the full library',
+    play: 'Play video',
+    cta: 'Get access to download',
+  },
+
+  // Registration on the landing: creates the account and opens the download portal right away
+  access: {
+    eyebrow: 'Download',
+    title: 'Get access to the *full library*',
+    sub: 'Register once to download every presentation, image, video, and promotional material. There is no cost.',
+    points: [
+      'Nine presentations, about 400 images, 10 videos, and 20 promotional materials',
+      'Download as much as you need, whenever you need it',
+      'Next time, sign in with a one-time code sent to your email',
+    ],
+    form: {
+      title: 'Get access',
+      fields: {
+        firstName: { label: 'First name', placeholder: 'John', error: 'Please enter your first name.' },
+        lastName: { label: 'Last name', placeholder: 'Smith', error: 'Please enter your last name.' },
+        email: { label: 'Email', placeholder: 'you@church.org', error: 'Please enter a valid email.', suggest: 'Did you mean {email}?' },
+      },
+      // {terms} and {license} become links
+      consent: { text: 'I agree to the {terms} and the {license}.', terms: 'Terms of Use', license: 'CC BY-NC 4.0 license', error: 'Please accept the Terms of Use to continue.' },
+      turnstileError: 'Please complete the spam check.',
+      submit: 'Get access',
+      sending: 'Registering',
+      note: 'We use your email only for access to the library and important updates about it.',
+      networkError: 'Something went wrong. Please try again in a moment.',
+      already: 'Already registered?',
+      signIn: 'Sign in with your email',
+      exists: 'This email is already registered. Sign in with a one-time code instead.',
+      success: {
+        title: "You're in",
+        // {name} and {email} are filled in
+        text: 'Welcome, {name}. We have also sent a confirmation to {email}.',
+        cta: 'Go to the download portal',
+        change: 'Register a different email',
+      },
+    },
+  },
+
   faq: {
     eyebrow: 'Questions',
     title: 'Before you *ask*',
     // Also published as FAQPage structured data. Start answers with the direct answer.
     items: [
       { q: 'What is Revelation Media Resources?', a: 'Revelation Media Resources is a library of ready-made materials for running an evangelistic prophecy series: presentations, slides, images, videos, and promotional materials for pastors, church leaders, and ministry organizations.', open: true },
-      { q: 'Do I need to pay or register?', a: 'No. There is no cost and no registration: everything downloads directly. The original resources are licensed under CC BY‑NC 4.0, so you may use, adapt, translate, and share them for your ministry, as long as you give credit and do not use them commercially.' },
+      { q: 'Is there a cost, and do I need to register?', a: 'There is no cost. To download, register once with your name and email: it takes a minute and confirms that you accept the Terms of Use and the CC BY‑NC 4.0 license. Next time, sign in with a one-time code sent to your email. You may use, adapt, translate, and share the resources for your ministry, as long as you give credit and do not use them commercially.' },
+      { q: 'How do I sign in again later?', a: 'Open the download portal and enter the email you registered with. We will send you a 6-digit code; enter it on the page and you are back in. You stay signed in for up to 30 days on the same device.' },
       { q: 'Who can use these materials?', a: 'Pastors, church leaders, and ministry organizations who want to run an evangelistic series. No design skills are needed: the files are ready to present and easy to adapt to your church.' },
       { q: 'What formats are included?', a: 'Presentations come in PowerPoint, Keynote, and Google Slides. Images and videos are provided in standard formats that work on any device.' },
       { q: 'Can I edit the materials?', a: "Yes. You can change text, reorder slides, and add your church's details to fit your program." },
@@ -268,6 +323,8 @@ const en = {
       terms: 'Terms of Use',
       translate: 'Translate',
       privacy: 'Privacy Policy',
+      license: 'License',
+      portal: 'Download portal',
     },
     copyright: '© 2026 Ministerial Association of the General Conference of Seventh-day Adventists',
     cookieSettings: 'Cookie settings',
@@ -282,30 +339,122 @@ const en = {
     label: 'Cookie consent',
   },
 
+  // Download portal (/downloads): categories, files, sign-in by email code
+  portal: {
+    title: 'Download portal',
+    description: 'Download the presentations, images, videos, and promotional materials of the All Things New prophecy seminar series.',
+    eyebrow: 'All Things New',
+    heading: 'Download *portal*',
+    sub: 'Every presentation, image, video, and promotional material of the series. Choose a category to start.',
+    categories: {
+      presentation: { label: 'Presentations', text: 'The nine seminar presentations' },
+      image: { label: 'Images', text: 'Original artwork for slides and print' },
+      video: { label: 'Videos', text: 'Clips for the key moments of the series' },
+      marketing: { label: 'Marketing materials', text: 'Posters, banners, and social posts' },
+    },
+    // {n} is the number of files
+    files: '{n} files',
+    back: 'All categories',
+    pageOf: 'Page {n} of {total}',
+    prev: 'Previous',
+    next: 'Next',
+    download: 'Download',
+    empty: 'Nothing here yet. Files are added as they are ready.',
+    loadError: "We couldn't load the files. Please try again.",
+    retry: 'Try again',
+    signedInAs: 'Signed in as {email}',
+    signOut: 'Sign out',
+    purpose: {
+      title: 'What will you use it for?',
+      text: 'This helps us see how the resources serve the church.',
+      options: ['Sermon or evangelistic series', 'Bible study or small group', 'Social media', 'Printed materials', 'Translation', 'Other'],
+      submit: 'Download',
+      cancel: 'Cancel',
+      error: 'Please choose an option.',
+      failed: "The download didn't start. Please try again.",
+    },
+    gate: {
+      title: 'Sign in to download',
+      text: 'Enter the email you registered with. We will send you a one-time code.',
+      email: { label: 'Email', placeholder: 'you@church.org', error: 'Please enter a valid email.', suggest: 'Did you mean {email}?' },
+      sendCode: 'Send code',
+      sendingCode: 'Sending',
+      codeTitle: 'Check your email',
+      // {email} is filled in
+      codeText: 'We sent a 6-digit code to {email}. It is valid for 10 minutes.',
+      code: { label: 'Code', placeholder: '123456', error: 'Enter the 6-digit code.' },
+      verify: 'Sign in',
+      verifying: 'Checking',
+      invalid: 'This code is not correct. Please check it and try again.',
+      expired: 'This code has expired. Please request a new one.',
+      resend: 'Send a new code',
+      changeEmail: 'Use a different email',
+      notRegistered: "We don't have this email yet. Register first to get access.",
+      register: 'Register for access',
+      networkError: 'Something went wrong. Please try again in a moment.',
+    },
+    // full-screen preview (click a tile)
+    viewer: { open: 'Open preview', close: 'Close', prev: 'Previous file', next: 'Next file', counter: '{n} of {total}' },
+    testNote: 'Test mode: sample files and no real emails. Sign in with the code 123456.',
+  },
+
+  // License page (/license): plain-language summary of CC BY-NC 4.0 and how to give credit
+  licensePage: {
+    title: 'License and credit',
+    description: 'How you may use the Revelation Media Resources materials under CC BY-NC 4.0, and how to give credit.',
+    eyebrow: 'License',
+    heading: 'How you may use *the resources*',
+    intro: 'The original resources of Revelation Media Resources are licensed under Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0). Registering for the download portal confirms that you accept this license and the Terms of Use.',
+    canTitle: 'You may',
+    can: [
+      'Use the resources in sermons, evangelistic series, Bible studies, and other ministry',
+      "Adapt them: edit the text, reorder slides, and add your church's details",
+      'Translate them into other languages',
+      'Share them with others, without charging for them',
+    ],
+    cannotTitle: 'You may not',
+    cannot: [
+      'Sell the resources or anything made from them',
+      'Include them in paid products, courses, or services',
+      'Present them as your own work',
+      'Suggest that the General Conference endorses you, your organization, or your product',
+    ],
+    creditTitle: 'How to give credit',
+    creditText: 'When you share or publish the resources, or something you made from them, include this line:',
+    creditLine: '© Ministerial Association, General Conference of Seventh-day Adventists. Licensed under CC BY-NC 4.0.',
+    fullLicense: 'Full license text (Creative Commons)',
+    terms: 'Terms of Use',
+    draft: 'Draft: this wording is awaiting legal review.',
+  },
+
   legal: {
     backHome: 'Back to home',
     updated: 'Last updated: September 29, 2026',
     terms: {
       title: 'Terms of Use',
-      description: 'Terms of Use for Revelation Media Resources.',
-      intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. These terms explain how you may use the library and its materials.',
+      description: 'Terms of Use for Revelation Media Resources and its download portal.',
+      intro: 'These Terms of Use apply to the Revelation Media Resources website and its download portal. By registering, you accept them together with the CC BY-NC 4.0 license. Draft: this wording is awaiting legal review.',
       sections: [
-        { heading: 'Who we are', text: 'The Ministerial Association of the General Conference of Seventh-day Adventists provides Revelation Media Resources to pastors, church leaders, and ministry organizations.' },
-        { heading: 'Using the materials', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam.' },
-        { heading: 'What is not allowed', text: 'Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.' },
-        { heading: 'Accounts and access', text: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
-        { heading: 'Changes to these terms', text: 'Curabitur blandit tempus porttitor. Maecenas faucibus mollis interdum, nullam quis risus eget urna mollis ornare vel eu leo.' },
+        { heading: 'Who we are', text: 'Revelation Media Resources is provided by the Ministerial Association of the General Conference of Seventh-day Adventists for pastors, church leaders, and ministry organizations.' },
+        { heading: 'License', text: 'The original resources are licensed under Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0). The License page explains in plain language what you may and may not do. If anything here differs from the license, the license applies.' },
+        { heading: 'Using the materials', text: 'You may use, adapt, translate, and share the resources for ministry, with credit and without charging for them. When you share or publish them, or something you made from them, include: "© Ministerial Association, General Conference of Seventh-day Adventists. Licensed under CC BY-NC 4.0."' },
+        { heading: 'What is not allowed', text: 'You may not sell the resources or anything made from them, include them in paid products, courses, or services, present them as your own work, or suggest that the General Conference endorses you, your organization, or your product.' },
+        { heading: 'Registration and access', text: 'To download, register with your real name and email, and keep your sign-in codes private. We may suspend access if these terms or the license are not respected.' },
+        { heading: 'Changes', text: 'We may update the resources and these terms. Changes will be published on this page with a new date.' },
         { heading: 'Contact', text: 'Questions about these terms? Write to us at {email}.' },
       ],
     },
     privacy: {
       title: 'Privacy Policy',
       description: 'How Revelation Media Resources collects and uses personal data.',
-      intro: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. This policy explains what we collect, why, and the choices you have.',
+      intro: 'This policy explains what personal data we collect through Revelation Media Resources, why, and the choices you have. Draft: this wording is awaiting legal review.',
       sections: [
-        { heading: 'What we collect', text: 'Downloading the kit needs no personal data: there is no registration and no signup form.' },
-        { heading: 'Cookies and analytics', text: 'With your consent we use Google Analytics to understand how the site is used. You can change your choice at any time using "Cookie settings" in the footer.' },
-        { heading: 'Your rights', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id ligula porta felis euismod semper, cras mattis consectetur purus sit amet fermentum.' },
+        { heading: 'What we collect', text: 'When you register: your first name, last name, email, the language of the site, and the date you accepted the Terms of Use. When you download: which file and the purpose you choose.' },
+        { heading: 'Why we collect it', text: 'To give you access to the download portal, to send your sign-in codes and a registration confirmation, to tell you about important changes to the library, and to understand how the resources serve the church. We do not sell your data.' },
+        { heading: 'Who processes it', text: 'The site and its data are hosted on Cloudflare. Emails are sent with Resend. Both process data only on our behalf.' },
+        { heading: 'Sign-in and cookies', text: 'A cookie keeps you signed in to the download portal for up to 30 days. With your consent we also use Google Analytics to understand how the site is used. You can change that choice at any time using "Cookie settings" in the footer.' },
+        { heading: 'Spam protection', text: 'The registration and sign-in forms are protected by Cloudflare Turnstile, which processes technical data to tell people from bots.' },
+        { heading: 'Your rights', text: 'You can ask us at any time to see, correct, or delete your data. Deleting your data also ends your access to the download portal.' },
         { heading: 'Contact', text: 'Questions about your data? Write to us at {email}.' },
       ],
     },

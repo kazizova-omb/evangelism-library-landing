@@ -3,6 +3,9 @@
 const env = import.meta.env;
 const str = (v: string | undefined) => (v ?? '').trim();
 
+/** Cloudflare's public test key: always passes, shows a visible widget. */
+const TURNSTILE_TEST_KEY = '1x00000000000000000000AA';
+
 
 /** Google Slides view link -> direct PowerPoint download of the same deck */
 const slidesExport = (url: string) => url.replace(/\/(edit|view|preview)[^/]*$/, '') + '/export/pptx';
@@ -11,6 +14,10 @@ const slidesExport = (url: string) => url.replace(/\/(edit|view|preview)[^/]*$/,
 const DEMO_URL = 'https://docs.google.com/presentation/d/1qQWVP-OLH7YOuxll7rzfQVDOEtVoTCZ8DqUacyVn7uY/edit?usp=sharing';
 
 export const config = {
+  /** Backend for registration, sign-in and downloads (Sergiy). Empty = test mode: everything runs in the
+      browser with sample files, any registration succeeds and the sign-in code is 123456. See README. */
+  apiUrl: str(env.PUBLIC_API_URL).replace(/\/$/, ''),
+  turnstileSiteKey: str(env.PUBLIC_TURNSTILE_SITE_KEY) || TURNSTILE_TEST_KEY,
   ga4Id: str(env.PUBLIC_GA4_ID),
   /** Daniel 2 demo. Google Slides for now; switch to the ZIP URL once it is ready (env overrides). */
   demoUrl: str(env.PUBLIC_DEMO_URL) || DEMO_URL,

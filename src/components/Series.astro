@@ -2,13 +2,14 @@
 // The nine presentations of the seminar, each with its own download button. A presentation
 // without a file yet shows the button disabled with "Coming November 2026" (see config.presentationUrls).
 import Icon from './Icon.astro';
-import { useT } from '../i18n';
+import { useT, getLang, localePath } from '../i18n';
 import { config } from '../config';
 import { rich } from '../lib/rich';
 
 const site = useT(Astro);
 const s = site.series;
 const urls = config.presentationUrls;
+const portal = localePath(getLang(Astro), '/downloads');
 ---
 <section class="section" id="series" aria-labelledby="series-title">
   <div class="wrap">
@@ -28,9 +29,9 @@ const urls = config.presentationUrls;
           <p class="pres__text">{p.text}</p>
           <div class="pres__foot">
             {urls[i] ? (
-              <a href={urls[i]} class="btn btn--gold btn--sm" download data-track="series_download" data-track-location={`presentation_${i + 1}`}>
+              <a href="#access" class="btn btn--gold btn--sm pres__get" data-portal={`${portal}?type=presentation`} data-download-label={s.download} data-track="series_access" data-track-location={`presentation_${i + 1}`}>
                 <Icon name="download" />
-                {s.download}
+                <span>{s.access}</span>
               </a>
             ) : (
               <Fragment>
@@ -74,3 +75,16 @@ const urls = config.presentationUrls;
     .pres__foot { padding-top: 12px }
     }
 </style>
+
+<script>
+  // Downloads happen in the portal: visitors who are not signed in go to the registration form first,
+  // signed-in visitors go straight to the presentations in the portal.
+  import { me } from '../scripts/api';
+  me().then((u) => {
+    if (!u) return;
+    document.querySelectorAll<HTMLAnchorElement>('.pres__get').forEach((a) => {
+      a.href = a.dataset.portal ?? a.href;
+      a.querySelector('span')!.textContent = a.dataset.downloadLabel ?? '';
+    });
+  }).catch(() => {});
+</script>

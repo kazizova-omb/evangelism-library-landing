@@ -1,0 +1,64 @@
+---
+// /license: plain-language summary of CC BY-NC 4.0, how to give credit, links to the full license and the
+// Terms of Use. The registration checkbox links here.
+import Base from '../layouts/Base.astro';
+import { useT, getLang, localePath } from '../i18n';
+import { rich } from '../lib/rich';
+
+const site = useT(Astro);
+const lang = getLang(Astro);
+const l = site.licensePage;
+---
+<Base title={l.title} description={l.description} breadcrumb={l.title}>
+  <article class="section lic glow-r">
+    <div class="wrap lic__in">
+      <p class="eyebrow">{l.eyebrow}</p>
+      <h1 class="h2" set:html={rich(l.heading)} />
+      <p class="lic__badge"><a href={site.license.url} target="_blank" rel="license noopener">{site.license.badge}</a></p>
+      <p class="sub">{l.intro}</p>
+      <p class="lic__draft">{l.draft}</p>
+
+      <div class="lic__cols">
+        <section class="lic__box lic__box--yes">
+          <h2>{l.canTitle}</h2>
+          <ul>{l.can.map((t) => <li>{t}</li>)}</ul>
+        </section>
+        <section class="lic__box lic__box--no">
+          <h2>{l.cannotTitle}</h2>
+          <ul>{l.cannot.map((t) => <li>{t}</li>)}</ul>
+        </section>
+      </div>
+
+      <section class="lic__credit">
+        <h2>{l.creditTitle}</h2>
+        <p>{l.creditText}</p>
+        <blockquote>{l.creditLine}</blockquote>
+      </section>
+
+      <p class="lic__links">
+        <a href={site.license.url} target="_blank" rel="license noopener" class="btn btn--ghost">{l.fullLicense}</a>
+        <a href={localePath(lang, '/terms')} class="btn btn--ghost">{l.terms}</a>
+      </p>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .lic { padding-top: calc(76px + clamp(48px, 6vw, 96px)) }
+  .lic__in { max-width: 880px }
+  .lic__badge a { display: inline-block; margin-bottom: 20px; padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: 700; letter-spacing: .1em; color: #fff; background: var(--navy, #1F2160) }
+  .lic__draft { margin-top: 14px; font-size: 13px; color: var(--muted-solid) }
+  .lic__cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 40px }
+  .lic__box { padding: 26px 28px; border-radius: 8px; background: #FBFAF7; box-shadow: 0 0 0 1px var(--line) inset }
+  .lic h2 { font-family: var(--poster, var(--display)); font-weight: 400; font-size: 26px; line-height: 1.05; text-transform: uppercase; color: var(--navy, var(--ink)); margin-bottom: 14px }
+  .lic__box ul { list-style: none; display: grid; gap: 12px }
+  .lic__box li { position: relative; padding-left: 28px; color: var(--ink-2); line-height: 1.55 }
+  .lic__box li::before { position: absolute; left: 0; top: 0; font-weight: 700 }
+  .lic__box--yes li::before { content: "✓"; color: var(--teal-text, var(--gold)) }
+  .lic__box--no li::before { content: "✕"; color: #B3261E }
+  .lic__credit { margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--line) }
+  .lic__credit p { color: var(--ink-2) }
+  .lic__credit blockquote { margin-top: 14px; padding: 16px 20px; border-left: 3px solid var(--teal, var(--gold)); background: #FBFAF7; font-weight: 600; color: var(--navy, var(--ink)) }
+  .lic__links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 40px }
+  @media (max-width: 760px) { .lic__cols { grid-template-columns: 1fr } .lic__links .btn { width: 100% } }
+</style>

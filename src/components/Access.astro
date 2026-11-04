@@ -1,0 +1,190 @@
+---
+// "Get access" on the landing: registration (first name, last name, email, accept the Terms of Use and
+// CC BY-NC 4.0). On success the visitor is signed in and goes straight to the download portal.
+// Requests go through src/scripts/api.ts (test mode until PUBLIC_API_URL is set).
+import Brush from './Brush.astro';
+import Icon from './Icon.astro';
+import { useT, getLang, localePath } from '../i18n';
+import { rich, fill } from '../lib/rich';
+import { config } from '../config';
+
+const site = useT(Astro);
+const lang = getLang(Astro);
+const a = site.access;
+const f = a.form;
+const portal = localePath(lang, '/downloads');
+const consentHtml = fill(f.consent.text, {
+  terms: `<a href="${localePath(lang, '/terms')}" target="_blank" rel="noopener">${f.consent.terms}</a>`,
+  license: `<a href="${localePath(lang, '/license')}" target="_blank" rel="noopener">${f.consent.license}</a>`,
+});
+const successHtml = fill(f.success.text, { name: '<span id="welcomeName"></span>', email: '<b id="sentTo"></b>' });
+---
+<section class="section" id="access" aria-labelledby="access-title">
+  <Brush w={756} h={636} at="right:0;top:0" box={1924.835} x={-240.31} y={-1035.28} size={1456.895} rotate={155.9} opacity={0.15} tone="teal" />
+  <div class="wrap access">
+    <div class="access__head reveal">
+      <p class="eyebrow">{a.eyebrow}</p>
+      <h2 class="h2" id="access-title" set:html={rich(a.title)} />
+      <p class="sub">{a.sub}</p>
+      <ul class="access__points">
+        {a.points.map((t) => <li><Icon name="check" />{t}</li>)}
+      </ul>
+    </div>
+
+    <div class="formcard reveal" id="accessCard" data-portal={portal} data-lang={lang}>
+      <form id="accessForm" novalidate aria-labelledby="access-form-title">
+        <h3 class="access__formtitle" id="access-form-title">{f.title}</h3>
+        <div class="form-err" id="accessErr" role="alert" hidden></div>
+        <div class="grid2">
+          <div class="field">
+            <label for="a-first">{f.fields.firstName.label}</label>
+            <input id="a-first" name="firstName" autocomplete="given-name" required placeholder={f.fields.firstName.placeholder} />
+            <span class="err" id="a-first-err">{f.fields.firstName.error}</span>
+          </div>
+          <div class="field">
+            <label for="a-last">{f.fields.lastName.label}</label>
+            <input id="a-last" name="lastName" autocomplete="family-name" required placeholder={f.fields.lastName.placeholder} />
+            <span class="err" id="a-last-err">{f.fields.lastName.error}</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="a-email">{f.fields.email.label}</label>
+          <input id="a-email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder={f.fields.email.placeholder} />
+          <span class="err" id="a-email-err">{f.fields.email.error}</span>
+          <p class="email-suggest" id="a-email-suggest" aria-live="polite" data-template={f.fields.email.suggest} hidden></p>
+        </div>
+        <!-- Honeypot: invisible to people, bots tend to fill it. Filled = silently dropped. The name and label
+             are chosen so browser autofill and password managers leave it alone (a "website" field got autofilled). -->
+        <div class="hp" aria-hidden="true">
+          <label for="a-hp">Leave this field empty</label>
+          <input id="a-hp" name="hp_leave_empty" type="text" tabindex="-1" autocomplete="off" data-1p-ignore data-lpignore="true" data-form-type="other" />
+        </div>
+        <div class="field consent-wrap">
+          <label class="consent">
+            <input type="checkbox" id="a-consent" name="consent" required />
+            <span set:html={consentHtml} />
+          </label>
+          <span class="err" id="a-consent-err">{f.consent.error}</span>
+        </div>
+        <div class="field turnstile-wrap">
+          <div class="turnstile" id="a-turnstile"></div>
+          <span class="err" id="a-turnstile-err">{f.turnstileError}</span>
+        </div>
+        <button type="submit" class="btn btn--gold btn--block" id="accessSubmit" data-label={f.submit} data-sending={f.sending}>{f.submit}</button>
+        <p class="form-note">{f.note}</p>
+        <p class="access__already">{f.already} <a href={`${portal}?signin`} class="link-btn">{f.signIn}</a></p>
+        {!config.apiUrl && <p class="test-note">{site.portal.testNote}</p>}
+      </form>
+
+      <div class="success" id="accessDone">
+        <div class="success__ic"><Icon name="success" /></div>
+        <h3 id="accessDoneTitle" tabindex="-1">{f.success.title}</h3>
+        <p set:html={successHtml} />
+        <a href={portal} class="btn btn--gold btn--block" data-track="portal_open" data-track-location="registration">{f.success.cta}</a>
+        <button type="button" class="link-btn" id="accessAgain">{f.success.change}</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="access-text" set:html={JSON.stringify({ exists: f.exists, signIn: f.signIn, networkError: f.networkError })} />
+
+<style>
+  .access { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 80px; align-items: center }
+  .access__head .h2 { font-size: clamp(40px, 3.9vw, 56px) }
+  .access__points { list-style: none; display: grid; gap: 14px; margin-top: 28px }
+  .access__points li { display: flex; gap: 12px; align-items: flex-start; line-height: 1.5 }
+  .access__points :global(svg) { flex: none; width: 22px; height: 22px; margin-top: 1px }
+  .access__formtitle { font-family: var(--poster, var(--display)); font-weight: 400; font-size: 30px; line-height: 1.05; text-transform: uppercase; margin-bottom: 20px }
+  .access__already { margin-top: 10px; text-align: center; font-size: 14px; color: var(--muted-solid) }
+
+  .success { display: none; text-align: center; padding: 28px 8px }
+  .formcard.is-done form { display: none }
+  .formcard.is-done .success { display: block; animation: rise .7s var(--ease) }
+  .success__ic { width: 76px; height: 76px; margin: 0 auto 24px; border-radius: 8px; display: grid; place-items: center; color: #fff; background: var(--indigo, var(--gold)) }
+  .success__ic :global(svg) { width: 32px; height: 32px }
+  .success h3 { font-family: var(--poster, var(--display)); font-weight: 400; font-size: clamp(34px, 3.4vw, 46px); line-height: 1.05; text-transform: uppercase; margin-bottom: 12px; outline: none }
+  .success p { color: var(--ink-2); max-width: 400px; margin: 0 auto 26px }
+  .success p :global(b) { color: var(--ink); font-weight: 600; overflow-wrap: anywhere }
+  .success .link-btn { margin-top: 16px }
+
+  @media (max-width: 1020px) { .access { grid-template-columns: 1fr; gap: 40px } }
+</style>
+
+<script>
+  import * as api from '../scripts/api';
+  import { mountTurnstile } from '../scripts/turnstile';
+  import { validate, clearOnEdit, emailHelp, normalizeEmail, setInvalid, setLoading } from '../scripts/forms';
+  import { track } from '../scripts/analytics';
+
+  const card = document.getElementById('accessCard')!;
+  const form = document.getElementById('accessForm') as HTMLFormElement;
+  const btn = document.getElementById('accessSubmit') as HTMLButtonElement;
+  const errBox = document.getElementById('accessErr')!;
+  const honeypot = document.getElementById('a-hp') as HTMLInputElement;
+  const text = JSON.parse(document.getElementById('access-text')!.textContent ?? '{}') as Record<string, string>;
+  const portal = card.dataset.portal ?? '/downloads';
+  const loadedAt = performance.now();
+  const MIN_FILL_MS = 3000; // faster than any person can fill the form
+  const TERMS_VERSION = '2026-11'; // bump when the Terms of Use change, so the backend knows what was accepted
+
+  const q = new URLSearchParams(location.search);
+  const utm = Object.fromEntries(['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].map((k) => [k, q.get(k) ?? '']));
+
+  const tsField = document.getElementById('a-turnstile')!.closest<HTMLElement>('.field')!;
+  const ts = mountTurnstile(document.getElementById('a-turnstile')!, () => setInvalid(tsField, null, false));
+  form.addEventListener('focusin', ts.load, { once: true });
+  clearOnEdit(form);
+  emailHelp(document.getElementById('a-email') as HTMLInputElement, document.getElementById('a-email-suggest')!);
+
+  function done(name: string, email: string) {
+    document.getElementById('welcomeName')!.textContent = name;
+    document.getElementById('sentTo')!.textContent = email;
+    card.classList.add('is-done');
+    document.getElementById('accessDoneTitle')!.focus();
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errBox.hidden = true;
+    if (!validate(form)) return;
+    const token = ts.token();
+    if (!token) { setInvalid(tsField, null, true); ts.load(); return; }
+
+    const data = new FormData(form);
+    const val = (k: string) => String(data.get(k) ?? '').trim();
+    const input = { firstName: val('firstName'), lastName: val('lastName'), email: normalizeEmail(val('email')), lang: card.dataset.lang ?? 'en', turnstileToken: token, termsVersion: TERMS_VERSION, utm };
+
+    // Bots: honeypot filled. Show the normal success screen so they learn nothing, but send nothing.
+    const isBot = honeypot.value.trim() !== '';
+    // Submitted faster than a person could type (autofill can do that): wait out the rest instead of
+    // dropping it, so a real visitor is never shown a success that did not happen.
+    const early = MIN_FILL_MS - (performance.now() - loadedAt);
+
+    setLoading(btn, true);
+    try {
+      if (early > 0) await new Promise((r) => setTimeout(r, early));
+      if (isBot) await new Promise((r) => setTimeout(r, 900));
+      else { await api.register(input); track('register'); }
+      done(input.firstName, input.email);
+    } catch (err) {
+      if (err instanceof api.ApiError && err.code === 'already_registered') {
+        errBox.innerHTML = `${text.exists} <a href="${portal}?signin">${text.signIn}</a>`;
+      } else errBox.textContent = text.networkError;
+      errBox.hidden = false;
+    } finally {
+      setLoading(btn, false);
+      ts.reset(); // tokens are single use
+    }
+  });
+
+  document.getElementById('accessAgain')!.addEventListener('click', async () => {
+    await api.logout().catch(() => {});
+    card.classList.remove('is-done');
+    form.reset();
+    (document.getElementById('a-first') as HTMLInputElement).focus();
+  });
+
+  // already signed in (came back later): skip the form
+  api.me().then((u) => { if (u && !card.classList.contains('is-done')) done(u.firstName || '', u.email); }).catch(() => {});
+</script>
