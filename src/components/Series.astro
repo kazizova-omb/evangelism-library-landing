@@ -29,7 +29,7 @@ const portal = localePath(getLang(Astro), '/downloads');
           <p class="pres__text">{p.text}</p>
           <div class="pres__foot">
             {urls[i] ? (
-              <a href="#access" class="btn btn--gold btn--sm pres__get" data-portal={`${portal}?type=presentation`} data-download-label={s.download} data-track="series_access" data-track-location={`presentation_${i + 1}`}>
+              <a href="#access" class="btn btn--gold btn--sm pres__get" data-portal={`${portal}#materials`} data-download-label={s.download} data-track="series_access" data-track-location={`presentation_${i + 1}`}>
                 <Icon name="download" />
                 <span>{s.access}</span>
               </a>

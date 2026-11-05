@@ -1,32 +1,80 @@
-// Client for the download portal backend (registration, sign-in by email code, catalog, downloads).
+// Client for the download portal backend (registration, sign-in by email code, library, downloads).
 // The backend is Sergiy's part; the contract is described in README ("Download portal API").
-// With no PUBLIC_API_URL the same functions run in test mode in the browser: sample catalog,
-// any registration succeeds, the sign-in code is 123456, the session lives in localStorage.
+// With no PUBLIC_API_URL the same functions run in test mode in the browser: sample data from
+// src/lib/portalSample.ts, any registration succeeds, the sign-in code is 123456, the session lives in
+// localStorage.
 import { config } from '../config';
+// test data is loaded only in test mode, so it never ships with the real portal
+const sample = () => import('../lib/portalSample');
 
-export type ItemType = 'presentation' | 'image' | 'video' | 'marketing';
-export const ITEM_TYPES: ItemType[] = ['presentation', 'image', 'video', 'marketing'];
+export interface FileFormat { id: string; label: string; hint?: string }
 
-export interface CatalogItem {
+/** one image of the Image Library */
+export interface LibraryImage {
   id: string;
-  type: ItemType;
   title: string;
+  /** tile and modal thumbnail (about 800px wide) */
   preview: string;
-  /** larger preview for full-screen viewing (about 1600px wide); falls back to `preview` */
-  previewLarge?: string;
-  /** videos: a playable preview (smaller, watermark-free stream or MP4), not the original file */
-  previewVideo?: string;
-  format: string;
+  /** detail page and full-screen view (about 1600px wide) */
+  image: string;
+  book: string;
+  chapter: number;
+  chapterName: string;
+  /** "Daniel 2", "Revelation 6:1-8" */
+  ref: string;
+  testament: 'Old' | 'New';
+  /** curated category ids (see LibraryCategory) */
+  categories: string[];
+  tags: string[];
+  desc: string;
+  /** group label shown on the detail page ("Biblical Scenes", "Prophecy") */
+  group: string;
+  sub?: string;
+  dims: string;
   size: string;
-  language: string;
-  series?: number;
+  date: string;
+  views: number;
+  downloads: number;
+  license: string;
+  /** optional: shown on the detail page only when present */
+  model?: string;
+  modelVersion?: string;
+  prompt?: string;
 }
-export interface CatalogPage {
-  items: CatalogItem[];
-  total: number;
-  page: number;
-  perPage: number;
+export interface LibraryCategory { id: string; label: string; thumb: string; count?: number }
+export interface LibraryBook { book: string; testament: 'Old' | 'New'; order: number; count: number; chapters: { n: number; name: string; count: number }[] }
+export interface LibraryFacets { total: number; books: LibraryBook[]; categories: LibraryCategory[]; tags: string[] }
+export interface LibraryQuery { book?: string; chapter?: number; category?: string; q?: string; sort?: 'new' | 'views' | 'downloads' | 'az'; page: number; perPage: number }
+export interface LibraryPage { items: LibraryImage[]; total: number; page: number; perPage: number }
+
+export type MaterialGroupId = 'presentations' | 'video' | 'marketing' | 'audio';
+export interface MaterialItem {
+  id: string;
+  cat: string;
+  title: string;
+  thumb: string;
+  size: string;
+  slides?: number;
+  duration?: string;
+  fileType?: string;
+  formats: FileFormat[];
 }
+export interface Materials {
+  series: { sessions: number; files: string; formats: number; size: string; thumb: string; formatsList: FileFormat[] };
+  languages: { code: string; name: string; available: boolean }[];
+  groups: { id: MaterialGroupId; items: MaterialItem[] }[];
+}
+export interface DownloadRequest {
+  kind: 'image' | 'material' | 'series';
+  /** image or material id; for the series, the language code */
+  id: string;
+  format: string;
+  purpose: string;
+  /** free text when purpose is "other" */
+  purposeText?: string;
+  lang: string;
+}
+
 export interface User { email: string; firstName: string }
 
 export class ApiError extends Error {
@@ -71,12 +119,6 @@ const read = <T>(k: string, fallback: T): T => {
 };
 const write = (k: string, v: unknown) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { /* private mode */ } };
 const startSession = (u: User) => write(SESSION_KEY, { ...u, exp: Date.now() + SESSION_DAYS * 864e5 });
-
-/** sample catalog, rendered into the page at build time (see src/lib/sampleCatalog.ts) */
-function sampleCatalog(): CatalogItem[] {
-  const el = document.getElementById('sample-catalog');
-  return el ? (JSON.parse(el.textContent ?? '[]') as CatalogItem[]) : [];
-}
 
 /* ---------------- public API ---------------- */
 
@@ -135,26 +177,82 @@ export async function logout(): Promise<void> {
   try { localStorage.removeItem(SESSION_KEY); } catch { /* ignore */ }
 }
 
-/** Catalog counts per type (public, no session needed: previews are shown behind the sign-in gate). */
-export async function counts(lang: string): Promise<Record<ItemType, number>> {
-  if (!testMode) return call(`/catalog/counts?lang=${encodeURIComponent(lang)}`);
-  const all = sampleCatalog();
-  return Object.fromEntries(ITEM_TYPES.map((t) => [t, all.filter((i) => i.type === t).length])) as Record<ItemType, number>;
+/* ---------------- library and materials ---------------- */
+
+const BOOK_ORDER: Record<string, number> = { Genesis: 1, Exodus: 2, Daniel: 27, Joel: 29, Zechariah: 38, Matthew: 40, Revelation: 66 };
+
+async function sampleFacets(): Promise<LibraryFacets> {
+  const { SAMPLE_IMAGES, SAMPLE_CATEGORIES } = await sample();
+  const books = new Map<string, LibraryBook>();
+  for (const d of SAMPLE_IMAGES) {
+    const b = books.get(d.book) ?? { book: d.book, testament: d.testament, order: BOOK_ORDER[d.book] ?? 99, count: 0, chapters: [] };
+    b.count++;
+    const ch = b.chapters.find((c) => c.n === d.chapter);
+    if (ch) ch.count++; else b.chapters.push({ n: d.chapter, name: d.chapterName, count: 1 });
+    books.set(d.book, b);
+  }
+  return {
+    total: SAMPLE_IMAGES.length,
+    books: [...books.values()].sort((a, b) => a.order - b.order).map((b) => ({ ...b, chapters: b.chapters.sort((x, y) => x.n - y.n) })),
+    categories: SAMPLE_CATEGORIES.map((c) => ({ ...c, count: SAMPLE_IMAGES.filter((d) => d.categories.includes(c.id)).length })),
+    tags: [...new Set(SAMPLE_IMAGES.flatMap((d) => d.tags))].slice(0, 10),
+  };
 }
 
-export async function catalog(type: ItemType, page: number, perPage: number, lang: string): Promise<CatalogPage> {
-  if (!testMode) return call(`/catalog?type=${type}&page=${page}&perPage=${perPage}&lang=${encodeURIComponent(lang)}`);
-  await wait(250);
-  const all = sampleCatalog().filter((i) => i.type === type);
-  return { items: all.slice((page - 1) * perPage, page * perPage), total: all.length, page, perPage };
+/** books and chapters for the filter, curated categories with counts, popular tags */
+export async function facets(lang: string): Promise<LibraryFacets> {
+  if (!testMode) return call(`/library/facets?lang=${encodeURIComponent(lang)}`);
+  return sampleFacets();
 }
 
-/** Records the purpose and returns a short-lived link to the file. Throws ApiError('unauthorized') when the
-    session has expired. */
-export async function download(id: string, purpose: string): Promise<string> {
-  if (!testMode) return (await post<{ url: string }>('/download', { id, purpose })).url;
+export async function images(query: LibraryQuery, lang: string): Promise<LibraryPage> {
+  if (!testMode) {
+    const q = new URLSearchParams({ lang, page: String(query.page), perPage: String(query.perPage), sort: query.sort ?? 'new' });
+    if (query.book) q.set('book', query.book);
+    if (query.chapter) q.set('chapter', String(query.chapter));
+    if (query.category) q.set('category', query.category);
+    if (query.q) q.set('q', query.q);
+    return call(`/library/images?${q}`);
+  }
+  await wait(150);
+  const { SAMPLE_IMAGES } = await sample();
+  const words = (query.q ?? '').toLowerCase().split(/\s+/).filter(Boolean);
+  let list = SAMPLE_IMAGES.filter((d) => {
+    if (query.category) return d.categories.includes(query.category);
+    if (query.book && d.book !== query.book) return false;
+    if (query.chapter && d.chapter !== query.chapter) return false;
+    if (words.length) {
+      const hay = [d.title, d.book, d.chapter, d.ref, d.chapterName, d.group, d.sub, d.tags.join(' '), d.desc].join(' ').toLowerCase();
+      return words.every((w) => hay.includes(w));
+    }
+    return true;
+  });
+  if (query.sort === 'views') list = [...list].sort((a, b) => b.views - a.views);
+  else if (query.sort === 'downloads') list = [...list].sort((a, b) => b.downloads - a.downloads);
+  else if (query.sort === 'az') list = [...list].sort((a, b) => a.title.localeCompare(b.title));
+  const start = (query.page - 1) * query.perPage;
+  return { items: list.slice(start, start + query.perPage), total: list.length, page: query.page, perPage: query.perPage };
+}
+
+export async function image(id: string, lang: string): Promise<LibraryImage | null> {
+  if (!testMode) {
+    try { return await call<LibraryImage>(`/library/images/${encodeURIComponent(id)}?lang=${encodeURIComponent(lang)}`); }
+    catch (e) { if (e instanceof ApiError && e.status === 404) return null; throw e; }
+  }
+  return (await sample()).SAMPLE_IMAGES.find((d) => d.id === id) ?? null;
+}
+
+export async function materials(lang: string): Promise<Materials> {
+  if (!testMode) return call(`/materials?lang=${encodeURIComponent(lang)}`);
+  return (await sample()).SAMPLE_MATERIALS;
+}
+
+/** Records who downloads what and why, and returns a short-lived link to the file. Throws
+    ApiError('unauthorized', 401) when there is no session. */
+export async function download(req: DownloadRequest): Promise<string> {
+  if (!testMode) return (await post<{ url: string }>('/download', req)).url;
   await wait(400);
   if (!(await me())) throw new ApiError('unauthorized', 401);
-  const item = sampleCatalog().find((i) => i.id === id);
-  return (item as CatalogItem & { file?: string })?.file ?? item?.preview ?? '';
+  // test mode: hand back the preview image (images) or nothing to fetch (materials, series)
+  return req.kind === 'image' ? (await sample()).SAMPLE_IMAGES.find((d) => d.id === req.id)?.image ?? '' : '';
 }

@@ -1,0 +1,48 @@
+---
+// Page shell for the download portal. The portal is an app with its own top bar (see PortalApp.astro), so it
+// does not use the landing's header, footer, themes or global styles.
+import { useT, getLang, withBase } from '../i18n';
+import { config } from '../config';
+import '@fontsource/dm-serif-display/400.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import '@fontsource/inter/800.css';
+
+interface Props { title: string; description: string }
+const { title, description } = Astro.props;
+const site = useT(Astro);
+const lang = getLang(Astro);
+const canonical = new URL(Astro.url.pathname.replace(/\.html$/, ''), Astro.site).href;
+---
+<!doctype html>
+<html lang={site.locale.htmlLang}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{`${title} | ${site.meta.title}`}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="robots" content={config.preview ? 'noindex, follow' : 'index, follow'} />
+  <meta name="theme-color" content="#F5F3EE" />
+  <meta name="color-scheme" content="light" />
+  <link rel="icon" href={withBase('/favicon.ico')} sizes="32x32" />
+  <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+  <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
+  <link rel="alternate" hreflang={lang} href={canonical} />
+  <script is:inline define:vars={{ gaId: config.ga4Id }}>
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    if (gaId) gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' });
+  </script>
+</head>
+<body>
+  <slot />
+  <script>
+    // analytics only for visitors who accepted cookies on the landing
+    import { getConsent, loadGa } from '../scripts/analytics';
+    if (getConsent() === 'granted') { window.gtag?.('consent', 'update', { analytics_storage: 'granted' }); loadGa(); }
+  </script>
+</body>
+</html>

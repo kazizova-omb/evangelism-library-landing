@@ -1,11 +1,11 @@
 ---
 import { langPaths, useT } from '../../i18n';
-import Base from '../../layouts/Base.astro';
-import Portal from '../../components/Portal.astro';
+import PortalLayout from '../../layouts/PortalLayout.astro';
+import PortalApp from '../../components/PortalApp.astro';
 
 export const getStaticPaths = langPaths;
 const site = useT(Astro);
 ---
-<Base title={site.portal.title} description={site.portal.description} breadcrumb={site.portal.title}>
-  <Portal />
-</Base>
+<PortalLayout title={site.portal.title} description={site.portal.description}>
+  <PortalApp />
+</PortalLayout>

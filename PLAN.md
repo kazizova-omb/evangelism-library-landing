@@ -37,6 +37,8 @@ the **Terms of Use** at registration. Emails through **Resend**.
 
 ## Stage 2. Download portal (Katya), done in test mode
 
+Rebuilt on 5 Nov from the portal design mock-up: open browsing, sign-in only to download.
+
 - [x] `/downloads` and `/es/downloads`: four categories with previews and counts.
 - [x] Category grid with pagination (24 per page), no search; file title, format, size, download icon.
 - [x] "What will you use it for?" before each download (last choice remembered).
@@ -87,6 +89,10 @@ is set.
 | `series` | presentation 1 to 9, if the file belongs to one |
 | `tags` | tags |
 | `featured` | yes / no: shown in the landing preview |
+| `book`, `chapter`, `chapterName`, `ref`, `testament` | Bible passage: filter by book and chapter |
+| `categories` | curated categories (Jesus, Sanctuary, Daniel 2…) |
+| `desc`, `dims`, `date`, `license` | image page |
+| `model`, `modelVersion`, `prompt` | optional, image page only if filled in |
 
 Prompts stay in the table only (the optional bonus, not part of the site).
 

@@ -72,7 +72,7 @@ const successHtml = fill(f.success.text, { name: '<span id="welcomeName"></span>
         </div>
         <button type="submit" class="btn btn--gold btn--block" id="accessSubmit" data-label={f.submit} data-sending={f.sending}>{f.submit}</button>
         <p class="form-note">{f.note}</p>
-        <p class="access__already">{f.already} <a href={`${portal}?signin`} class="link-btn">{f.signIn}</a></p>
+        <p class="access__already">{f.already} <a href={`${portal}#login`} class="link-btn">{f.signIn}</a></p>
         {!config.apiUrl && <p class="test-note">{site.portal.testNote}</p>}
       </form>
 
@@ -169,7 +169,7 @@ const successHtml = fill(f.success.text, { name: '<span id="welcomeName"></span>
       done(input.firstName, input.email);
     } catch (err) {
       if (err instanceof api.ApiError && err.code === 'already_registered') {
-        errBox.innerHTML = `${text.exists} <a href="${portal}?signin">${text.signIn}</a>`;
+        errBox.innerHTML = `${text.exists} <a href="${portal}#login">${text.signIn}</a>`;
       } else errBox.textContent = text.networkError;
       errBox.hidden = false;
     } finally {

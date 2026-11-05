@@ -124,44 +124,70 @@ their name and email, so the license is agreed with a known person. The licence 
 `/terms`.
 
 - **Landing:** the "Get access" form (`src/components/Access.astro`) registers the visitor and signs them in
-  right away, with a button to the portal. "Already registered?" leads to the portal's sign-in. The Series
-  buttons and every Download button lead to the form, or to the portal once signed in. The landing only shows
-  a preview of the library (`src/components/Preview.astro`); nothing downloads there except the Daniel 2 demo.
-- **Portal** (`/downloads`, `src/components/Portal.astro`): four categories with counts, a paginated grid
-  (24 per page, no search), "What will you use it for?" before each download. Without a session the content
-  fades out under the sign-in card: email, then a 6-digit code sent by email.
+  right away; "Go to the download portal" opens the portal signed in. "Already registered?" leads to the
+  portal's sign-in (`/downloads#login`). The landing only shows a preview of the library
+  (`src/components/Preview.astro`); nothing downloads there except the Daniel 2 demo.
+- **Portal** (`/downloads`, `src/components/PortalApp.astro`, own layout `src/layouts/PortalLayout.astro`),
+  built from the portal design mock-up. Browsing is open to everyone; downloading needs a session.
+  - `#library`: Image Library. Filter by book and chapter, curated categories, sort, 8 per page.
+  - `#image/<id>`: image page (large view, passage, tags, description, size, licence; AI model and prompt
+    only when the data has them).
+  - `#materials`: series banner (language, "Download entire series"), tabs for presentations, video,
+    marketing, audio.
+  - `#search`: search by title, book, tag or keyword.
+  - `#login`: email, then a 6-digit code. After signing in the visitor goes back to what they were doing.
+  - Every download asks "How will you use this?" (required, "Other" needs a few words) and a format, then
+    shows a short receipt.
 - **Emails:** `emails/<lang>/registered.html` and `code.html`, see `emails/README.md`.
 
 ### Test mode
 
 Without `PUBLIC_API_URL` everything runs in the browser so the screens can be reviewed before the backend
-exists: a sample catalog built from the slot images (`src/lib/sampleCatalog.ts`), any registration succeeds,
-the sign-in code is **123456**, the session lives in `localStorage` for 30 days. A yellow note marks it on the
-page. Nothing is sent anywhere.
+exists: sample data from the design mock-up (`src/lib/portalSample.ts`, images in `public/portal-sample/`),
+any registration succeeds, the sign-in code is **123456**, the session lives in `localStorage` for 30 days.
+A note marks it on the page. Nothing is sent anywhere.
 
 ### Download portal API (backend)
 
 All requests go to `PUBLIC_API_URL`, JSON in and out, with `credentials: 'include'`: the session is an
 httpOnly cookie set by the backend (allow CORS with credentials from the site origin). Errors return
-`{ "error": "<code>" }` with the status below. The client is `src/scripts/api.ts`.
+`{ "error": "<code>" }` with the status below. Types are in `src/scripts/api.ts`.
 
-| Request | Body / query | Success | Errors |
+**Account**
+
+| Request | Body | Success | Errors |
 |---|---|---|---|
-| `POST /register` | `{ firstName, lastName, email, lang, consent: true, termsVersion, turnstileToken, source, utm }` | `200 { email, firstName }`, sets the session cookie, sends `registered.html` | `409 already_registered` (send a sign-in code instead), `400 invalid` |
+| `POST /register` | `{ firstName, lastName, email, lang, consent: true, termsVersion, turnstileToken, source, utm }` | `200 { email, firstName }`, sets the session cookie, sends `registered.html` | `409 already_registered`, `400 invalid` |
 | `POST /login/code` | `{ email, lang, turnstileToken }` | `200`, sends `code.html` | `404 not_registered`, `429 too_many` |
 | `POST /login/verify` | `{ email, code }` | `200 { email, firstName }`, sets the session cookie | `400 invalid_code`, `410 expired_code`, `429 too_many` |
 | `GET /me` | | `200 { email, firstName }` | `401` |
 | `POST /logout` | `{}` | `200`, clears the cookie | |
-| `GET /catalog/counts?lang=` | | `200 { presentation, image, video, marketing }` | |
-| `GET /catalog?type=&page=&perPage=&lang=` | `type`: presentation, image, video, marketing | `200 { items: [{ id, type, title, preview, format, size, language, series? }], total, page, perPage }` | |
-| `POST /download` | `{ id, purpose }` | `200 { url }`: a short-lived signed link to the file; log who, what, purpose, when | `401` (session expired: the portal shows sign-in again) |
+
+**Library and materials** (public: browsing needs no session)
+
+| Request | Success |
+|---|---|
+| `GET /library/facets?lang=` | `{ total, books: [{ book, testament: "Old"\|"New", order, count, chapters: [{ n, name, count }] }], categories: [{ id, label, thumb, count }], tags: [string] }` |
+| `GET /library/images?lang=&page=&perPage=&sort=new\|views\|downloads\|az&book=&chapter=&category=&q=` | `{ items: [LibraryImage], total, page, perPage }` |
+| `GET /library/images/<id>?lang=` | `LibraryImage`, or `404` |
+| `GET /materials?lang=` | `{ series: { sessions, files, formats, size, thumb, formatsList }, languages: [{ code, name, available }], groups: [{ id: "presentations"\|"video"\|"marketing"\|"audio", items: [{ id, cat, title, thumb, size, slides?, duration?, fileType?, formats: [{ id, label, hint }] }] }] }` |
+
+`LibraryImage`: `{ id, title, preview (~800px), image (~1600px), book, chapter, chapterName, ref, testament,
+categories, tags, desc, group, sub?, dims, size, date, views, downloads, license, model?, modelVersion?, prompt? }`.
+Previews are small public images; the files themselves stay private in storage.
+
+**Download** (needs a session)
+
+| Request | Body | Success | Errors |
+|---|---|---|---|
+| `POST /download` | `{ kind: "image"\|"material"\|"series", id, format, purpose, purposeText?, lang }` (for the series, `id` is the language code) | `200 { url }`: a short-lived signed link; log who, what, format, purpose, when | `401` (the portal shows sign-in, then resumes the download) |
+
+Purposes: `personal`, `ministry`, `social`, `sermon`, `web`, `print`, `other` (with `purposeText`).
+Image formats offered: `png`, `jpg`, `webp`; materials list their own `formats`.
 
 Suggested limits: session 30 days, code valid 10 minutes, 5 wrong codes then a new code is needed. Verify the
-Turnstile token on the server (`/register`, `/login/code`). `termsVersion` (currently `2026-11`, in
-`Access.astro`) records which version of the terms was accepted.
-
-Catalog fields come from the image table; `preview` is a small public image, the file itself stays private
-in storage. `featured` items in the table are meant for the landing preview (15 to 20 images).
+Turnstile token on the server (`/register`, `/login/code`; use the Invisible widget mode in production).
+`termsVersion` (currently `2026-11`, in `Access.astro`) records which version of the terms was accepted.
 
 ## Analytics and consent
 
