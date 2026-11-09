@@ -1,10 +1,9 @@
 ---
 // The illustrated book and the audiobook in one block. The book is a print PDF (cover, then two-page
-// spreads), so the landing shows a few pages as pictures in a small viewer: the cover sits on the right
-// half like a closed book, spreads fill the whole stage. The audio is a short sample from chapter 2;
+// spreads), so the landing shows a few of its pages in a short looping page-turn animation. The audio is a short sample from chapter 2;
 // the full book and audiobook download in the portal (registration first, like the presentations).
 import Icon from './Icon.astro';
-import { Picture } from 'astro:assets';
+import { Image } from 'astro:assets';
 import { useT, getLang, localePath } from '../i18n';
 import { rich } from '../lib/rich';
 import cover from '../assets/book/cover.jpg';
@@ -18,26 +17,41 @@ const b = site.book;
 const portal = localePath(getLang(Astro), '/downloads');
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const sample = `${base}/media/audio/daniel-2-sample.mp3`;
-const pages = [cover, s1, s2, s3, s4];
+// sheet i: front = right page of the cover or spread i, back = left page of spread i+1; the last spread's
+// right page lies under them all
+const spreads = [s1, s2, s3, s4];
+const leaves = spreads.map((back, i) => ({ front: i === 0 ? cover : spreads[i - 1], back }));
+const last = spreads[spreads.length - 1];
+const SW = [800, 1200, 1600];
+const SS = '(max-width: 1020px) 90vw, 620px';
 ---
 <section class="section" id="book" aria-labelledby="book-title">
   <div class="wrap">
     <div class="bk reveal">
       <div class="bk__viewer">
-        <div class="bk__stage" data-book tabindex="0" role="region" aria-roledescription="carousel" aria-label={b.viewerLabel}>
-          {pages.map((src, i) => (
-            <figure class:list={['bk__page', i === 0 && 'is-cover']} aria-label={b.pageOf.replace('{n}', String(i + 1)).replace('{total}', String(pages.length))}>
-              <Picture src={src} alt={i === 0 ? b.coverAlt : ''} formats={['avif', 'webp']}
-                widths={i === 0 ? [360, 560, 800] : [720, 1100, 1600]}
-                sizes={i === 0 ? '(max-width: 1020px) 46vw, 320px' : '(max-width: 1020px) 92vw, 660px'}
-                loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
-            </figure>
-          ))}
+        <!-- a short looping animation: the closed book opens and its pages turn, then it closes and starts
+             again. Each leaf is one sheet: its front is the right page of one spread (or the cover), its back
+             is the left page of the next spread, both cut from the spread pictures with CSS -->
+        <div class="bk__stage" data-book role="img" aria-label={b.viewerLabel}>
+          <div class="fb" data-fb>
+            <div class="fb__base"><div class="fb__face is-r"><Image src={last} alt="" widths={SW} sizes={SS} format="webp" loading="lazy" decoding="async" /></div></div>
+            {leaves.map((leaf, i) => (
+              <div class="fb__leaf" style={`z-index:${leaves.length - i}`}>
+                <div class:list={['fb__face fb__front', i === 0 ? 'is-cover' : 'is-r']}>
+                  {i === 0
+                    ? <Image src={cover} alt="" widths={[400, 640, 900]} sizes="(max-width: 1020px) 45vw, 320px" format="webp" loading="eager" decoding="async" />
+                    : <Image src={leaf.front} alt="" widths={SW} sizes={SS} format="webp" loading="lazy" decoding="async" />}
+                </div>
+                <div class="fb__face fb__back is-l"><Image src={leaf.back} alt="" widths={SW} sizes={SS} format="webp" loading="lazy" decoding="async" /></div>
+              </div>
+            ))}
+          </div>
         </div>
         <div class="bk__nav">
-          <button type="button" class="bk__arrow" data-dir="-1" aria-label={b.prev} disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
-          <span class="bk__count" aria-live="polite"><b data-book-n>1</b> / {pages.length}</span>
-          <button type="button" class="bk__arrow" data-dir="1" aria-label={b.next}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+          <button type="button" class="bk__toggle" aria-label={b.stopAnim} data-label-stop={b.stopAnim} data-label-play={b.playAnim}>
+            <span class="i-pause" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></span>
+            <span class="i-play" aria-hidden="true"><Icon name="play" /></span>
+          </button>
           <span class="bk__note">{b.sampleNote}</span>
         </div>
       </div>
@@ -74,33 +88,40 @@ const pages = [cover, s1, s2, s3, s4];
   .bk .h2 { text-wrap: balance }
   .bk { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: center }
 
-  /* viewer: one spread per slide (5100x3300); the cover is a single page, shown on the right half */
-  .bk__stage { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; border-radius: 10px; outline-offset: 4px;
-    background: var(--paper-2, #ECE9E1); aspect-ratio: 5100 / 3300; height: auto; width: 100% }
-  .bk__stage::-webkit-scrollbar { display: none }
-  /* each page is a positioned box and the picture is pinned inside it, so the image size never depends on
-     percentage heights through inline <picture> (Safari collapsed those to zero) */
-  .bk__page { position: relative; flex: 0 0 100%; min-width: 100%; height: 100%; scroll-snap-align: center; margin: 0 }
-  .bk__page :global(picture) { position: absolute; inset: 0; display: block }
-  .bk__page :global(img) { display: block; width: 100%; height: 100%; object-fit: contain }
-  /* the cover alone is not a spread: show it as a closed book in the middle of a dark stage in the cover's
-     own blues, with a spine shade on the left edge and a soft shadow underneath */
-  .bk__page.is-cover { background: radial-gradient(60% 75% at 50% 45%, #2F4C8A, #14204A 70%, #0D1433) }
-  .bk__page.is-cover :global(picture) { inset: 7% auto auto 50%; height: 86%; aspect-ratio: 2550 / 3300; transform: translateX(-50%);
-    border-radius: 2px 6px 6px 2px; overflow: hidden;
-    box-shadow: 0 30px 50px -20px rgba(0, 0, 0, .7), 0 12px 20px -10px rgba(0, 0, 0, .5) }
-  .bk__page.is-cover :global(picture)::after { content: ''; position: absolute; inset: 0; pointer-events: none;
-    background: linear-gradient(90deg, rgba(0, 0, 0, .35), rgba(255, 255, 255, .18) 1.6%, rgba(0, 0, 0, .12) 3.2%, transparent 7%) }
-  .bk__page.is-cover :global(img) { object-fit: cover }
+  /* page-turn animation. The stage is a dark field in the cover's own blues; the book (one spread,
+     5100x3300) sits in it, shifted left by a quarter while closed so the cover is centred */
+  .bk__stage { --turn: 1.1s; --ease-turn: cubic-bezier(.5, .05, .25, 1);
+    position: relative; display: grid; place-items: center; width: 100%; aspect-ratio: 16 / 11; border-radius: 10px; overflow: hidden;
+    background: radial-gradient(70% 80% at 50% 45%, #2F4C8A, #14204A 70%, #0D1433) }
+  .fb { position: relative; width: 88%; aspect-ratio: 5100 / 3300; perspective: 2600px; transform: translateX(-25%); transition: transform var(--turn) var(--ease-turn) }
+  .fb.is-open { transform: none }
+  .fb__base, .fb__leaf { position: absolute; top: 0; left: 50%; width: 50%; height: 100% }
+  .fb__leaf { transform-origin: left center; transform-style: preserve-3d; transition: transform var(--turn) var(--ease-turn) }
+  .fb__leaf.is-flipped { transform: rotateY(-180deg) }
+  .fb__face { position: absolute; inset: 0; overflow: hidden; background: #fff; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border-radius: 0 5px 5px 0; box-shadow: 0 24px 40px -22px rgba(0, 0, 0, .75) }
+  .fb__back { transform: rotateY(180deg); border-radius: 5px 0 0 5px }
+  /* a spread picture is twice the page width: the right page shows its right half, the left page its left half */
+  .fb__face :global(img) { position: absolute; top: 0; left: -100%; width: 200%; max-width: none; height: 100%; object-fit: cover }
+  .fb__face.is-l :global(img) { left: 0 }
+  .fb__face.is-cover :global(img) { left: 0; width: 100% }
+  /* spine shade on the inner edge of every page, and a light that sweeps over a sheet while it turns */
+  .fb__face::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(90deg, rgba(0, 0, 0, .28), rgba(0, 0, 0, .08) 4%, transparent 10%) }
+  .fb__back::after { background: linear-gradient(270deg, rgba(0, 0, 0, .28), rgba(0, 0, 0, .08) 4%, transparent 10%) }
+  .fb__face.is-cover::after { background: linear-gradient(90deg, rgba(0, 0, 0, .35), rgba(255, 255, 255, .18) 1.6%, rgba(0, 0, 0, .12) 3.2%, transparent 7%) }
+  .fb__face::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; background: linear-gradient(90deg, rgba(0, 0, 0, .35), rgba(255, 255, 255, .12)) }
+  .fb__leaf.is-turning .fb__face::before { animation: fb-shade var(--turn) var(--ease-turn) }
+  @keyframes fb-shade { 50% { opacity: 1 } }
 
   .bk__nav { display: flex; align-items: center; gap: 12px; margin-top: 14px }
-  .bk__arrow { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: var(--navy, #1F2160); border: 1px solid rgba(31, 33, 96, .2); background: #fff; transition: background .2s, opacity .2s }
-  .bk__arrow:hover:not(:disabled) { background: var(--paper-2, #ECE9E1) }
-  .bk__arrow:disabled { opacity: .35; cursor: default }
-  .bk__arrow :global(svg) { width: 18px; height: 18px }
-  .bk__count { min-width: 44px; text-align: center; font-size: 14px; color: var(--muted-solid) }
-  .bk__count b { color: var(--navy, #1F2160) }
-  .bk__note { margin-left: auto; font-size: 13px; color: var(--muted-solid) }
+  .bk__toggle { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: var(--navy, #1F2160); border: 1px solid rgba(31, 33, 96, .2); background: #fff; transition: background .2s }
+  .bk__toggle:hover { background: var(--paper-2, #ECE9E1) }
+  .bk__toggle :global(svg) { width: 16px; height: 16px }
+  .bk__toggle .i-play :global(svg) { margin-left: 2px }
+  .bk__toggle .i-play, .bk__toggle.is-paused .i-pause { display: none }
+  .bk__toggle.is-paused .i-play { display: block }
+  .bk__note { font-size: 13px; color: var(--muted-solid) }
 
   /* audio sample */
   .player { display: flex; align-items: center; gap: 16px; margin: 28px 0 24px; padding: 16px 20px 14px 16px; border-radius: 14px; color: #fff; background: var(--indigo, #2A2C7C) }
@@ -141,35 +162,70 @@ const pages = [cover, s1, s2, s3, s4];
 <script>
   import { me } from '../scripts/api';
 
-  // viewer: arrows and the counter follow the scroll position, so swiping and the keyboard work too
+  // page-turn animation: closed cover, then the pages turn one by one, then the book closes and loops.
+  // It runs only while on screen, stops with the button, and stays on the first spread for reduced motion.
   document.querySelectorAll<HTMLElement>('[data-book]').forEach((stage) => {
-    const viewer = stage.parentElement!;
-    const [prev, next] = viewer.querySelectorAll<HTMLButtonElement>('.bk__arrow');
-    const count = viewer.querySelector<HTMLElement>('[data-book-n]')!;
-    const total = stage.children.length;
-    // pages after the first are lazy; fetch them all once the viewer is near, so paging never shows a blank
+    const book = stage.querySelector<HTMLElement>('[data-fb]')!;
+    const leaves = [...book.querySelectorAll<HTMLElement>('.fb__leaf')];
+    const toggle = stage.parentElement!.querySelector<HTMLButtonElement>('.bk__toggle')!;
+    const n = leaves.length;
+    const TURN = 1100;
+    const GAP = 140; // between sheets when the book closes
+    let flipped = 0;
+    let timer = 0;
+    let visible = false;
+    let paused = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // a turning sheet goes on top; once it lands, the last one turned lies on top of the left stack and the
+    // next one to turn lies on top of the right stack
+    const turn = (i: number, fwd: boolean) => {
+      const l = leaves[i];
+      l.style.zIndex = String(fwd ? 50 : 50 + n - i);
+      l.classList.add('is-turning');
+      l.classList.toggle('is-flipped', fwd);
+      setTimeout(() => { l.classList.remove('is-turning'); l.style.zIndex = String(fwd ? i + 1 : n - i); }, TURN);
+    };
+    const schedule = (ms: number) => {
+      clearTimeout(timer);
+      if (!paused && visible && !document.hidden) timer = window.setTimeout(step, ms);
+    };
+    function step() {
+      if (flipped < n) {
+        book.classList.add('is-open');
+        turn(flipped++, true);
+        schedule(TURN + (flipped === n ? 2600 : 1500));
+      } else {
+        for (let k = n - 1; k >= 0; k--) setTimeout(() => turn(k, false), (n - 1 - k) * GAP);
+        setTimeout(() => book.classList.remove('is-open'), (n - 1) * GAP);
+        flipped = 0;
+        schedule(TURN + n * GAP + 1600);
+      }
+    }
+
+    // reduced motion: show the first spread, still; the button can start it
+    if (paused) {
+      leaves[0].style.transition = 'none'; book.style.transition = 'none';
+      leaves[0].classList.add('is-flipped'); leaves[0].style.zIndex = '1'; book.classList.add('is-open'); flipped = 1;
+      requestAnimationFrame(() => requestAnimationFrame(() => { leaves[0].style.transition = ''; book.style.transition = ''; }));
+    }
+    const label = () => {
+      toggle.classList.toggle('is-paused', paused);
+      toggle.setAttribute('aria-label', (paused ? toggle.dataset.labelPlay : toggle.dataset.labelStop)!);
+    };
+    label();
+    toggle.addEventListener('click', () => { paused = !paused; label(); if (paused) clearTimeout(timer); else schedule(300); });
+
+    // load the inner pages once the block is near, and only run while it is on screen
     new IntersectionObserver((entries, io) => {
       if (!entries.some((e) => e.isIntersecting)) return;
       stage.querySelectorAll('img').forEach((img) => { img.loading = 'eager'; });
       io.disconnect();
     }, { rootMargin: '400px 0px' }).observe(stage);
-    // `pos` is the page we are on or heading to, so quick repeated clicks don't read a half-finished scroll
-    let pos = 0;
-    let settle = 0;
-    const show = (i: number) => { count.textContent = String(i + 1); prev.disabled = i === 0; next.disabled = i === total - 1; };
-    const go = (i: number) => {
-      pos = Math.max(0, Math.min(total - 1, i)); show(pos);
-      stage.scrollTo({ left: pos * stage.clientWidth, behavior: 'smooth' });
-    };
-    // swipes and trackpads: take the position once scrolling stops
-    stage.addEventListener('scroll', () => {
-      clearTimeout(settle);
-      settle = window.setTimeout(() => { pos = Math.round(stage.scrollLeft / stage.clientWidth); show(pos); }, 120);
-    }, { passive: true });
-    [prev, next].forEach((b) => b.addEventListener('click', () => go(pos + Number(b.dataset.dir))));
-    stage.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); go(pos + (e.key === 'ArrowRight' ? 1 : -1)); }
-    });
+    new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      if (visible) schedule(flipped === 0 ? 1200 : 800); else clearTimeout(timer);
+    }, { threshold: 0.35 }).observe(stage);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) clearTimeout(timer); else schedule(800); });
   });
 
   // audio sample player
