@@ -964,7 +964,7 @@ const svg = (d: string, attrs = '') => `<svg viewBox="0 0 24 24" fill="none" str
   });
 
   /* ---------------- materials ---------------- */
-  const GROUP_ICON: Record<string, string> = { presentations: ICON.deck, video: ICON.video, marketing: ICON.mkt, audio: ICON.audio, images: ICON.img };
+  const GROUP_ICON: Record<string, string> = { presentations: ICON.deck, video: ICON.video, marketing: ICON.mkt, audio: ICON.audio, book: ICON.book, images: ICON.img };
   const groupLabel = (id: string) => T.materials[id] ?? id;
   const kindLabel = (id: string) => T.materials[`kind${id[0].toUpperCase()}${id.slice(1)}`] ?? '';
   function itemMeta(g: string, it: api.MaterialItem) {

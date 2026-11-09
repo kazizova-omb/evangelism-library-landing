@@ -47,7 +47,7 @@ export interface LibraryFacets { total: number; books: LibraryBook[]; categories
 export interface LibraryQuery { book?: string; chapter?: number; category?: string; q?: string; sort?: 'new' | 'views' | 'downloads' | 'az'; page: number; perPage: number }
 export interface LibraryPage { items: LibraryImage[]; total: number; page: number; perPage: number }
 
-export type MaterialGroupId = 'presentations' | 'video' | 'marketing' | 'audio';
+export type MaterialGroupId = 'presentations' | 'video' | 'marketing' | 'audio' | 'book';
 export interface MaterialItem {
   id: string;
   cat: string;

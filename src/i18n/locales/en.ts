@@ -231,6 +231,32 @@ const en = {
     cta: 'Get access to download',
   },
 
+  // The illustrated book and the audiobook: a few pages and a short audio sample on the landing,
+  // the full files in the download portal
+  book: {
+    eyebrow: 'Book and audiobook',
+    title: 'Read it. *Hear it.*',
+    sub: 'An illustrated book on Daniel 2 to hand to guests and members, and an English audiobook of the Book of Daniel. Listen to a short sample from chapter 2.',
+    viewerLabel: 'Sample pages from the book',
+    coverAlt: 'Book cover: All Things New, Hope starts here',
+    pageOf: 'Page {n} of {total}',
+    prev: 'Previous page',
+    next: 'Next page',
+    sampleNote: 'A few sample pages',
+    play: 'Play the audio sample',
+    pause: 'Pause',
+    seek: 'Audio position',
+    trackTitle: 'Daniel, chapter 2',
+    trackTag: 'Sample',
+    trackLength: '1:56',
+    includes: [
+      'Illustrated book, 41 pages, print-ready PDF',
+      'Audiobook in 12 chapters, about 2 hours 10 minutes, MP3 and WAV',
+    ],
+    cta: 'Get access to download',
+    download: 'Open in the download portal',
+  },
+
   // Registration on the landing: creates the account and opens the download portal right away
   access: {
     eyebrow: 'Download',
@@ -426,11 +452,13 @@ const en = {
       video: 'Video',
       marketing: 'Marketing',
       audio: 'Audio',
+      book: 'Book',
       images: 'Images',
       kindPresentations: 'Deck',
       kindVideo: 'Video',
       kindMarketing: 'Print',
       kindAudio: 'Audio',
+      kindBook: 'Book',
       slides: '{n} slides',
       download: 'Download',
       imagesTitle: 'Images live in the Image Library',

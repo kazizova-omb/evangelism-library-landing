@@ -426,6 +426,10 @@ export const SAMPLE_MATERIALS: Materials = {
     { id: 'audio', items: [
       { id: 'a1', cat: 'Music', title: 'Series Soundtrack (12 tracks)', duration: '48:30', size: '112 MB', thumb: T('img_1fa6b2'), formats: AUDIO },
       { id: 'a2', cat: 'Sermon', title: 'Full Series Audio', duration: '6:12:00', size: '340 MB', thumb: T('img_9f3a71'), formats: AUDIO },
+      { id: 'a3', cat: 'Audiobook', title: 'The Book of Daniel (12 chapters)', duration: '2:10:00', size: '313 MB', thumb: T('img_da2stat'), formats: AUDIO },
+    ] },
+    { id: 'book', items: [
+      { id: 'b1', cat: 'Illustrated book', title: 'All Things New: Daniel 2', fileType: 'PDF', size: '50 MB', thumb: T('img_da2stat'), formats: [{ id: 'pdf', label: 'PDF', hint: 'Print ready' }] },
     ] },
   ],
 };

@@ -1,0 +1,209 @@
+---
+// The illustrated book and the audiobook in one block. The book is a print PDF (cover, then two-page
+// spreads), so the landing shows a few pages as pictures in a small viewer: the cover sits on the right
+// half like a closed book, spreads fill the whole stage. The audio is a short sample from chapter 2;
+// the full book and audiobook download in the portal (registration first, like the presentations).
+import Icon from './Icon.astro';
+import { Picture } from 'astro:assets';
+import { useT, getLang, localePath } from '../i18n';
+import { rich } from '../lib/rich';
+import cover from '../assets/book/cover.jpg';
+import s1 from '../assets/book/spread-1.jpg';
+import s2 from '../assets/book/spread-2.jpg';
+import s3 from '../assets/book/spread-3.jpg';
+import s4 from '../assets/book/spread-4.jpg';
+
+const site = useT(Astro);
+const b = site.book;
+const portal = localePath(getLang(Astro), '/downloads');
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const sample = `${base}/media/audio/daniel-2-sample.mp3`;
+const pages = [cover, s1, s2, s3, s4];
+---
+<section class="section" id="book" aria-labelledby="book-title">
+  <div class="wrap">
+    <div class="bk reveal">
+      <div class="bk__viewer">
+        <div class="bk__stage" data-book tabindex="0" role="region" aria-roledescription="carousel" aria-label={b.viewerLabel}>
+          {pages.map((src, i) => (
+            <figure class:list={['bk__page', i === 0 && 'is-cover']} aria-label={b.pageOf.replace('{n}', String(i + 1)).replace('{total}', String(pages.length))}>
+              <Picture src={src} alt={i === 0 ? b.coverAlt : ''} formats={['avif', 'webp']}
+                widths={i === 0 ? [360, 560, 800] : [720, 1100, 1600]}
+                sizes={i === 0 ? '(max-width: 1020px) 46vw, 320px' : '(max-width: 1020px) 92vw, 660px'}
+                loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+            </figure>
+          ))}
+        </div>
+        <div class="bk__nav">
+          <button type="button" class="bk__arrow" data-dir="-1" aria-label={b.prev} disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <span class="bk__count" aria-live="polite"><b data-book-n>1</b> / {pages.length}</span>
+          <button type="button" class="bk__arrow" data-dir="1" aria-label={b.next}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+          <span class="bk__note">{b.sampleNote}</span>
+        </div>
+      </div>
+
+      <div class="bk__text">
+        <p class="eyebrow">{b.eyebrow}</p>
+        <h2 class="h2" id="book-title" set:html={rich(b.title)} />
+        <p class="sub">{b.sub}</p>
+
+        <div class="player" data-player>
+          <audio preload="none" src={sample}></audio>
+          <button type="button" class="player__btn" aria-label={b.play} data-label-play={b.play} data-label-pause={b.pause} data-track="audio_play" data-track-location="book">
+            <span class="i-play"><Icon name="play" /></span>
+            <span class="i-pause" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></span>
+          </button>
+          <div class="player__body">
+            <p class="player__title">{b.trackTitle}<span>{b.trackTag}</span></p>
+            <input class="player__bar" type="range" min="0" max="1000" value="0" step="1" aria-label={b.seek} />
+            <p class="player__time"><span data-cur>0:00</span><span data-dur>{b.trackLength}</span></p>
+          </div>
+        </div>
+
+        <ul class="bk__list" role="list">
+          {b.includes.map((item) => <li><Icon name="check" />{item}</li>)}
+        </ul>
+        <a href="#access" class="btn btn--gold bk__get" data-portal={`${portal}#materials`} data-download-label={b.download}
+          data-track="cta_click" data-track-location="book"><span>{b.cta}</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bk .h2 { text-wrap: balance }
+  .bk { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: center }
+
+  /* viewer: one spread per slide (5100x3300); the cover is a single page, shown on the right half */
+  .bk__stage { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; border-radius: 10px; outline-offset: 4px;
+    background: var(--paper-2, #ECE9E1); aspect-ratio: 5100 / 3300; height: auto; width: 100% }
+  .bk__stage::-webkit-scrollbar { display: none }
+  /* each page is a positioned box and the picture is pinned inside it, so the image size never depends on
+     percentage heights through inline <picture> (Safari collapsed those to zero) */
+  .bk__page { position: relative; flex: 0 0 100%; min-width: 100%; height: 100%; scroll-snap-align: center; margin: 0 }
+  .bk__page :global(picture) { position: absolute; inset: 0; display: block }
+  .bk__page :global(img) { display: block; width: 100%; height: 100%; object-fit: contain }
+  /* the cover alone is not a spread: show it as a closed book in the middle of a dark stage in the cover's
+     own blues, with a spine shade on the left edge and a soft shadow underneath */
+  .bk__page.is-cover { background: radial-gradient(60% 75% at 50% 45%, #2F4C8A, #14204A 70%, #0D1433) }
+  .bk__page.is-cover :global(picture) { inset: 7% auto auto 50%; height: 86%; aspect-ratio: 2550 / 3300; transform: translateX(-50%);
+    border-radius: 2px 6px 6px 2px; overflow: hidden;
+    box-shadow: 0 30px 50px -20px rgba(0, 0, 0, .7), 0 12px 20px -10px rgba(0, 0, 0, .5) }
+  .bk__page.is-cover :global(picture)::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(90deg, rgba(0, 0, 0, .35), rgba(255, 255, 255, .18) 1.6%, rgba(0, 0, 0, .12) 3.2%, transparent 7%) }
+  .bk__page.is-cover :global(img) { object-fit: cover }
+
+  .bk__nav { display: flex; align-items: center; gap: 12px; margin-top: 14px }
+  .bk__arrow { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: var(--navy, #1F2160); border: 1px solid rgba(31, 33, 96, .2); background: #fff; transition: background .2s, opacity .2s }
+  .bk__arrow:hover:not(:disabled) { background: var(--paper-2, #ECE9E1) }
+  .bk__arrow:disabled { opacity: .35; cursor: default }
+  .bk__arrow :global(svg) { width: 18px; height: 18px }
+  .bk__count { min-width: 44px; text-align: center; font-size: 14px; color: var(--muted-solid) }
+  .bk__count b { color: var(--navy, #1F2160) }
+  .bk__note { margin-left: auto; font-size: 13px; color: var(--muted-solid) }
+
+  /* audio sample */
+  .player { display: flex; align-items: center; gap: 16px; margin: 28px 0 24px; padding: 16px 20px 14px 16px; border-radius: 14px; color: #fff; background: var(--indigo, #2A2C7C) }
+  .player__btn { flex: none; display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; color: var(--indigo, #2A2C7C); background: #fff; transition: transform .2s var(--ease) }
+  .player__btn:hover { transform: scale(1.06) }
+  .player__btn :global(svg) { width: 22px; height: 22px }
+  .player__btn .i-play :global(svg) { margin-left: 3px }
+  .player__btn .i-pause { display: none }
+  .player.is-playing .i-play { display: none }
+  .player.is-playing .i-pause { display: block }
+  .player__body { flex: 1; min-width: 0 }
+  .player__title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; font-weight: 600; font-size: 16px; margin-bottom: 8px }
+  .player__title span { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--cyan-light, #7FE0EC) }
+  .player__bar { --p: 0%; display: block; width: 100%; height: 18px; margin: 0; background: transparent; appearance: none; -webkit-appearance: none; cursor: pointer }
+  .player__bar::-webkit-slider-runnable-track { height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--cyan-light, #7FE0EC) var(--p), rgba(255, 255, 255, .25) var(--p)) }
+  .player__bar::-moz-range-track { height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--cyan-light, #7FE0EC) var(--p), rgba(255, 255, 255, .25) var(--p)) }
+  .player__bar::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; margin-top: -5px; border-radius: 50%; border: 0; background: #fff }
+  .player__bar::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; border: 0; background: #fff }
+  .player__time { display: flex; justify-content: space-between; margin-top: 4px; font-size: 12px; font-variant-numeric: tabular-nums; color: rgba(255, 255, 255, .7) }
+
+  .bk__list { list-style: none; display: grid; gap: 12px; margin: 0 0 28px }
+  .bk__list li { display: flex; gap: 12px; align-items: flex-start; color: var(--ink-2) }
+  .bk__list :global(svg) { flex: none; width: 20px; height: 20px; margin-top: 2px; color: var(--cyan-text, var(--gold)) }
+
+  @media (max-width: 1020px) {
+    .bk { grid-template-columns: 1fr }
+    .bk__text { order: -1 }
+  }
+  @media (max-width: 560px) {
+    .bk__note { display: none }
+    .bk__nav { justify-content: center }
+    .player { padding: 14px; gap: 12px }
+    .player__btn { width: 48px; height: 48px }
+    .bk__get { width: 100% }
+  }
+</style>
+
+<script>
+  import { me } from '../scripts/api';
+
+  // viewer: arrows and the counter follow the scroll position, so swiping and the keyboard work too
+  document.querySelectorAll<HTMLElement>('[data-book]').forEach((stage) => {
+    const viewer = stage.parentElement!;
+    const [prev, next] = viewer.querySelectorAll<HTMLButtonElement>('.bk__arrow');
+    const count = viewer.querySelector<HTMLElement>('[data-book-n]')!;
+    const total = stage.children.length;
+    // pages after the first are lazy; fetch them all once the viewer is near, so paging never shows a blank
+    new IntersectionObserver((entries, io) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      stage.querySelectorAll('img').forEach((img) => { img.loading = 'eager'; });
+      io.disconnect();
+    }, { rootMargin: '400px 0px' }).observe(stage);
+    // `pos` is the page we are on or heading to, so quick repeated clicks don't read a half-finished scroll
+    let pos = 0;
+    let settle = 0;
+    const show = (i: number) => { count.textContent = String(i + 1); prev.disabled = i === 0; next.disabled = i === total - 1; };
+    const go = (i: number) => {
+      pos = Math.max(0, Math.min(total - 1, i)); show(pos);
+      stage.scrollTo({ left: pos * stage.clientWidth, behavior: 'smooth' });
+    };
+    // swipes and trackpads: take the position once scrolling stops
+    stage.addEventListener('scroll', () => {
+      clearTimeout(settle);
+      settle = window.setTimeout(() => { pos = Math.round(stage.scrollLeft / stage.clientWidth); show(pos); }, 120);
+    }, { passive: true });
+    [prev, next].forEach((b) => b.addEventListener('click', () => go(pos + Number(b.dataset.dir))));
+    stage.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); go(pos + (e.key === 'ArrowRight' ? 1 : -1)); }
+    });
+  });
+
+  // audio sample player
+  const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+  document.querySelectorAll<HTMLElement>('[data-player]').forEach((p) => {
+    const audio = p.querySelector('audio')!;
+    const btn = p.querySelector<HTMLButtonElement>('.player__btn')!;
+    const bar = p.querySelector<HTMLInputElement>('.player__bar')!;
+    const cur = p.querySelector<HTMLElement>('[data-cur]')!;
+    const dur = p.querySelector<HTMLElement>('[data-dur]')!;
+    const paint = () => {
+      const r = audio.duration ? audio.currentTime / audio.duration : 0;
+      bar.value = String(Math.round(r * 1000)); bar.style.setProperty('--p', `${r * 100}%`);
+      cur.textContent = fmt(audio.currentTime);
+    };
+    btn.addEventListener('click', () => { if (audio.paused) audio.play(); else audio.pause(); });
+    audio.addEventListener('play', () => { p.classList.add('is-playing'); btn.setAttribute('aria-label', btn.dataset.labelPause!); });
+    audio.addEventListener('pause', () => { p.classList.remove('is-playing'); btn.setAttribute('aria-label', btn.dataset.labelPlay!); });
+    audio.addEventListener('loadedmetadata', () => { dur.textContent = fmt(audio.duration); });
+    audio.addEventListener('timeupdate', paint);
+    audio.addEventListener('ended', () => { audio.currentTime = 0; paint(); });
+    bar.addEventListener('input', () => {
+      if (audio.readyState === 0) audio.load();
+      const seek = () => { audio.currentTime = (Number(bar.value) / 1000) * audio.duration; paint(); };
+      if (audio.duration) seek(); else audio.addEventListener('loadedmetadata', seek, { once: true });
+    });
+  });
+
+  // the download button leads to registration, or straight to the portal once signed in
+  me().then((u) => {
+    if (!u) return;
+    document.querySelectorAll<HTMLAnchorElement>('.bk__get').forEach((a) => {
+      a.href = a.dataset.portal ?? a.href;
+      a.querySelector('span')!.textContent = a.dataset.downloadLabel ?? '';
+    });
+  }).catch(() => {});
+</script>
