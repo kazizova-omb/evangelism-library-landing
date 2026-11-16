@@ -2,29 +2,37 @@
 // A short look inside the library on the landing, as one mosaic: the trailer large (plays in the modal),
 // images and slides around it, and a closing tile with what the full library holds. Nothing downloads
 // here; the tile leads to registration.
-// TODO: once the image table exists, take the items marked "featured" there instead of the slot images.
+// TODO: once the image table exists, take the items marked "featured" there instead of these files.
 import Icon from './Icon.astro';
 import SlotImage from './SlotImage.astro';
 import { useT } from '../i18n';
 import { rich } from '../lib/rich';
-import { slot, type SlotName } from '../lib/slots';
-import { getTheme } from '../lib/theme';
+import type { ImageMetadata } from 'astro';
 
 const site = useT(Astro);
-const theme = getTheme(Astro);
 const p = site.preview;
 
 type Kind = 'image' | 'video' | 'slide';
+// The mosaic has its own images in src/assets/preview/ (not the landing slots, so nothing repeats).
 // order = reading order; `area` places the tile in the mosaic (see the grid below)
-const tiles: { img: SlotName; kind: Kind; area: string; trailer?: boolean; sizes: string }[] = [
-  { img: 'trailer', kind: 'video', area: 'video', trailer: true, sizes: '(max-width: 760px) 100vw, 800px' },
-  { img: 'hero', kind: 'image', area: 'tall', sizes: '(max-width: 760px) 100vw, 400px' },
-  { img: 'gallery-slide', kind: 'slide', area: 'slide', sizes: '(max-width: 760px) 100vw, 600px' },
-  { img: 'about', kind: 'image', area: 'a', sizes: '(max-width: 760px) 50vw, 300px' },
-  { img: 'gallery-flyer', kind: 'image', area: 'b', sizes: '(max-width: 760px) 50vw, 300px' },
-  { img: 'gallery-art', kind: 'image', area: 'c', sizes: '(max-width: 760px) 50vw, 300px' },
-  { img: 'gallery-social', kind: 'image', area: 'd', sizes: '(max-width: 760px) 50vw, 300px' },
-  { img: 'gallery-video', kind: 'image', area: 'e', sizes: '(max-width: 760px) 50vw, 300px' },
+import video from '../assets/preview/video.webp';
+import slide from '../assets/preview/slide.webp';
+import image1 from '../assets/preview/image-1.webp';
+import image2 from '../assets/preview/image-2.webp';
+import image3 from '../assets/preview/image-3.webp';
+import image4 from '../assets/preview/image-4.webp';
+import image5 from '../assets/preview/image-5.webp';
+import image6 from '../assets/preview/image-6.webp';
+const small = '(max-width: 760px) 50vw, 300px';
+const tiles: { img: ImageMetadata; kind: Kind; area: string; trailer?: boolean; sizes: string }[] = [
+  { img: video, kind: 'video', area: 'video', trailer: true, sizes: '(max-width: 760px) 100vw, 800px' },
+  { img: image1, kind: 'image', area: 'tall', sizes: '(max-width: 760px) 100vw, 400px' },
+  { img: slide, kind: 'slide', area: 'slide', sizes: '(max-width: 760px) 100vw, 600px' },
+  { img: image2, kind: 'image', area: 'a', sizes: small },
+  { img: image3, kind: 'image', area: 'b', sizes: small },
+  { img: image4, kind: 'image', area: 'c', sizes: small },
+  { img: image5, kind: 'image', area: 'd', sizes: small },
+  { img: image6, kind: 'image', area: 'e', sizes: small },
 ];
 // the four content types of the library, from the stats of "What's inside" (skip the slide count)
 const counts = site.inside.stats.filter((_, i) => i !== 1);
@@ -41,8 +49,8 @@ const counts = site.inside.stats.filter((_, i) => i !== 1);
 
     <ul class="mosaic reveal" role="list">
       {tiles.map((t) => {
-        const img = slot(t.img, theme);
-        return img && (
+        const img = t.img;
+        return (
           <li class:list={['mosaic__tile', `is-${t.area}`, `kind-${t.kind}`]}>
             <SlotImage src={img} alt="" sizes={t.sizes} widths={[400, 800, 1200]} />
             <span class="mosaic__tag">{p.tags[t.kind]}</span>
@@ -88,6 +96,9 @@ const counts = site.inside.stats.filter((_, i) => i !== 1);
   .is-a { grid-area: a } .is-b { grid-area: b } .is-c { grid-area: c } .is-d { grid-area: d } .is-e { grid-area: e } .is-more { grid-area: more }
   .mosaic__tile :global(.slot-img) { position: absolute; inset: 0; transition: transform 1.2s var(--ease) }
   .mosaic__tile:hover :global(.slot-img) { transform: scale(1.04) }
+  /* the slide has its quote on the left: crop from the right when the tile is narrower than the image */
+  .is-slide :global(.slot-img img) { object-position: 0% 50% }
+  .is-slide .mosaic__tag { left: auto; right: 12px } /* the quote sits top left */
   .mosaic__tag { position: absolute; left: 12px; top: 12px; padding: 4px 9px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--navy, #1F2160); background: rgba(255, 255, 255, .9) }
 
   .mosaic__play { position: absolute; inset: 0; display: grid; place-items: center; background: linear-gradient(180deg, rgba(15, 16, 48, 0) 40%, rgba(15, 16, 48, .5)) }
