@@ -400,11 +400,11 @@ export const SAMPLE_MATERIALS: Materials = {
   ],
   groups: [
     { id: 'presentations', items: [
-      { id: 'p1', cat: 'Daniel', title: 'History Written in Advance', slides: 28, size: '18 MB', thumb: T('img_da2stat'), formats: PPTX },
+      { id: 'p1', cat: 'Daniel', title: 'The Golden Statue', slides: 28, size: '18 MB', thumb: T('img_da2stat'), formats: PPTX },
       { id: 'p2', cat: 'Revelation', title: 'The War Behind the World', slides: 22, size: '15 MB', thumb: T('img_c51e9d'), formats: PPTX },
-      { id: 'p3', cat: 'Sanctuary', title: 'The Longest Prophecy and Our High Priest', slides: 31, size: '21 MB', thumb: T('img_2b7c04'), formats: PPTX },
+      { id: 'p3', cat: 'Sanctuary', title: 'The Sanctuary', slides: 31, size: '21 MB', thumb: T('img_2b7c04'), formats: PPTX },
       { id: 'p4', cat: 'Gospel', title: 'The Sign He Never Changed', slides: 19, size: '13 MB', thumb: T('prev-pray'), formats: PPTX },
-      { id: 'p5', cat: 'Revelation', title: 'The Final Choice', slides: 24, size: '17 MB', thumb: T('img_8e0a63'), formats: PPTX },
+      { id: 'p5', cat: 'Revelation', title: 'The Mark of the Beast', slides: 24, size: '17 MB', thumb: T('img_8e0a63'), formats: PPTX },
       { id: 'p6', cat: 'Revelation', title: "Heaven's Last Message", slides: 26, size: '18 MB', thumb: T('img_1fa6b2'), formats: PPTX },
       { id: 'p7', cat: 'Gospel', title: 'The Church God Is Looking For', slides: 20, size: '14 MB', thumb: T('img_47af18'), formats: PPTX },
       { id: 'p8', cat: 'Revelation', title: 'The End of Evil', slides: 30, size: '22 MB', thumb: T('img_d92f57'), formats: PPTX },
@@ -412,7 +412,7 @@ export const SAMPLE_MATERIALS: Materials = {
     ] },
     { id: 'video', items: [
       { id: 'v1', cat: 'Promo', title: 'Series Trailer', duration: '2:14', size: '84 MB', thumb: T('img_9f3a71'), formats: VIDEO },
-      { id: 'v2', cat: 'Sessions', title: 'Episode 1: History Written in Advance', duration: '38:20', size: '1.1 GB', thumb: T('img_da2stat'), formats: VIDEO },
+      { id: 'v2', cat: 'Sessions', title: 'Episode 1: The Golden Statue', duration: '38:20', size: '1.1 GB', thumb: T('img_da2stat'), formats: VIDEO },
       { id: 'v3', cat: 'Sessions', title: 'Episode 3: Our High Priest', duration: '41:05', size: '1.2 GB', thumb: T('prev-pray'), formats: VIDEO },
       { id: 'v4', cat: 'Promo', title: 'Social Teaser: The Beast', duration: '0:45', size: '22 MB', thumb: T('prev-bear'), formats: VIDEO },
     ] },
