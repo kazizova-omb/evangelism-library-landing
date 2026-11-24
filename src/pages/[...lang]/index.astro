@@ -2,6 +2,7 @@
 import { langPaths } from '../../i18n';
 import Base from '../../layouts/Base.astro';
 import Hero from '../../components/Hero.astro';
+import OneVoice from '../../components/OneVoice.astro';
 import Trailer from '../../components/Trailer.astro';
 import VideoModal from '../../components/VideoModal.astro';
 import Inside from '../../components/Inside.astro';
@@ -20,6 +21,7 @@ export const getStaticPaths = langPaths;
 ---
 <Base home>
   <Hero />
+  <OneVoice />
   <Trailer />
   <Inside />
   <Series />

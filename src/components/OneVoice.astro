@@ -1,0 +1,30 @@
+---
+// Block right after the hero: All Things New is the outreach brand of OneVoice27: Mission for All
+// (the church's movement toward September 2027). Logo: src/assets/brand/onevoice27.svg, the wordmark from
+// onevoice27.org without the church symbol (Justin asked for no SDA logo on the landing).
+import logo from '../assets/brand/onevoice27.svg?url';
+import { useT } from '../i18n';
+
+const site = useT(Astro);
+const o = site.onevoice;
+---
+<section class="ov" aria-labelledby="ov-title">
+  <img class="ov__logo" src={logo} alt="OneVoice27: Mission for All" width="200" height="41" />
+  <h2 class="ov__title" id="ov-title">{o.titleLead} <span class="ov__grad">OneVoice27</span></h2>
+  <p class="ov__text">{o.text}</p>
+  <a class="ov__link" href={o.url} target="_blank" rel="noopener" data-track="outbound" data-track-location="onevoice">{o.link}<span aria-hidden="true"> ↗</span></a>
+</section>
+
+<style>
+  .ov { padding: 80px var(--gutter); text-align: center; background: var(--paper, #F5F3EE) }
+  .ov__logo { display: block; width: 200px; height: auto; margin: 0 auto 22px }
+  .ov__title { max-width: 900px; margin: 0 auto 16px; font-family: var(--poster, var(--display)); font-weight: 400; font-size: clamp(32px, 3.6vw, 52px); line-height: 1; text-transform: uppercase; text-wrap: balance; color: var(--navy, #1F2160) }
+  .ov__grad { white-space: nowrap; background: linear-gradient(90deg, #B85AAA, #6041CB 50%, #3F8F99); -webkit-background-clip: text; background-clip: text; color: transparent }
+  .ov__text { max-width: 560px; margin: 0 auto 22px; font-size: 17px; line-height: 1.6; text-wrap: pretty; color: var(--ink-2, #3F4170) }
+  .ov__link { font-size: 14px; font-weight: 700; color: var(--navy, #1F2160); text-decoration: underline; text-decoration-color: rgba(31, 33, 96, .3); text-underline-offset: 4px }
+  .ov__link:hover { text-decoration-color: currentColor }
+  @media (max-width: 640px) {
+    .ov { padding: 56px var(--gutter) }
+    .ov__logo { width: 170px }
+  }
+</style>

@@ -334,7 +334,16 @@ const en = {
     mailSubject: 'Volunteer translator',
   },
 
+  // The strip after the first screen: All Things New is the outreach brand of OneVoice27 (draft text, for Justin to edit)
+  onevoice: {
+    titleLead: 'All Things New is part of', // followed by the OneVoice27 name in the brand gradient
+    text: 'A worldwide movement inviting every member and every church to share Jesus, building toward September 2027.',
+    link: 'Learn about OneVoice27',
+    url: 'https://onevoice27.org/en',
+  },
+
   footer: {
+    partOf: 'Part of the OneVoice27 movement',
     tagline: 'A modern visual library of materials for evangelistic series, made for pastors and church leaders.',
     columns: { explore: 'Explore', help: 'Help', legal: 'Legal' },
     links: {
