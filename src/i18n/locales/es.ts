@@ -225,7 +225,15 @@ const es: Site = {
     mailSubject: 'Traductor voluntario',
   },
 
+  onevoice: {
+    titleLead: 'All Things New es parte de', // followed by the OneVoice27 name in the brand gradient
+    text: 'Un movimiento mundial que invita a cada miembro y a cada iglesia a compartir a Jesús, rumbo a septiembre de 2027.',
+    link: 'Conozca OneVoice27',
+    url: 'https://onevoice27.org/es',
+  },
+
   footer: {
+    partOf: 'Parte del movimiento OneVoice27',
     tagline: 'Una biblioteca visual moderna de materiales para series evangelísticas, pensada para pastores y líderes de iglesia.',
     columns: { explore: 'Explorar', help: 'Ayuda', legal: 'Legal' },
     links: {

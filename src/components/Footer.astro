@@ -5,6 +5,7 @@ import LangSwitch from './LangSwitch.astro';
 import { useT, getLang, localePath } from '../i18n';
 import { config } from '../config';
 import { anchor } from '../lib/links';
+import ovLogo from '../assets/brand/onevoice27-white.svg?url';
 
 interface Props { home: boolean }
 const { home } = Astro.props;
@@ -20,6 +21,10 @@ const a = (href: string) => anchor(href, home, lang);
     <div class="footer__brand">
       <BrandLockup href={home ? '#top' : localePath(lang, '/')} dark />
       <p>{site.footer.tagline}</p>
+      <a class="footer__ov" href={site.onevoice.url} target="_blank" rel="noopener">
+        <img src={ovLogo} alt="OneVoice27: Mission for All" width="150" height="31" />
+        <span>{site.footer.partOf}</span>
+      </a>
     </div>
 
     <nav class="footer__cols" aria-label="Footer">
@@ -64,6 +69,10 @@ const a = (href: string) => anchor(href, home, lang);
   .brand { display: inline-flex; align-items: center; gap: 12px; font-family: var(--display); font-weight: 600; font-size: 22px; letter-spacing: .02em; white-space: nowrap }
   .brand :global(.brand__mark) { width: 26px; height: 26px; color: var(--gold) }
   .footer__brand p { max-width: 340px; margin-top: 16px; font-size: 14px; line-height: 1.6; color: var(--muted-solid) }
+
+  .footer__ov { display: inline-flex; flex-direction: column; gap: 8px; margin-top: 24px; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted-solid); transition: color .2s }
+  .footer__ov img { width: 150px; height: auto }
+  .footer__ov:hover { color: var(--gold-hi) }
 
   .footer__cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px }
   .footer__h { margin-bottom: 16px; font-size: 12px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--gold) }
